@@ -1,4 +1,4 @@
-# <Title>
+# Title
 
 Status: Pending
 
@@ -8,60 +8,60 @@ Author(s): Jane Doe (@jane-doe)
 
 ## Summary
 
-<summary of this proposal>
+This is a summary of this proposal.
 
 ## Motivation
 
-<describe why this is needed>
+Describe why this proposal is needed.
 
 ### Goals
 
-<what will be addressed by the proposal>
+What will be addressed by the proposal?
 
 ### Non-Goals
 
-<what will not be addressed by the proposal>
+What will not be addressed by the proposal?
 
 ## Proposal
 
-<description of the proposed solution>
+Description of the proposed solution.
 
 ### Data model impact
 
-<does the proposal affect data model>
+Does the proposal affect data model?
 
 ### REST API impact
 
-<does the proposal affect API>
+Does the proposal affect API?
 
 ### Security impact
 
-<does it affect security>
+Does it affect security?
 
 ### Other end user impact
 
-<other than API, are there other changes that affect a user? For example, CLI changes>
+Other than API, are there other changes that affect a user? For example the CLI changes.
 
 ### Performance impact
 
-<is there any performance impact>
+Is there any performance impact?
 
 ### Other deployer impact
 
-<how does it affect the deployment? are there config option changes?>
+How does it affect the deployment? Are there config option changes?
 
 ### Developer impact
 
-<does this affect other developers>
+Does this affect other developers?
 
 ## Use Cases
 
-<enumerated list of use cases for this feature>
+List use cases for the proposal.
 
 ## Implementation
 
-<in depth description of how the feature will be implemented. This can be a list of work items.>
+Describe how the feature will be implemented. This can be a list of work items.
 
 ## Alternatives considered
 
-<short description of alternative solutions to be considered>
+Describe alternative solutions to be considered.
