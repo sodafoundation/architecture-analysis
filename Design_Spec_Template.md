@@ -16,7 +16,11 @@ Author(s): Jane Doe (@jane-doe)
 
 ### Goals
 
+<what will be addressed by the proposal>
+
 ### Non-Goals
+
+<what will not be addressed by the proposal>
 
 ## Proposal
 
@@ -24,9 +28,15 @@ Author(s): Jane Doe (@jane-doe)
 
 ### Data model impact
 
+<does the proposal affect data model>
+
 ### REST API impact
 
+<does the proposal affect API>
+
 ### Security impact
+
+<does it affect security>
 
 ### Other end user impact
 
@@ -34,11 +44,15 @@ Author(s): Jane Doe (@jane-doe)
 
 ### Performance impact
 
+<is there any performance impact>
+
 ### Other deployer impact
 
 <how does it affect the deployment? are there config option changes?>
 
 ### Developer impact
+
+<does this affect other developers>
 
 ## Use Cases
 
