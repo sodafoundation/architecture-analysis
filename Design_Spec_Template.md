@@ -1,10 +1,10 @@
 # Title
 
-Status: Pending
+**Status**: Pending
 
-Version: Alpha | Beta | GA
+**Version**: Alpha | Beta | GA
 
-Author(s): Jane Doe (@jane-doe)
+**Author(s)**: Jane Doe (@jane-doe)
 
 ## Summary
 
