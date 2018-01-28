@@ -12,7 +12,7 @@ This proposal is drafted for building capabilities report mechanism for opensds 
 
 ## Motivation
 
-As a unified storage reousrce management controller, it's indispensable to enable resource scheduling features for opensds, so the controller NEEDS to perceptive of all backend capabilities (such as capacities, configuration, advanced features and so forth). But currently what's standing in the way is that capabilities report methods in different storage systems are far different. For example, there is few property reported in LVM while some vendor sotrage systems can expose a lot of features. So we should design a standard capabilities report interface to integrate different storage drivers and establish capabilities discovery workflow to close the cycle of report mechanism.
+As a unified storage resource management controller, it's indispensable to enable resource scheduling features for opensds, so the controller NEEDS to perceptive of all backend capabilities (such as capacities, configuration, advanced features and so forth). But currently what's standing in the way is that capabilities report methods in different storage systems are far different. For example, there is few property reported in LVM while some vendor storage systems can expose a lot of features. So we should design a standard capabilities report interface to integrate different storage drivers and establish capabilities discovery workflow to close the gap of report mechanism.
 
 ### Goals
 
@@ -32,7 +32,7 @@ Currently [Hotpot](https://github.com/opensds/opensds) project contains two serv
 
 ### Data model impact
 
-The proposal could imporve some properties in ```PoolSpec```, but considering the current format of ```ExtraSpec``` is map[string]interface{}, there would be no impact to the data model.
+The proposal could improve some properties in ```PoolSpec```, but considering the current format of ```ExtraSpec``` is map[string]interface{}, there would be no impact to the data model.
 
 Here is a sample JSON object of updated ```PoolSpec```:
 ```json
@@ -90,11 +90,11 @@ None
 
 ### Developer impact
 
-None
+For storage drivers, developers NEED to fix the gap between capabilities exposed by storage systems and capabilities report interface. Specifically, they should implement ```ListStoragePools``` interface by their owns to make sure all required fields (see sample JSON object above) returned.
 
 ## Use Cases
 
-User sets up a three-nodes opensds cluster: one controller node(running osdslet daemon) and two storage nodes(run osdsdock daemon seperately in LVM and Ceph cluster). Because user doesn't know any idea about backend storage type, so he only needs to specify a profile and opensds will handle all remaining work to create storage instance:
+User A sets up a three-nodes opensds cluster: one controller node(running osdslet daemon) and two storage nodes(run osdsdock daemon seperately in LVM and Ceph cluster). Because user doesn't know any idea about backend storage type, so A only needs to specify a profile and opensds will handle all remaining work to create storage instance:
 
   * Expose what every profile contains to user with properties collected from different storage backends.
 
