@@ -35,6 +35,7 @@ Currently [Hotpot](https://github.com/opensds/opensds) project contains two serv
 The proposal could improve some properties in ```PoolSpec```, but considering the current format of ```ExtraSpec``` is map[string]interface{}, there would be no impact to the data model.
 
 Here is a sample JSON object of updated ```PoolSpec```:
+
 ```json
 {
   "id": "f4486139-78d5-462d-a7b9-fdaf6c797e1b",
@@ -104,21 +105,33 @@ User A sets up a three-nodes opensds cluster: one controller node(running osdsle
 
 ## Implementation (Chinese for now)
 
-1.服务启动，读取配置文件信息，传给系统全局配置项变量```CONF```
+Here is the whole process of ```osdsdock``` service after implementing capabilities report features:
 
-2.从CONF中读取db endpoint，进行数据库初始化连接
+1. After the service initialized, the system will read all information from ```/etc/opensds/opensds.conf```, and pass the parameters into the global configuration variable ```CONF```
 
-3.初始化```dock.DockHub```结构体，并赋给全局变量```dock.Brain```
+2. Get ```dbEndpoint``` field from ```CONF``` and connect to etcd server using this varialbe
 
-4.通过调用```DockHub```的私有函数TriggerDiscovery实现后端存储能力的收集与上报
+3. Initialize ```DockHub``` structure defined in dock package, and pass the pointer of this instance to global variable ```Brain```
 
-  1）初始化```DockDiscoverer```结构体，从CONF中导入所有的```model.DockSpec```信息
+4. Enabling capabilities collecting and reporting feature by calling ```TriggerDiscovery``` method which is a private method of ```DockHub```
 
-  2）调用一个异步进程执行DiscoverAndReport函数，创建一个loop循环并传入一个用于stop的channel
+  1) Initialize ```DockDiscoverer``` structure defined in discovery package, import all properties about ```DockSpec``` from ```CONF``` and     pass them to the instance
 
-  3）loop循环内部首先调用南向的ListPools接口用于实现后端能力的收集，然后通过etcd的存储功能实现能力上报
+  2) Execute DiscoverAndReport method by calling a golang thread, and this thread will run a loop circle (see sample defination below):
 
-5.初始化gRPC的server实例，针对配置的endpoint进行服务监听
+```go
+type Context struct {
+	stopChan chan bool
+	errChan chan error
+	metaChan chan string	
+}
+
+func (dd *DockDiscoverer) DiscoverAndReport(d drivers.VolumeDriver, ctx *Context)
+```
+
+  3) Inside the loop sircle, the system will call ```ListStoragePools``` which is southbound interface to collect capabilities from storage backends, and then the report feature will be accomplished by storing the data in etcd
+
+5. Initialize a ```Server``` instance of gRPC, and start listening specified endpoint from ```CONF```
 
 ## Alternatives considered
 
