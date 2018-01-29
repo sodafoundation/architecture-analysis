@@ -115,9 +115,10 @@ Here is the whole process of ```osdsdock``` service after implementing capabilit
 
 4. Enabling capabilities collecting and reporting feature by calling ```TriggerDiscovery``` method which is a private method of ```DockHub```
 
-  4.1 Initialize ```DockDiscoverer``` structure defined in discovery package, import all properties about ```DockSpec``` from ```CONF``` and     pass them to the instance
 
-  4.2 Execute DiscoverAndReport method by calling a golang thread, and this thread will run a loop circle (see sample defination below):
+  * Initialize ```DockDiscoverer``` structure defined in discovery package, import all properties about ```DockSpec``` from ```CONF``` and     pass them to the instance
+
+  * Execute DiscoverAndReport method by calling a golang thread, and this thread will run a loop circle (see sample defination below):
 
 ```go
 type Context struct {
@@ -129,7 +130,7 @@ type Context struct {
 func (dd *DockDiscoverer) DiscoverAndReport(d drivers.VolumeDriver, ctx *Context)
 ```
 
-  4.3 Inside the loop sircle, the system will call ```ListStoragePools``` which is southbound interface to collect capabilities from storage backends, and then the report feature will be accomplished by storing the data in etcd
+  * Inside the loop sircle, the system will call ```ListStoragePools``` which is southbound interface to collect capabilities from storage backends, and then the report feature will be accomplished by storing the data in etcd
 
 5. Initialize a ```Server``` instance of gRPC, and start listening specified endpoint from ```CONF```
 
