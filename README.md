@@ -1,7 +1,7 @@
 # Design Proposals
 OpenSDS design proposals repo.
 
-## OpenSDS Technical Meeting
+## OpenSDS Technical Meetings
 * [Thursdays at 5:00pm PT (Pacific Time)](https://zoom.us/j/297629570) (weekly). [Convert to your timezone](http://www.thetimezoneconverter.com/?t=17:00&tz=PT%20%28Pacific%20Time%29).
 
 Join from PC, Mac, Linux, iOS or Android: https://zoom.us/j/297629570
