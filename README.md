@@ -18,6 +18,14 @@ Or Telephone:
 ### Meeting Agenda
 Meeting agenda and notes can be found [here](https://docs.google.com/document/d/1JlxAAOtvZvvf_KhVr8XQa6mUD7lkHOXlxuGruTKEukE/edit?usp=sharing).
 
+## OpenSDS Architecture
+
+[OpenSDS Architecture](https://docs.google.com/presentation/d/1-XZJ8lUSGzSXNs23P2MBSUjuyaIumWhSU85hKUbqauM/edit#)
+
+## OpenSDS Roadmap
+
+[OpenSDS Roadmap](https://docs.google.com/presentation/d/1wDhKmdBFOnWraDL98lSWvVoqbuw-xOTA549O04_de_U/edit#)
+
 ## Design Proposal Links
 
 Design proposals are drafted here:
