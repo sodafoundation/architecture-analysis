@@ -42,5 +42,7 @@ Design proposals are drafted here:
 
 [OpenSDS Minimum Requirements](https://docs.google.com/document/d/1lOntboT99pN-5iS4Z6_gz1Dzwlx7y1Q2weo1VxC_Knk/edit#)
 
+[OpenSDS and OpenStack Integration](https://docs.google.com/document/d/1xZWMlVSd1ove-N-xWv3ZmRbiauzBmdgiQu2C6HRSJKI/edit#)
+
 [Enhance Cinder with OpenSDS](https://docs.google.com/presentation/d/1Vn5dBLyUXlcTyNCdw-hgTqX5bMd4VDpCQNk7SgfipXA/edit#)
 
