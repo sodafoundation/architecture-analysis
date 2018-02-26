@@ -50,17 +50,13 @@ Here is a sample JSON object of updated ```PoolSpec```:
   "freeCapacity": 699,
   "dockId": "ccac4f33-e603-425a-8813-371bbe10566e",
   "extras": {
-    "DataStorageLineOfService": {
-      "RecoveryTimeObjective":0, # both thin and thick are supported in a pool
-      "ProvisioningPolicy":["Thin", "Fixed"],
-      "IsSpaceEfficient":true
-	},
-	"IOConnectivityLineOfService": {
-      "AccessProtocol":"FC",
-      "MaxIOPs":null
-    },
-    "DataProtectionLineOfService": {},
-    "xxx": {}
+    "recoveryTimeObjective":0, # both thin and thick are supported in a pool
+    "provisioningPolicy":["Thin", "Fixed"],
+    "isSpaceEfficient":true,
+    "accessProtocol":"FC",
+    "maxIOPs":null,
+    "diskType":"SSD",
+    "xxx":{}
   }
 }
 ```
@@ -72,10 +68,6 @@ None
 ### Security impact
 
 This proposal brings IPC mechanism, so we should take care of message synchronization and protect the data from loss if system crashes.
-
-***Q1***: If the main thread change the status of backend to ```error```, how can report thread accept this signal and jump out of the loop? What if the backend service comes alive again?
-
-***Q2***: If the main thread crashes down, how to clean the report thread and notify ```osdslet``` daemon? 
 
 ### Other end user impact
 
@@ -91,7 +83,7 @@ None
 
 ### Developer impact
 
-For storage drivers, developers NEED to fix the gap between capabilities exposed by storage systems and capabilities report interface. Specifically, they should implement ```ListStoragePools``` interface by their owns to make sure all required fields (see sample JSON object above) returned.
+For storage drivers, developers NEED to fix the gap between capabilities exposed by storage systems and capabilities report interface. Specifically, they should implement ```ListStoragePools``` interface by themselves to make sure all required fields (see sample JSON object above) returned.
 
 ## Use Cases
 
@@ -103,22 +95,22 @@ User A sets up a three-nodes opensds cluster: one controller node(running osdsle
 
   * Keep in track with report thread to make sure it alive.
 
-## Implementation (Chinese for now)
+## Implementation
 
 Here is the whole process of ```osdsdock``` service after implementing capabilities report features:
 
 1. After the service initialized, the system will read all information from ```/etc/opensds/opensds.conf```, and pass the parameters into the global configuration variable ```CONF```
 
-2. Get ```dbEndpoint``` field from ```CONF``` and connect to etcd server using this varialbe
+2. Get ```dbEndpoint``` field from ```CONF``` and connect to etcd server using this variable
 
 3. Initialize ```DockHub``` structure defined in dock package, and pass the pointer of this instance to global variable ```Brain```
 
-4. Enabling capabilities collecting and reporting feature by calling ```TriggerDiscovery``` method which is a private method of ```DockHub```
+4. Enable capabilities collecting and reporting feature by calling ```TriggerDiscovery``` method which is a private method of ```DockHub```
 
 
   * Initialize ```DockDiscoverer``` structure defined in discovery package, import all properties about ```DockSpec``` from ```CONF``` and     pass them to the instance
 
-  * Execute DiscoverAndReport method by calling a golang thread, and this thread will run a loop circle (see sample defination below):
+  * Execute DiscoverAndReport method by calling a golang thread, and this thread will run a loop circle (see sample definition below):
 
 ```go
 type Context struct {
@@ -130,10 +122,16 @@ type Context struct {
 func (dd *DockDiscoverer) DiscoverAndReport(d drivers.VolumeDriver, ctx *Context)
 ```
 
-  * Inside the loop sircle, the system will call ```ListStoragePools``` which is southbound interface to collect capabilities from storage backends, and then the report feature will be accomplished by storing the data in etcd
+  * Inside the loop circle, the system will call ```ListStoragePools``` which is southbound interface to collect capabilities from storage backends, and then the report feature will be accomplished by storing the data in etcd
 
 5. Initialize a ```Server``` instance of gRPC, and start listening specified endpoint from ```CONF```
 
 ## Alternatives considered
 
 None
+
+## Open issues
+
+***Q1***: If the main thread change the status of backend to ```error```, how can report thread accept this signal and jump out of the loop? What if the backend service comes alive again?
+
+***Q2***: If the main thread crashes down, how to clean the report thread and notify ```osdslet``` daemon? 
