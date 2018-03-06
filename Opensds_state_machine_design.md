@@ -71,8 +71,8 @@ None
 Volume statuses
 
 Status	          Description
-creating	      The volume is being created. 
-available	      The volume is ready to attach to an instance.
+creating	     |The volume is being created. 
+available	     |The volume is ready to attach to an instance.
 attaching	      The volume is attaching to an instance.
 detaching	      The volume is detaching from an instance.
 in-use	          The volume is attached to an instance.
