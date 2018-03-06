@@ -16,11 +16,11 @@ For example, When creating a volume, there is needed to know if it has been crea
 
 ### Goals
 
-*Design volume statuses
+Design volume statuses
 
-*Design snapshot statuses
+Design snapshot statuses
 
-*Design attachment statuses
+Design attachment statuses
 
 ### Non-Goals
 
@@ -107,4 +107,3 @@ error_detaching	  An error occurred while the volume is detaching from an instan
 ## Alternatives considered
 
 None
-
