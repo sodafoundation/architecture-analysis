@@ -70,17 +70,17 @@ None
 
 Volume statuses
 
-|Status	          | Description
-|creating	      |The volume is being created. 
-|available	      |The volume is ready to attach to an instance.
-|attaching	      |The volume is attaching to an instance.
-|detaching	      |The volume is detaching from an instance.
-|in-use	          |The volume is attached to an instance.
-|deleting	      |The volume is being deleted.
-|error	          |A volume creation error occurred.
-|error_deleting	  |A volume deletion error occurred.
-|error_extending  |An error occurred while attempting to extend a volume.
-|extending	      |The volume is being extended.
+Status            Description
+creating	      The volume is being created. 
+available	      The volume is ready to attach to an instance.
+attaching	      The volume is attaching to an instance.
+detaching	      The volume is detaching from an instance.
+in-use            The volume is attached to an instance.
+deleting	      The volume is being deleted.
+error             A volume creation error occurred.
+error_deleting    A volume deletion error occurred.
+error_extending   An error occurred while attempting to extend a volume.
+extending         The volume is being extended.
 
 
 Snapshot statuses
@@ -100,7 +100,7 @@ Status	          Description
 attached	      The volume has been attached to an instance.
 attaching	      The volume is attaching to an instance.
 detached	      The volume has been detached from an instance.
-error_attaching	  An error occurred while the volume is attaching to an instance.
+error_attaching   An error occurred while the volume is attaching to an instance.
 error_detaching	  An error occurred while the volume is detaching from an instance.
 
 
