@@ -24,7 +24,7 @@ Design attachment statuses
 
 ### Non-Goals
 
-Statuses for Group, GroupSnapshot, and Replication will be designed later.
+Statuses for Group, GroupSnapshot and Replication will be designed later.
 
 ## Proposal
 
