@@ -8,11 +8,11 @@ Author(s): jack li (@lasshpanzer)
 
 ## Summary
 
-The State machines of volume,snapshot and attachment show the real-time status and state transitions between actions.
+The State machines of volume, snapshot and attachment show the real-time status and state transitions between actions.
 
 ## Motivation
 
-For example, When creating a volume, there is needed to know if it has been created or if something went wrong.
+When creating a volume, there is needed to know if it has been created or if something went wrong.
 
 ### Goals
 
@@ -24,15 +24,15 @@ Design attachment statuses
 
 ### Non-Goals
 
-Some architectures needs to be changed.
+Statuses for Group, GroupSnapshot, and Replication will be designed later.
 
 ## Proposal
 
-There is no mechanism to show the real-time status and state transitions in the current opensds version.It needs to be implemented.
+There is no mechanism to show the real-time status and state transitions in the current opensds version. It needs to be implemented.
 
 ### Data model impact
 
-The state attributes of the data have been added to many new states
+Status will be added to volume, snapshot, and attachment resources.
 
 ### REST API impact
 
@@ -46,8 +46,7 @@ No
 
 ### Other end user impact
 
-Other than API, are there other changes that affect a user? For example the CLI changes.
-No
+When getting a resource such as a volume, end user can now see the changed status of the resource.
 
 ### Performance impact
 
@@ -60,7 +59,7 @@ None
 
 ### Developer impact
 
-Other developers may use these state attributes to design other properties and methods.
+Driver developers will need to return status after an operation is completed on a resource.
 
 ## Use Cases
 
@@ -71,37 +70,37 @@ None
 Volume statuses
 
 Status            Description
-creating	      The volume is being created. 
-available	      The volume is ready to attach to an instance.
-attaching	      The volume is attaching to an instance.
-detaching	      The volume is detaching from an instance.
-in-use            The volume is attached to an instance.
-deleting	      The volume is being deleted.
-error             A volume creation error occurred.
-error_deleting    A volume deletion error occurred.
-error_extending   An error occurred while attempting to extend a volume.
-extending         The volume is being extended.
+Creating	      The volume is being created. 
+Available	      The volume is ready to use.
+Attaching	      The volume is attaching to an instance.
+Detaching	      The volume is detaching from an instance.
+InUse             The volume is attached to an instance.
+Deleting	      The volume is being deleted.
+Error             A volume creation error occurred.
+ErrorDeleting     A volume deletion error occurred.
+ErrorExtending    An error occurred while attempting to extend a volume.
+Extending         The volume is being extended.
 
 
 Snapshot statuses
 
 Status	          Description
-creating	      The snapshot is being created.
-available	      The snapshot is ready to use.
-deleting	      The snapshot is being deleted
-error	          A snapshot creation error occurred.
-deleted	          The snapshot has been deleted
-error_deleting	  A snapshot deletion error occurred.
+Creating	      The snapshot is being created.
+Available	      The snapshot is ready to use.
+Deleting	      The snapshot is being deleted
+Error	          A snapshot creation error occurred.
+Deleted	          The snapshot has been deleted
+ErrorDeleting	  A snapshot deletion error occurred.
 
 
 Attachment statuses
 
 Status	          Description
-attached	      The volume has been attached to an instance.
-attaching	      The volume is attaching to an instance.
-detached	      The volume has been detached from an instance.
-error_attaching   An error occurred while the volume is attaching to an instance.
-error_detaching	  An error occurred while the volume is detaching from an instance.
+Attached	      The volume has been attached to an instance.
+Attaching	      The volume is attaching to an instance.
+Detached	      The volume has been detached from an instance.
+ErrorAttaching    An error occurred while the volume is attaching to an instance.
+ErrorDetaching	  An error occurred while the volume is detaching from an instance.
 
 
 ## Alternatives considered
