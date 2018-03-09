@@ -65,3 +65,7 @@ Describe how the feature will be implemented. This can be a list of work items.
 ## Alternatives considered
 
 Describe alternative solutions to be considered.
+
+## Open issues
+
+Describe some open issues to be considered.

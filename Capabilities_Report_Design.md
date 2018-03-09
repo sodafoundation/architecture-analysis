@@ -1,6 +1,6 @@
 # Capabilities Report Design
 
-**Status**: WIP
+**Status**: Completed
 
 **Version**: Alpha
 
@@ -34,7 +34,7 @@ Currently [Hotpot](https://github.com/opensds/opensds) project contains two serv
 
 The proposal could improve some properties in ```PoolSpec```, but considering the current format of ```ExtraSpec``` is map[string]interface{}, there would be no impact to the data model.
 
-Here is a sample JSON object of updated ```PoolSpec```:
+Currently vendors need to define some basic properties (diskType, accessProtocol, thinProvisioned and compressed) in their drivers, besides they can also configure some advaced features optionally to build their own technical competitiveness. Here is a sample JSON object of updated ```PoolSpec```:
 
 ```json
 {
@@ -50,13 +50,16 @@ Here is a sample JSON object of updated ```PoolSpec```:
   "freeCapacity": 699,
   "dockId": "ccac4f33-e603-425a-8813-371bbe10566e",
   "extras": {
-    "recoveryTimeObjective":0, # both thin and thick are supported in a pool
-    "provisioningPolicy":["Thin", "Fixed"],
-    "isSpaceEfficient":true,
+    "diskType": "SSD",
     "accessProtocol":"FC",
-    "maxIOPs":null,
-    "diskType":"SSD",
-    "xxx":{}
+    "thinProvisioned": true,
+    "compressed": true,
+    "advanced": {
+      "recoveryTimeObjective": 0,
+      "maxIOPS": 1000,
+      "deduped": false,
+      "xxx":{}
+	}
   }
 }
 ```
