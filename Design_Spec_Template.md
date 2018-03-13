@@ -1,10 +1,10 @@
 # Title
 
-Status: Pending
+**Status**: Pending
 
-Version: Alpha | Beta | GA
+**Version**: Alpha | Beta | GA
 
-Author(s): Jane Doe (@jane-doe)
+**Author(s)**: Jane Doe (@jane-doe)
 
 ## Summary
 
@@ -65,3 +65,7 @@ Describe how the feature will be implemented. This can be a list of work items.
 ## Alternatives considered
 
 Describe alternative solutions to be considered.
+
+## Open issues
+
+Describe some open issues to be considered.
