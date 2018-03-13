@@ -78,7 +78,7 @@ The user created a volume with a size of 1G. Then the user extends the size of t
 2. Add a cli command (osdsctl volume extend <id> <new size>).
 3. Implement extend volume in volume controller.
 4. Add logic in the selector to handle extend volume.
-5. Implement extend volume in drivers.
+5. Implement extend volume in LVM, Ceph, and Cinder drivers.
 
 ## Alternatives considered
 
