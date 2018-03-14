@@ -154,7 +154,8 @@ Because this proposal has modified the `StoragePool` definition, all packages (d
 ## Use Cases
 
 * Multi-tenants resource provisioning
-After the system initiated, the capabilities report thread will be triggered automatically and then capabilities properties of storage pool resource will be stored in database. After that, admin A creates a `ProvisionProfile` which can be viewed by all users, so user B can check all available profiles and create a volume.
+
+After the system initiated, the capabilities report thread will be triggered automatically and then capabilities properties of storage pool resource will be stored in database. After that, admin A creates a `ProvisionProfile` which can be viewed by all users, so user B can check all available profiles and choose one to create a volume.
 
 ## Implementation
 
