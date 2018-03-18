@@ -1,6 +1,6 @@
 # Design to Define Storage Pool Properties
 
-**Status**: WIP
+**Status**: Completed
 
 **Version**: Alpha
 
@@ -8,13 +8,15 @@
 
 ## Summary
 
-This proposal is designed for standardizing the properties definition of storage pool. This design is also part of referenced implementation of LineOfService defined in [Swordfish](https://www.snia.org/sites/default/files/SMI/swordfish/V105/Swordfish_v1.0.5_Specification.pdf) specification (v1.0.5), which promises to providing a unified approach for the management of storage and servers in hyperscale and cloud infrastructure environments.
+This proposal is designed for standardizing the properties definition of storage pool. This design is also part of referenced implementation of LineOfService defined in [Swordfish](https://www.snia.org/sites/default/files/SMI/swordfish/V105/Swordfish_v1.0.5_Specification.pdf) specification (v1.0.5), which promises to provide a unified approach for the management of storage and servers in hyperscale and cloud infrastructure environments.
 
 ## Motivation
 
-During these two months, we did a lot of work to design OpenSDS Profile (see [here](https://docs.google.com/document/d/1irNnz019j0XuW6SZNigs6QuYFOCC3uL44EkRYJiHyq8/edit?usp=sharing)). Besides the extensible [capabilties filter](https://github.com/opensds/opensds/pull/297) mechanism was also finished several days ago. But as for the design of implementation of StoragePool resource, it's still an issue unresolved.
+As we all know, we did a lot of work to design OpenSDS Profile (see [here](https://docs.google.com/document/d/1irNnz019j0XuW6SZNigs6QuYFOCC3uL44EkRYJiHyq8/edit?usp=sharing)). In addition, the extensible [capabilties filter](https://github.com/opensds/opensds/pull/297) mechanism was also finished several days ago. This design spec proposes how to implement the StoragePool resources based on the Swordfish spec.
 
-Now that we have come to a conclusion about Profile design, it would be much easier to design StoragePool because both of them are composed of LineOfService defined in Swordfish.
+Now that we have come to a conclusion about `Profile` design, it would be much easier to design `StoragePool` because both of them are composed of LineOfService defined in Swordfish.
+
+## Proposal
 
 ### Goals
 
@@ -23,14 +25,6 @@ Now that we have come to a conclusion about Profile design, it would be much eas
 * Update all storage drivers to stay up with the changes.
 
 * Update the fake pool data declared in test package.
-
-### Non-Goals
-
-None
-
-## Proposal
-
-Description of the proposed solution.
 
 ### Data model impact
 
@@ -128,7 +122,7 @@ type StoragePoolExtraSpec struct {
 
 ### Other deployer impact
 
-If this prososal gets permitted, the backend configuration file (take ceph for example) should be updated like this:
+If this prososal gets accepted, the backend configuration file (take ceph for example) should be updated like this:
 ```yaml
 configFile: /etc/ceph/ceph.conf
 pool:
@@ -157,6 +151,30 @@ Because this proposal has modified the `StoragePool` definition, all packages (d
 
 After the system initiated, the capabilities report thread will be triggered automatically and then capabilities properties of storage pool resource will be stored in database. After that, admin A creates a `ProvisionProfile` which can be viewed by all users, so user B can check all available profiles and choose one to create a volume.
 
+Currently the `ExtraSpec` defined in `ProfileSpec` is k-v pair, so an example of ProvsionProfile is as follows:
+```go
+SampleProfile = model.ProfileSpec{
+	BaseModel: &model.BaseModel{
+		Id: "2f9c0a04-66ef-11e7-ade2-43158893e017",
+	},
+	Name:        "silver",
+	Description: "silver policy",
+	Extras: model.ExtraSpec{
+		"dataStorage": map[string]interface{}{
+			"provisioningPolicy": "Thin",
+			"isSpaceEfficient":   true,
+		},
+		"ioConnectivity": map[string]interface{}{
+			"accessProtocol": "rbd",
+			"maxIOPS":        float64(1000),
+		},
+		"advanced": map[string]interface{}{
+			"diskType": "SSD",
+		},
+	},
+}
+```
+
 ## Implementation
 
 * Update `StoragePool` schema (see `Data model` section) in model package.
@@ -170,4 +188,5 @@ None
 
 ## Open issues
 
-None
+* This proposal is focusing on storage provision scenario, so all the storage pool properties are based on the current definition of `ProvisionProfile`. If other profiles (such as `ReplicationProfile`, `MigrationProfile`) are designed later, there would be some changes in pool properties.
+* Currently the design of `ReplicationProfile` also contains the properties `RecoveryTimeObjectives`, from my perspective there would no impact to the current design, because they are different use cases for users: one for data provisioning service and the other one is for data replication service. And the reason for adding `RTO` in DataStorageLoS is that user may also need HA when they ask for storage provsioning service, but this feature is definitely optional because not every vendor are not willing to implement this feature.
