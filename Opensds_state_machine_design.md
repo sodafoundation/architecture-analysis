@@ -69,7 +69,7 @@ None
 
 Volume status
 
-Status            Description
+ Status           Description
 Creating	      The volume is being created. 
 Available	      The volume is ready to use.
 Attaching	      The volume is attaching to an instance.
@@ -84,7 +84,7 @@ Extending         The volume is being extended.
 
 Snapshot status
 
-Status	          Description
+ Status	          Description
 Creating	      The snapshot is being created.
 Available	      The snapshot is ready to use.
 Deleting	      The snapshot is being deleted
@@ -95,7 +95,7 @@ ErrorDeleting	  A snapshot deletion error occurred.
 
 Attachment status
 
-Status	          Description
+ Status	          Description
 Attached	      The volume has been attached to an instance.
 Attaching	      The volume is attaching to an instance.
 Detached	      The volume has been detached from an instance.
