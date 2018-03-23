@@ -25,41 +25,6 @@ The proposal only satisfies the data model of the pool and profile in the curren
 ## Proposal
 
 This proposal is drafted to enhance the scheduler of OpenSDS.
-
-### Data model impact
-
-None
-
-### REST API impact
-
-None
-
-### Security impact
-
-None
-
-### Other end user impact
-
-None
-
-### Performance impact
-
-None
-
-### Other deployer impact
-
-None
-
-### Developer impact
-
-None
-
-## Use Cases
-
-If the user creates a volume and requires the volume's AvailabilityZone to be az1, then the user can set the extras["availabilityZone"]" in the profile to "az1" or "s== az1" before creating the volume.
-
-## Implementation
-
 1、OpenSDS convert "pool" from a StoragePoolSpec to a map[string]interface{}. 
    For example: 
    PoolA = StoragePoolSpec{
@@ -109,6 +74,38 @@ If the user creates a volume and requires the volume's AvailabilityZone to be az
    The "s" indicates it is a string comparison. These choose a pool that satisfies the comparison of strings in 
    capability and specification. For example, if "availabilityZone": "s== az1", a pool that reports availabilityZone 
    of "az1" will be selected.
+
+### Data model impact
+
+None
+
+### REST API impact
+
+None
+
+### Security impact
+
+None
+
+### Other end user impact
+
+None
+
+### Performance impact
+
+None
+
+### Other deployer impact
+
+None
+
+### Developer impact
+
+None
+
+## Use Cases
+
+If the user creates a volume and requires the volume's AvailabilityZone to be az1, then the user can set the extras["availabilityZone"]" in the profile to "az1" or "s== az1" before creating the volume.
 
 ## Alternatives considered
 
