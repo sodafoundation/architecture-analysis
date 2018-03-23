@@ -16,15 +16,15 @@ When creating a volume, there is a need to know if it has been created or if som
 
 ### Goals
 
-Design volume statuses
+Design volume status
 
-Design snapshot statuses
+Design snapshot status
 
-Design attachment statuses
+Design attachment status
 
 ### Non-Goals
 
-Statuses for Group, GroupSnapshot and Replication will be designed later.
+status for Group, GroupSnapshot and Replication will be designed later.
 
 ## Proposal
 
@@ -67,7 +67,7 @@ None
 
 ## Implementation
 
-Volume statuses
+Volume status
 
 Status            Description
 Creating	      The volume is being created. 
@@ -82,7 +82,7 @@ ErrorExtending    An error occurred while attempting to extend a volume.
 Extending         The volume is being extended.
 
 
-Snapshot statuses
+Snapshot status
 
 Status	          Description
 Creating	      The snapshot is being created.
@@ -93,7 +93,7 @@ Deleted	          The snapshot has been deleted
 ErrorDeleting	  A snapshot deletion error occurred.
 
 
-Attachment statuses
+Attachment status
 
 Status	          Description
 Attached	      The volume has been attached to an instance.
