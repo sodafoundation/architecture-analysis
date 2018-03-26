@@ -5,11 +5,16 @@ OpenSDS design proposals repo.
 ### Meeting Time
 
 It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm ET) on Tuesdays.
+
 Next meeting date: March 27, 2018
+
 Zoom Link: https://zoom.us/j/777978108
 
+
 It is also held bi-weekly at 12:00am-1:00am UTC (5:00pm-6:00pm PT and 8:00pm-9:00pm ET) on Thursdays.
+
 Next meeting date: April 5, 2018
+
 Zoom Link:  https://zoom.us/j/229373941
 
 ### Meeting Agenda
