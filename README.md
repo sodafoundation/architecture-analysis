@@ -3,17 +3,14 @@ OpenSDS design proposals repo.
 
 ## OpenSDS Technical Meetings
 ### Meeting Time
-[Thursdays at 5:00pm PT (Pacific Time)](https://zoom.us/j/297629570) (weekly). [Convert to your timezone](http://www.thetimezoneconverter.com/?t=17:00&tz=PT%20%28Pacific%20Time%29).
 
-Join from PC, Mac, Linux, iOS or Android: https://zoom.us/j/297629570
+It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm ET) on Tuesdays.
+Next meeting date: March 27, 2018
+Zoom Link: https://zoom.us/j/777978108
 
-Or iPhone one-tap :
-    US: +16699006833,,297629570#  or +19294360666,,297629570# 
-Or Telephone:
-    Dial(for higher quality, dial a number based on your current location): 
-        US: +1 669 900 6833  or +1 929 436 0666 
-    Meeting ID: 297 629 570
-    International numbers available: https://zoom.us/zoomconference?m=Rd--yoOGxogtTrGwIUrLHwlk15A6n99c
+It is also held bi-weekly at 12:00am-1:00am UTC (5:00pm-6:00pm PT and 8:00pm-9:00pm ET) on Thursdays.
+Next meeting date: April 5, 2018
+Zoom Link:  https://zoom.us/j/229373941
 
 ### Meeting Agenda
 Meeting agenda and notes can be found [here](https://docs.google.com/document/d/1JlxAAOtvZvvf_KhVr8XQa6mUD7lkHOXlxuGruTKEukE/edit?usp=sharing).
