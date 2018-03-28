@@ -44,10 +44,12 @@ type DataStorageLoS struct {
 	RecoveryTimeObjective int64 `json:"recoveryTimeObjective,omitempty" yaml:"recoveryTimeObjective,omitempty"`
 
 	// ProvisioningPolicy only supports "Fixed" and "Thin".
+	// +required
 	ProvisioningPolicy string `json:"provisioningPolicy,omitempty" yaml:"provisioningPolicy,omitempty"`
 
 	// IsSpaceEfficient indicates that the storage is compressed or deduplicated.
 	// The default value for this prperty is false.
+	// +required
 	IsSpaceEfficient bool `json:"isSpaceEfficient,omitempty" yaml:"isSpaceEfficient,omitempty"`
 }
 
@@ -56,18 +58,20 @@ type DataStorageLoS struct {
 type IOConnectivityLoS struct {
 	// The Enumeration Literal shall specify the Access protocol for this
 	// service option.
+	// +required
 	AccessProtocol string `json:"accessProtocol,omitempty" yaml:"accessProtocol,omitempty"`
 
 	// MaxIOPS shall be the maximum IOs per second that the connection shall
 	// allow for the selected access protocol.
+	// +required
 	// +units:[IO]/s
 	MaxIOPS int64 `json:"maxIOPS,omitempty" yaml:"maxIOPS,omitempty"`
 	
 	// MaxBWS shall be the maximum amount of data that can be transmitted in a
 	// fixed amount of time.
+	// +required
 	// +units:[MB]/s
 	MaxBWS int64 `json:"maxBWS,omitempty" yaml:"maxBWS,omitempty"`
-
 }
 
 // DataProtectionLoS describes a replica that protects data from loss. The
@@ -80,10 +84,13 @@ type DataProtectionLos struct{}
 ```go
 type StoragePoolExtraSpec struct {
 	// DataStorage represents suggested some data storage capabilities.
+	// +required
 	DataStorage DataStorageLoS `json:"dataStorage,omitempty" yaml:"dataStorage,omitempty"`
 	// IOConnectivity represents some suggested IO connectivity capabilities.
+	// +required
 	IOConnectivity IOConnectivityLoS `json:"ioConnectivity,omitempty" yaml:"ioConnectivity,omitempty"`
 	// DataProtection represents some suggested data protection capabilities.
+	// +required
 	DataProtection DataProtectionLos `json:"dataProtection,omitempty" yaml:"dataProtection,omitempty"`
 
 	// Besides those basic suggested pool properties above, vendors can configure
@@ -112,10 +119,13 @@ Compared with before, there would be some performance loss when encoding and dec
 ```go
 type StoragePoolExtraSpec struct {
 	// DataStorage represents suggested some data storage capabilities.
+	// +required
 	DataStorage *DataStorageLoS `json:"dataStorage,omitempty" yaml:"dataStorage,omitempty"`
 	// IOConnectivity represents some suggested IO connectivity capabilities.
+	// +required
 	IOConnectivity *IOConnectivityLoS `json:"ioConnectivity,omitempty" yaml:"ioConnectivity,omitempty"`
 	// DataProtection represents some suggested data protection capabilities.
+	// +required
 	DataProtection *DataProtectionLos `json:"dataProtection,omitempty" yaml:"dataProtection,omitempty"`
 
 	// Besides those basic suggested pool properties above, vendors can configure
@@ -143,6 +153,7 @@ pool:
         accessProtocol: rbd
         maxIOPS: 8000000
         maxBWS: 700
+      dataProtection:
       advanced:
         diskType: SSD
         latency: 3ms
@@ -175,6 +186,7 @@ SampleProfile = model.ProfileSpec{
 			"accessProtocol": "rbd",
 			"maxIOPS":        float64(8000000),
 		},
+		"dataProtection": map[string]interface{}{},
 		"advanced": map[string]interface{}{
 			"diskType": "SSD",
 			"latency": "3ms",
@@ -198,3 +210,4 @@ None
 
 * This proposal is focusing on storage provision scenario, so all the storage pool properties are based on the current definition of `ProvisionProfile`. If other profiles (such as `ReplicationProfile`, `MigrationProfile`) are designed later, there would be some changes in pool properties.
 * Currently the design of `ReplicationProfile` also contains the properties `RecoveryTimeObjectives`, from my perspective there would no impact to the current design, because they are different use cases for users: one for data provisioning service and the other one is for data replication service. And the reason for adding `RTO` in DataStorageLoS is that user may also need HA when they ask for storage provsioning service, but this feature is definitely optional because not every vendor are not willing to implement this feature.
+* For `FreeCapacity` definition in `StoragePoolSpec`, it's still unclear how to report real free capacity of storage pools, because it varies a lot from different storage drivers. For example, in ceph both the replicated size and thin-provisioning enabled would have an impact on the real capacity. So we should have a deeper discussion about how to normalize this field.
