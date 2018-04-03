@@ -29,16 +29,18 @@ This proposal is drafted to enhance the scheduler of OpenSDS.
    For example: 
    PoolA = StoragePoolSpec{
 		AvailabilityZone: "az1",
-		Extras: model.ExtraSpec{
-			"thin": true,
+		Extras: model.StoragePoolExtraSpec{
+			Advanced: model.ExtraSpec{
+				"thin": true,
+			},
 		}
         ...
 	}
-    
+
     The result is:
     PoolB = map[string]interface{
 			"availabilityZone": "az1", // "availabilityZone" = The json name corresponding to "AvailabilityZone".
-			"extras.thin": true, // "extras.thin" = The json name corresponding to "Extras" + "." + The original name of "thin"
+			"extras.advanced.thin": true, // "extras.thin" = The json name corresponding to "Extras" + The json name corresponding to "Advanced" + "." + The original name of "thin"
             ...
 	}
     
