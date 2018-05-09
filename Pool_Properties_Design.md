@@ -10,8 +10,8 @@
 
 This proposal is designed for standardizing the properties definition of storage
 pool. This design is also part of referenced implementation of LineOfService
-defined in [Swordfish](https://www.snia.org/sites/default/files/SMI/swordfish/V105/Swordfish_v1.0.5_Specification.pdf)
-specification (v1.0.5), which promises to provide a unified approach for the
+defined in [Swordfish](https://www.snia.org/sites/default/files/SMI/swordfish/v106/Swordfish_v1.0.6_Specification.pdf)
+specification (v1.0.6), which promises to provide a unified approach for the
 management of storage and servers in hyperscale and cloud infrastructure
 environments.
 
@@ -49,17 +49,13 @@ type DataStorageLoS struct {
 	// The enumeration literal specifies the time after a disaster that the
 	// client shall regain conformant service level access to the primary
 	// store. The possible values of this property could be:
-	// * Immediate: Access to synchronous replicas shall be instantaneous.
-	// * Nearline: Access to a replica shall be consistent with switching access
-	//   to a different path through a different front-end interconnection
-	//   infrastructure. Some inconsistency may occur. A restore step may be
-	//   required before recovery can commence.
-	// * Offline: Access to a replica may take a significant amount of time.
-	//   No direct connection to the replica is assumed. Some inconsistency loss
-	//   may occur. A restore step is likely to be required.
-	// * Online: Access to a synchronous replica shall be consistent with
-	//   switching access to a different path the same front-end interconnect.
-	//   A restore step shall not be required.
+	// * OnlineActive: Active access to synchronous replicas.
+	// * OnlinePassive: Passive access to replicas via the same front-end
+	//   interconnect.
+	// * Nearline: Access to replica via a different front-end interconnect. A
+	//   restore step is required before recovery can commence.
+	// * Offline: No direct connection to the replica. (i.e. To a bunker
+	//   containing backup media.)
 	//
 	// The expectation is that the services required to implement this
 	// capability are part of the advertising system.
@@ -84,7 +80,11 @@ type DataStorageLoS struct {
 // connectivity.
 type IOConnectivityLoS struct {
 	// The enumeration literal shall specify the Access protocol for this
-	// service option.
+	// service option. The possible values of this property could be:
+	// * iSCSI: Internet SCSI.
+	// * RBD: Ceph RBD protocol.
+	// * FC: Fibre Channel.
+	// * NVMeOverFabrics: NVMe over Fabrics.
 	AccessProtocol string `json:"accessProtocol,omitempty" yaml:"accessProtocol,omitempty"`
 
 	// MaxIOPS shall be the maximum IOs per second that the connection shall
@@ -92,8 +92,8 @@ type IOConnectivityLoS struct {
 	// +units:[IO]/s
 	MaxIOPS int64 `json:"maxIOPS,omitempty" yaml:"maxIOPS,omitempty"`
 
-	// MaxBWS shall be the maximum amount of data that can be transmitted in a
-	// fixed amount of time.
+	// MaxBWS shall be the the maximum bandwidth in Mbps that a connection can
+	// support.
 	// +units:Mb/s
 	MaxBWS int64 `json:"maxBWS,omitempty" yaml:"maxBWS,omitempty"`
 }
@@ -104,7 +104,18 @@ type IOConnectivityLoS struct {
 // DataProtectionLoS describes a replica that protects data from loss. The
 // requirements must be met collectively by the communication path and the
 // replica.
-type DataProtectionLos struct {
+// The expectation is that the services required to implement this
+// capability are part of the advertising system.
+type DataProtectionLoS struct {
+	// IsIsolated shall indicate if the replica is in a separate fault domain.
+	IsIsolated bool `json:"isIsolated,omitempty" yaml:"isIsolated,omitempty"`
+
+	// MinLifetime shall be an ISO 8601 duration that specifies the minimum
+	// required lifetime of the replica. For example, "P3Y6M4DT12H30M5S"
+	// represents a duration of "3 years, 6 months, 4 days, 12 hours, 30 minutes
+	// and 5 seconds".
+	MinLifetime string `json:"minLifetime,omitempty" yaml:"minLifetime,omitempty"`
+
 	// The enumeration literal specifies the geograhic scope of the failure
 	// domain, and currently contains these options:
 	// * Datacenter: A facility that provides communication, power, or cooling
@@ -119,39 +130,26 @@ type DataProtectionLos struct {
 	//   communication, power, or cooling.
 	// * Server: Components of a CPU/memory complex that share the same
 	//   infrastructure.
-	//
-	// The expectation is that the services required to implement this
-	// capability are part of the advertising system.
 	RecoveryGeographicObject string `json:"recoveryGeographicObjective,omitempty" yaml:"recoveryGeographicObjective,omitempty"`
 
-	// The enumeration literal shall be an ISO 8601 duration that specifies the
-	// maximum time over which source data may be lost on failure. For example,
-	// "P3Y6M4DT12H30M5S" represents a duration of "three years, six months,
-	// four days, twelve hours, thirty minutes, and five seconds". Date and time
-	// elements including their designator may be omitted if their value is
-	// zero, and lower order elements may also be omitted for reduced precision.
-	//
-	// The expectation is that the services required to implement this
-	// capability are part of the advertising system.
+	// This value shall be an ISO 8601 duration that specifies the maximum time
+	// over which source data may be lost on failure. For example,
+	// "P3Y6M4DT12H30M5S" represents a duration of "3 years, 6 months, 4 days,
+	// 12 hours, 30 minutes and 5 seconds".
+	// In the case that IsIsolated = false, failure of the domain is not a
+	// consideration.
 	RecoveryPointObjectiveTime string `json:"recoveryPointObjectiveTime,omitempty" yaml:"recoveryPointObjectiveTime,omitempty"`
 
 	// The enumeration literal specifies the time after a disaster that the
 	// client shall regain conformant service level access to the primary
 	// store. The possible values of this property could be:
-	// * Immediate: Access to synchronous replicas shall be instantaneous.
-	// * Nearline: Access to a replica shall be consistent with switching access
-	//   to a different path through a different front-end interconnection
-	//   infrastructure. Some inconsistency may occur. A restore step may be
-	//   required before recovery can commence.
-	// * Offline: Access to a replica may take a significant amount of time.
-	//   No direct connection to the replica is assumed. Some inconsistency loss
-	//   may occur. A restore step is likely to be required.
-	// * Online: Access to a synchronous replica shall be consistent with
-	//   switching access to a different path the same front-end interconnect.
-	//   A restore step shall not be required.
-	//
-	// The expectation is that the services required to implement this
-	// capability are part of the advertising system.
+	// * OnlineActive: Active access to synchronous replicas.
+	// * OnlinePassive: Passive access to replicas via the same front-end
+	//   interconnect.
+	// * Nearline: Access to replica via a different front-end interconnect. A
+	//   restore step is required before recovery can commence.
+	// * Offline: No direct connection to the replica. (i.e. To a bunker
+	//   containing backup media.)
 	RecoveryTimeObjective string `json:"recoveryTimeObjective,omitempty" yaml:"recoveryTimeObjective,omitempty"`
 
 	// The enumeration literals may be used to specify the intended outcome of
@@ -164,9 +162,6 @@ type DataProtectionLos struct {
 	//   shall create a point in time, virtual copy of the source.
 	// * TokenizedClone: This enumeration literal shall indicate that replication
 	//   shall create a token based clone.
-	//
-	// The expectation is that the services required to implement this
-	// capability are part of the advertising system.
 	ReplicaType string `json:"replicaType,omitempty" yaml:"replicaType,omitempty"`
 }
 ```
@@ -242,6 +237,8 @@ pool:
         maxIOPS: 8000000
         maxBWS: 700
       dataProtection:
+        isIsolated: true
+        minLifetime: P0Y0M7DT0H0M0S
         recoveryGeographicObjective: Region
         RecoveryPointObjectiveTime: P0Y0M0DT12H30M5S
         RecoveryTimeObjective: Nearline
