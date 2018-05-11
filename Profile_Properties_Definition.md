@@ -92,7 +92,7 @@ type SnapshotPropertiesSpec struct {
 		Datetime string `json:"datetime,omitempty"`
 		// The value specifies the duration of executing a operation, which
 		// contains three options including Daily, Weekly and Monthly.
-		Occurence string `json:"occurence,omitempty"`
+		Occurrence string `json:"occurrence,omitempty"`
 	} `json:"schedule,omitempty"`
 	Retention struct {
 		// The value specifies the number of recently created snapshots for
