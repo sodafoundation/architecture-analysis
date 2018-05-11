@@ -1,6 +1,6 @@
 # Profile Properties Definition
 
-**Status**: WIP
+**Status**: Completed
 
 **Version**: Alpha
 
@@ -18,7 +18,7 @@ environments.
 ## Motivation
 
 The profile defined in OpenSDS represents a service level, such as gold, silver
-and copper. The controller chooses an appropriate dock service for the profile
+and bronze. The controller chooses an appropriate dock service for the profile
 to handle the request when user creates a volume or group. This design proposal
 aims to define the standard capability rules for the profile to ensure that all
 the storage system can abstract out virtual pools in accordance with the
@@ -185,6 +185,15 @@ This proposal would have imapact on operations about profile extras below:
 | GET | /:tenantId/profiles/:profileId/extras | List all properties in profile |
 | DELETE | /:tenantId/profiles/:profileId/extras/:extraKey | Delete specified property from profile |
 
+If the proposal get approved, those methods would be replaced with below:
+
+| Method | Uri | Description |
+| --- | --- | --- |
+| POST | /:tenantId/profiles/:profileId/customProperties | Add key-value customized properties to profile |
+| GET | /:tenantId/profiles/:profileId/customProperties | List all customized properties in profile |
+| PUT | /:tenantId/profiles/:profileId/customProperties/:customKey | Update specified customized property in profile |
+| DELETE | /:tenantId/profiles/:profileId/customProperties/:customKey | Remove specified customized property from profile |
+
 ### Security impact
 
 None
@@ -192,7 +201,8 @@ None
 ### Other end user impact
 
 There would be some changes in client package that all operations related to
-profile extras should be updated with REST API.
+profile extras should be updated with REST API. See detailed changes in
+[REST API](### REST API impact) section.
 
 ### Performance impact
 
@@ -214,15 +224,17 @@ None
 
 * Data replication
 
-* Data protection for persistent volumes
+* Data protection for persistent volumes using snapshot
 
 
 
 ## Implementation
 
-* Update `ProfileSpec` schema (see `Data model` section) in model package.
+* Update `ProfileSpec` schema (see [Data model](### Data model impact) section)
+in model package.
 * Improve the selector filter to map new ProfileSpec to StoragePoolSpec.
-* Update REST API methods related to profile extras in api package.
+* Update REST API methods related to profile extras
+(see [REST API](### REST API impact) section) in api package.
 
 ## Alternatives considered
 
