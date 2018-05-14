@@ -27,7 +27,7 @@ The working steps of Cinder-compatible api are as follows:
 1.Users use a python-cinderclient to issue an api request.
 2.Cinder-compatible api receive the request, parse and convert the request to hotpot. 
 3.Hotpot receive the request and performs related operations and returns the result to the Cinder-compatible api.
-3.Cinder-compatible api receive the result, parse and convert the result to python-cinderclient. 
+4.Cinder-compatible api receive the result, parse and convert the result to python-cinderclient. 
 
 ### Data model impact
 
@@ -72,7 +72,6 @@ Create volume type
         }
     }
 }
-
 2.	Cinder-compatible api receive the request, parse and convert the request to hotpot api request, then send the request to hotpot:
 	{ “profile”: {
       "name": "vol-type-001",
@@ -83,6 +82,7 @@ Create volume type
       }
    }
 }
+
 Note:
 ●	Currently hotpot doesn’t support the volume type access
 ●	The storageType can be block, file, object, default is block
@@ -140,10 +140,11 @@ Create attachment
   "mountpoint": "/dev/vdb",
   "volumeId": "462dcc2d-130d-4654-8db1-da0df2da6a0d"
 }
+
 Note:
 ●	Multipath and mode aren’t supported in hotpot, these feature should be implemented in future.
 ●	Instance_uuid: In Nova terms server == instance, the server_id parameter referenced below is the UUID of the Instance, for non-nova consumers this can be a server UUID or some other arbitrary unique identifier. 
-		For hotpot, this parameter can be stored in metadata.
+	For hotpot, this parameter can be stored in metadata.
 
 ## Implementation
 
