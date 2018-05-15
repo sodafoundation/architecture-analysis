@@ -35,15 +35,13 @@ None
 ### REST API impact
 
 The following API will be added to support this capability.
-'''v1/{ProjectID}/volumes/{VolumeID}/action.
+'''v1/{ProjectID}/volumes/{VolumeID}/resize
 
 Method: POST
 
 JSON schema definition:
 {
-  "extend": {
-    "newSize": 3
-  }
+	"newSize": 3
 }
 
 Successful response code: 202'''
