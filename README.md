@@ -5,7 +5,7 @@ OpenSDS design proposals repo.
 ### Meeting Time
 
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
-Next Meeting Time on May 31, 2018 Thursday at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (May 18, 2018 Friday 1:00am-2:00am UTC)
+Next Meeting Time on May 31, 2018 Thursday at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (June 1, 2018 Friday 1:00am-2:00am UTC)
 
 It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays (1:00am-2:00am UTC on Fridays).
 
