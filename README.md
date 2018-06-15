@@ -4,14 +4,6 @@ OpenSDS design proposals repo.
 ## OpenSDS Technical Meetings
 ### Meeting Time
 
-#### Meeting on Thursdays Pacific Time (or Fridays UTC)
-Next Meeting Time on June 14, 2018 Thursday at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (June 15, 2018 Friday 1:00am-2:00am UTC)
-
-It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays (1:00am-2:00am UTC on Fridays).
-
-Zoom Link:  https://zoom.us/j/229373941
-
-
 #### Meeting Cancellation
 Meetings on June 19, 2018 and June 28, 2018 will be canceled due to OSS in Tokyo on June 20-22 and LC3 in Beijing on June 25-27.
 
@@ -22,6 +14,15 @@ Next Meeting Date: July 3, 2018
 It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm ET) on Tuesdays.
 
 Zoom Link: https://zoom.us/j/777978108
+
+
+#### Meeting on Thursdays Pacific Time (or Fridays UTC)
+Next Meeting Time on July 12, 2018 Thursday at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (July 13, 2018 Friday 1:00am-2:00am UTC)
+
+It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays (1:00am-2:00am UTC on Fridays).
+
+Zoom Link:  https://zoom.us/j/229373941
+
 
 ### Meeting Agenda
 Meeting agenda and notes can be found [here](https://docs.google.com/document/d/1JlxAAOtvZvvf_KhVr8XQa6mUD7lkHOXlxuGruTKEukE/edit?usp=sharing).
