@@ -4,17 +4,16 @@ OpenSDS design proposals repo.
 ## OpenSDS Technical Meetings
 ### Meeting Time
 
+#### Meeting Cancellation
+Meeting on July 17, 2018 will be canceled due to OSCon in Portland on July 16-20.
+
 
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
-Next Meeting Time on July 12, 2018 Thursday at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (July 13, 2018 Friday 1:00am-2:00am UTC)
+Next Meeting Time on on July 26, 2018 Thursday 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (or July 27, 2018 Friday 1:00am-2:00am UTC)
 
 It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays (1:00am-2:00am UTC on Fridays).
 
 Zoom Link:  https://zoom.us/j/229373941
-
-
-#### Meeting Cancellation
-Meeting on July 17, 2018 will be canceled due to OSCon in Portland on July 16-20.
 
 
 #### Meeting on Tuesdays
