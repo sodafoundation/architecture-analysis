@@ -4,19 +4,25 @@ OpenSDS design proposals repo.
 ## OpenSDS Technical Meetings
 ### Meeting Time
 
+#### Meeting Cancellation
+Meeting on July 17, 2018 will be canceled due to OSCon in Portland on July 16-20.
+
+
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
-Next Meeting Time on May 17, 2018 Thursday at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (May 18, 2018 Friday 1:00am-2:00am UTC)
+Next Meeting Time on on July 26, 2018 Thursday 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (or July 27, 2018 Friday 1:00am-2:00am UTC)
 
 It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays (1:00am-2:00am UTC on Fridays).
 
 Zoom Link:  https://zoom.us/j/229373941
 
+
 #### Meeting on Tuesdays
-Next Meeting Date: May 22, 2018
+Next Meeting Date: July 31, 2018
 
 It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm ET) on Tuesdays.
 
 Zoom Link: https://zoom.us/j/777978108
+
 
 ### Meeting Agenda
 Meeting agenda and notes can be found [here](https://docs.google.com/document/d/1JlxAAOtvZvvf_KhVr8XQa6mUD7lkHOXlxuGruTKEukE/edit?usp=sharing).
@@ -47,10 +53,11 @@ Design proposals are drafted here:
 
 [OpenSDS and OpenStack Integration](https://docs.google.com/document/d/1xZWMlVSd1ove-N-xWv3ZmRbiauzBmdgiQu2C6HRSJKI/edit#)
 
-[Enhance Cinder with OpenSDS](https://docs.google.com/presentation/d/1Vn5dBLyUXlcTyNCdw-hgTqX5bMd4VDpCQNk7SgfipXA/edit#)
-
 ## Project Tracking
 
 Project tracking sheet is [here](https://docs.google.com/spreadsheets/d/1eFZsYCqTW8-zc8K6IMFUVhmzrZQKpOeO8Br0cCraPlU/edit?usp=sharing).
 
+## Mini Summit
+
+OpenSDS mini summit presentations are posted [here](https://github.com/opensds/presentations/tree/master/mini-summit-kubecon-copenhagen-2018)
 

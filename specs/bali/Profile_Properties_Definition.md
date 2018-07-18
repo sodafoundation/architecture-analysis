@@ -21,14 +21,14 @@ The profile defined in OpenSDS represents a service level, such as gold, silver
 and bronze. The controller chooses an appropriate dock service for the profile
 to handle the request when user creates a volume or group. This design proposal
 aims to define the standard capability rules for the profile to ensure that all
-the storage system can abstract out virtual pools in accordance with the
+the storage systems can abstract out virtual pools in accordance with the
 standard rules.
 
 ## Proposal
 
 ### Goals
 
-* Redesign the definition of `ExtraSpec` contained in `ProfileSpec`.
+* Refactor the definition of `ExtraSpec` contained in `ProfileSpec`.
 
 * Update the selector filter to map profile properties with pool capabilities.
 
@@ -132,9 +132,6 @@ type CustomPropertiesSpec map[string]interface{}
 // capabilities which are desirable features for a class of applications.
 type ProfileSpec struct {
 	*BaseModel
-	// The uuid of project
-	// + readOnly
-	TenantId string `json:"tenantId"`
 
 	// The name of the profile.
 	Name string `json:"name,omitempty"`
@@ -222,11 +219,11 @@ None
 
 * Data provisioning
 
-* Data replication
-
-* Data protection for persistent volumes using snapshot
-
-
+Normally when user requests a volume, more parameters should be configured if
+he wants to perform additional operations (such as periodic snapshot or periodic
+replication operation) at the same time. But with this proposal user just needs
+to specify a profile and OpenSDS controller will hanler all the orchestration
+procedures.
 
 ## Implementation
 
@@ -244,3 +241,6 @@ None
 
 More scenarios should be presented in the long term, including data migration,
 data lifecycle, etc.
+
+In this case, we would define `MigrationPropertiesSpec`,
+`DataLifecyclePropertiesSpec` and add these fields in `ProfileSpec`.
