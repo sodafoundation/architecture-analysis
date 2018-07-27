@@ -52,8 +52,8 @@ type ProvisioningPropertiesSpec struct {
 ```go
 type ReplicationPropertiesSpec struct {
 	// DataProtection represents some suggested data protection capabilities.
-	DataProtection DataProtectionLoS `json:"dataProrection,omitempty"`
-	// ReplicaInfos represents some suggested data replicaiton information.
+	DataProtection DataProtectionLoS `json:"dataProtection,omitempty"`
+	// ReplicaInfos represents some suggested data replication information.
 	ReplicaInfos struct {
 		// The enumeration literal specifies whether the target elements will be
 		// updated synchronously or asynchronously. The possible values of this
@@ -95,8 +95,7 @@ type SnapshotPropertiesSpec struct {
 		Occurrence string `json:"occurrence,omitempty"`
 	} `json:"schedule,omitempty"`
 	Retention struct {
-		// The value specifies the number of recently created snapshots for
-		// retention.
+		// The value specifies the total number of snapshots for retention.
 		// +optional
 		Number int64 `json:"number,omitempty"`
 		// The value specifies the duration of snapshots for retention.
@@ -127,8 +126,8 @@ type CustomPropertiesSpec map[string]interface{}
 
 * ProfileSpec
 ```go
-// An OpenSDS profile is identified by a unique name and ID. With adding
-// profile properties, each profilecontains a set of tags of storage
+// An OpenSDS profile is identified by a unique name and ID. With additional
+// profile properties, each profile contains a set of tags of storage
 // capabilities which are desirable features for a class of applications.
 type ProfileSpec struct {
 	*BaseModel
@@ -174,7 +173,7 @@ type ProfileSpec struct {
 
 ### REST API impact
 
-This proposal would have imapact on operations about profile extras below:
+This proposal would have impact on operations about profile extras below:
 
 | Method | Uri | Description |
 | --- | --- | --- |
@@ -182,7 +181,7 @@ This proposal would have imapact on operations about profile extras below:
 | GET | /:tenantId/profiles/:profileId/extras | List all properties in profile |
 | DELETE | /:tenantId/profiles/:profileId/extras/:extraKey | Delete specified property from profile |
 
-If the proposal get approved, those methods would be replaced with below:
+If the proposal gets approved, those methods would be replaced with below:
 
 | Method | Uri | Description |
 | --- | --- | --- |
@@ -199,7 +198,7 @@ None
 
 There would be some changes in client package that all operations related to
 profile extras should be updated with REST API. See detailed changes in
-[REST API](### REST API impact) section.
+[REST API](# REST API impact) section.
 
 ### Performance impact
 
@@ -209,7 +208,7 @@ None
 
 There is no impact on the deployment, but to reduce the complexity of configuring
 profile, we would provide some sample profiles in different scenarios (such as
-Data Provisioning, Data Replication and so forth).
+Provisioning, Data Replication and so forth).
 
 ### Developer impact
 
@@ -217,7 +216,7 @@ None
 
 ## Use Cases
 
-* Data provisioning
+* Provisioning
 
 Normally when user requests a volume, more parameters should be configured if
 he wants to perform additional operations (such as periodic snapshot or periodic
@@ -227,11 +226,11 @@ procedures.
 
 ## Implementation
 
-* Update `ProfileSpec` schema (see [Data model](### Data model impact) section)
+* Update `ProfileSpec` schema (see [Data model](# Data model impact) section)
 in model package.
 * Improve the selector filter to map new ProfileSpec to StoragePoolSpec.
 * Update REST API methods related to profile extras
-(see [REST API](### REST API impact) section) in api package.
+(see [REST API](# REST API impact) section) in api package.
 
 ## Alternatives considered
 
