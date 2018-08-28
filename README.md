@@ -36,6 +36,8 @@ Meeting agenda and notes can be found [here](https://docs.google.com/document/d/
 
 Design proposals are drafted here:
 
+[Multi-Cloud Design](https://docs.google.com/document/d/1qd2p_-I7ryXxz9Owa1KaLH1Uoe-eH8kjtHxOWFFp1Rs/edit#)
+
 [OpenSDS Groups Design](https://docs.google.com/document/d/1bjDaeEQd1Zf9av8Vd4Yn7jfp1Eiv-bBBxafAAsAACrU/edit#)
 
 [OpenSDS Group Snapshots Design](https://docs.google.com/document/d/1mlnuVfRFhu_bczp8EWMdE2XR9xyNImOvVokLGgM6kCc/edit#)
