@@ -52,9 +52,9 @@ Design proposals are drafted here:
 
 ## Project Tracking
 
-Project tracking sheet is [here](https://docs.google.com/spreadsheets/d/1eFZsYCqTW8-zc8K6IMFUVhmzrZQKpOeO8Br0cCraPlU/edit?usp=sharing).
+Project tracking sheet is [here](https://docs.google.com/spreadsheets/d/1OZat5p1Hz5Df7eCb30stPp112Wg8_pfnceVvATGgeVI/edit?usp=sharing).
 
-## Mini Summit
+## Conference Presentations
 
-OpenSDS mini summit presentations are posted [here](https://github.com/opensds/presentations/tree/master/mini-summit-kubecon-copenhagen-2018)
+Conference presentations are posted [here](https://github.com/opensds/presentations)
 
