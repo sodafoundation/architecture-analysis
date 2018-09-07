@@ -38,6 +38,12 @@ Design proposals are drafted here:
 
 [Multi-Cloud Design](https://docs.google.com/document/d/1qd2p_-I7ryXxz9Owa1KaLH1Uoe-eH8kjtHxOWFFp1Rs/edit#)
 
+[Modularize OpenSDS](https://docs.google.com/document/d/1q02NVogtnzauzVwxyyLxwbAv_RktnYKHHpFuVWM6Ihs/edit#)
+
+[Thin OpenSDS](https://docs.google.com/document/d/16zLCE1X8bNjkGoKvBpqDZaxEHZapWluQVgdvlxuR_tE/edit#)
+
+[Multi-OpenStack](https://docs.google.com/document/d/1fDMlePgsYi8blZt8MfIX7xa2CrdwUFgXMaBQ0xZfQsI/edit#)
+
 [OpenSDS Groups Design](https://docs.google.com/document/d/1bjDaeEQd1Zf9av8Vd4Yn7jfp1Eiv-bBBxafAAsAACrU/edit#)
 
 [OpenSDS Group Snapshots Design](https://docs.google.com/document/d/1mlnuVfRFhu_bczp8EWMdE2XR9xyNImOvVokLGgM6kCc/edit#)
