@@ -52,7 +52,7 @@ Design proposals are drafted here.
 
 [Replication Design](https://github.com/opensds/design-specs/blob/master/specs/aruba/Replication_Design.md)
 
-[Host-based Replication Design] (https://github.com/opensds/design-specs/blob/master/specs/aruba/Host-base_Replication_Design.md)
+[Host-based Replication Design](https://github.com/opensds/design-specs/blob/master/specs/aruba/Host-base_Replication_Design.md)
 
 [OpenSDS Profiles Design](https://docs.google.com/document/d/1irNnz019j0XuW6SZNigs6QuYFOCC3uL44EkRYJiHyq8/edit#)
 
