@@ -1,9 +1,5 @@
 # Cinder-compatible api design
 
-Status: Pending
-
-Version: Alpha
-
 Author(s): PengYi
 
 ## Summary
@@ -113,8 +109,7 @@ Create volume type
 
 1.    User create a volume type with the following request:
 
-    Request Example
-    
+```Request Example    
 	{
 		"volume_type": {
 			"name": "vol-type-001",
@@ -125,8 +120,11 @@ Create volume type
 			}
 		}
 	}
+```
+
 2.	Cinder-compatible api receive the request, parse and convert the request to hotpot api request, then send the request to hotpot:
 
+```
 	{
 		“profile”: {
 			"name": "vol-type-001",
@@ -137,17 +135,17 @@ Create volume type
 			}
 		}
 	}
-
+```
 Note:
 
-●	Currently hotpot doesn’t support the volume type access, so is_public must be true.
-
-●	The storageType can be block, file, object, default is block
+* Currently hotpot doesn’t support the volume type access, so is_public must be true.
+* The storageType can be block, file, object, default is block
 
 Create volume
 
 1.	There are many ways to create a volume, such as create volume from volume type, create volume from snapshot, create volume from volume, etc. Now the hotpot only support creating volume from volume type. Creating volume from snapshot/volume will be supported in the near future. The following example shows how to create a volume from a volume type.
-	
+
+```	
 	{
 		"volume": {
 			"size": 10,
@@ -158,8 +156,10 @@ Create volume
 			
 		}
 	}
+```
 2.	For cinder-compatible api, the request of creating volume will be represented like the following json string.
-    
+
+``` 
 	{
 		"name": "vol001",
 		"description": "",
@@ -167,11 +167,13 @@ Create volume
 		"availabilityZone": "az1",
 		"profileId": "7edbc2f4-1507-44f8-ac0d-eed1d2608d29"
 	}
+```
 
 Create attachment
 
 1.	Cinder has exposed new attachment api since ocata version which supports attaching volume to nova instances or non-nova instances. 
 
+```
 	{
 		"attachment": {
 			"instance_uuid": "462dcc2d-130d-4654-8db1-da0df2da6a0d",
@@ -188,8 +190,11 @@ Create attachment
 			"volume_uuid": "462dcc2d-130d-4654-8db1-da0df2da6a0d"
 		}
 	}
+```
+
 2.	For cinder-compatible api, the request of creating attachment will be represented like the following json string.
-   
+
+```   
 	{
 		"hostInfo": {
 			"platform": "x86_64",
@@ -204,13 +209,14 @@ Create attachment
 		"mountpoint": "/dev/vdb",
 		"volumeId": "462dcc2d-130d-4654-8db1-da0df2da6a0d"
 	}
+```
 
 Note:
 
-●	Multipath and mode aren’t supported in hotpot, these feature should be implemented in future.
+* Multipath and mode aren’t supported in hotpot, these feature should be implemented in future.
+* Instance_uuid: In Nova terms server == instance, the server_id parameter referenced below is the UUID of the Instance, for non-nova consumers this can be a server UUID or some other arbitrary unique identifier. 
 
-●	Instance_uuid: In Nova terms server == instance, the server_id parameter referenced below is the UUID of the Instance, for non-nova consumers this can be a server UUID or some other arbitrary unique identifier. 
-	For hotpot, this parameter can be stored in metadata.
+For hotpot, this parameter can be stored in metadata.
 
 ## Implementation
 
