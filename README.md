@@ -34,7 +34,9 @@ Meeting agenda and notes can be found [here](https://docs.google.com/document/d/
 
 ## Design Proposal Links
 
-Design proposals are drafted here:
+Merged design specs are [here](https://github.com/opensds/design-specs/tree/master/specs).
+
+Additional design proposals are drafted here:
 
 [Multi-Cloud Design](https://docs.google.com/document/d/1qd2p_-I7ryXxz9Owa1KaLH1Uoe-eH8kjtHxOWFFp1Rs/edit#)
 
@@ -48,11 +50,7 @@ Design proposals are drafted here:
 
 [OpenSDS Group Snapshots Design](https://docs.google.com/document/d/1mlnuVfRFhu_bczp8EWMdE2XR9xyNImOvVokLGgM6kCc/edit#)
 
-[OpenSDS Replication Design](https://docs.google.com/document/d/1ymjJdBjFntaVcnR-m--VdSILkzOOj3CM4mZA1Sg5Mk0/edit#)
-
 [OpenSDS Profiles Design](https://docs.google.com/document/d/1irNnz019j0XuW6SZNigs6QuYFOCC3uL44EkRYJiHyq8/edit#)
-
-[OpenSDS Enumeration Design](https://docs.google.com/document/d/1f-ta2CbORuXPTdEZybl48hqbBpq2wnsy1puxbzlvLik/edit#)
 
 [OpenSDS Minimum Requirements](https://docs.google.com/document/d/1lOntboT99pN-5iS4Z6_gz1Dzwlx7y1Q2weo1VxC_Knk/edit#)
 
