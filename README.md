@@ -1,5 +1,5 @@
 # Design Specs
-OpenSDS design proposals repo.
+This repo contains [design specs](https://github.com/opensds/design-specs/tree/master/specs) for OpenSDS features.
 
 ## OpenSDS Technical Meetings
 ### Meeting Time
@@ -34,9 +34,9 @@ Meeting agenda and notes can be found [here](https://docs.google.com/document/d/
 
 ## Design Proposal Links
 
-Merged design specs are [here](https://github.com/opensds/design-specs/tree/master/specs).
+Design proposals are drafted here.
 
-Additional design proposals are drafted here:
+### Bali Proposals
 
 [Multi-Cloud Design](https://docs.google.com/document/d/1qd2p_-I7ryXxz9Owa1KaLH1Uoe-eH8kjtHxOWFFp1Rs/edit#)
 
@@ -46,11 +46,17 @@ Additional design proposals are drafted here:
 
 [Multi-OpenStack](https://docs.google.com/document/d/1fDMlePgsYi8blZt8MfIX7xa2CrdwUFgXMaBQ0xZfQsI/edit#)
 
-[OpenSDS Groups Design](https://docs.google.com/document/d/1bjDaeEQd1Zf9av8Vd4Yn7jfp1Eiv-bBBxafAAsAACrU/edit#)
-
 [OpenSDS Group Snapshots Design](https://docs.google.com/document/d/1mlnuVfRFhu_bczp8EWMdE2XR9xyNImOvVokLGgM6kCc/edit#)
 
+### Aruba Proposals
+
+[Replication Design](https://github.com/opensds/design-specs/blob/master/specs/aruba/Replication_Design.md)
+
+[Host-based Replication Design] (https://github.com/opensds/design-specs/blob/master/specs/aruba/Host-base_Replication_Design.md)
+
 [OpenSDS Profiles Design](https://docs.google.com/document/d/1irNnz019j0XuW6SZNigs6QuYFOCC3uL44EkRYJiHyq8/edit#)
+
+[OpenSDS Groups Design](https://docs.google.com/document/d/1bjDaeEQd1Zf9av8Vd4Yn7jfp1Eiv-bBBxafAAsAACrU/edit#)
 
 [OpenSDS Minimum Requirements](https://docs.google.com/document/d/1lOntboT99pN-5iS4Z6_gz1Dzwlx7y1Q2weo1VxC_Knk/edit#)
 
