@@ -5,14 +5,18 @@
 In the document, we will discuss how to use DRBD for host-based replication.  This is based on the [OpenSDS Replication Design Proposal](https://docs.google.com/document/d/1ymjJdBjFntaVcnR-m--VdSILkzOOj3CM4mZA1Sg5Mk0/edit#) and [DRBD user guide](http://docs.linbit.com/docs/users-guide-9.0/). The focus of this work is on DRBD9.  It includes the following sections:
 * DRBD replication overview - an overview of DRBD technology for replication.
 * OpenSDS host-based replication using DRBD
+
 This design proposal was drafted [here](https://docs.google.com/document/d/1Wt_f75QXAphQGKCx9VrOHcz4Glizjl1YB-9k3wmXyQA/edit#)
+
 ## DRBD Replication Overview
+
 ### Replication Modes
 DRBD supports 3 replication modes as follows:
 * Protocol A - async, using DRBD proxy
 * Protocol B - semi-sync
 * Protocol C - sync
 Protocol C is the most popular one.
+
 ### Replication Methods
 DRBD has the following replication methods:
 * 3 way replication with stacking, while stacking was mainly used in DRBD8, as it did not allow multiple (>2) peers. In DRBD9 stacking is becoming more and more uncommon, as it supports multiple peers natively.
@@ -146,6 +150,7 @@ We want to support replication with or without using a replication group (DRBD h
 9. OpenSDS controller uses Policy Engine to register async policies to run later.
 
 ### Basic Manual Failover
+
 1. API Server calls OpenSDS Controller which calls DR Controller.
 2. DR Controller calls DRBD replication driver on primary and secondary node to do failover.
     1. On the current primary node stop any applications or services using the DRBD device, unmount the DRBD device, and demote the resource to secondary.
