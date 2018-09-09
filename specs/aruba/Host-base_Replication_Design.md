@@ -1,6 +1,6 @@
 # Host-based Replication using DRBD
 
-**Authors:** [Xing Yang](https://github.com/xing-yang), [Roland Kammerer] (https://github.com/rck)
+**Authors:** [Xing Yang](https://github.com/xing-yang), [Roland Kammerer](https://github.com/rck)
 
 In the document, we will discuss how to use DRBD for host-based replication.  This is based on the [OpenSDS Replication Design Proposal](https://docs.google.com/document/d/1ymjJdBjFntaVcnR-m--VdSILkzOOj3CM4mZA1Sg5Mk0/edit#) and [DRBD user guide](http://docs.linbit.com/docs/users-guide-9.0/). The focus of this work is on DRBD9.  It includes the following sections:
 * DRBD replication overview - an overview of DRBD technology for replication.
@@ -40,12 +40,12 @@ Assume there are two nodes in the DRBD cluster.
     2. Start sync: # drbdadm primary --force <resource>
 7. Basic manual failover
 8. On the current primary node stop any applications or services using the DRBD device, unmount the DRBD device, and demote the resource to secondary.
-    1. # umount /dev/drbd/by-res/<resource>
-    2. # drbdadm secondary <resource>
+    1. `umount /dev/drbd/by-res/<resource>`
+    2. `drbdadm secondary <resource>`
     3. For DRBD9, this is not necessary anymore. If the resource was auto-promoted (i.e., a writer opened the device file RW, the device automatically gets promoted to Primary. If the last read-writer closes the device, it automatically demoted to Secondary.
 9. On the node we want to make primary, promote the resource and mount the device.
-    1. # drbdadm primary <resource>
-    2. # mount /dev/drbd/by-res/<resource> <mountpoint>
+    1. `drbdadm primary <resource>`
+    2. `mount /dev/drbd/by-res/<resource> <mountpoint>`
     3. Again, this is not necessary any more. If all nodes are Secondary, you just open the device file (e.g., mount).
 
 Here are some DRBD configuration file examples.
@@ -149,11 +149,11 @@ We want to support replication with or without using a replication group (DRBD h
 1. API Server calls OpenSDS Controller which calls DR Controller.
 2. DR Controller calls DRBD replication driver on primary and secondary node to do failover.
     1. On the current primary node stop any applications or services using the DRBD device, unmount the DRBD device, and demote the resource to secondary.
-        1. # umount /dev/drbd/by-res/<resource>
-        2. # drbdadm secondary <resource>
+        1. `umount /dev/drbd/by-res/<resource>`
+        2. `drbdadm secondary <resource>`
     2. On the current secondary node, promote the resource and mount the device.
-        1. # drbdadm primary <resource>
-        2. # mount /dev/drbd/by-res/<resource> <mountpoint>
+        1. `drbdadm primary <resource>`
+        2. `mount /dev/drbd/by-res/<resource> <mountpoint>`
 
 Note: There’s a way to use DRBD in a Pacemaker cluster for more automatic failover (DRBD’s auto-promote feature).  Using the auto-promote feature, there is no need to change the Primary and Secondary roles manually; only stopping of the services and unmounting, respectively mounting, is necessary. (See section 9.2 in the DRBD user guide)
 
