@@ -1,10 +1,6 @@
 # Title
 
-**Status**: Pending
-
-**Version**: Alpha | Beta | GA
-
-**Author(s)**: Jane Doe (@jane-doe)
+**Author(s)**: [Jane Doe](https://github.com/jane-doe)
 
 ## Summary
 
@@ -22,7 +18,7 @@ What will be addressed by the proposal?
 
 What will not be addressed by the proposal?
 
-## Proposal
+## Design Details
 
 Description of the proposed solution.
 
