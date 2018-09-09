@@ -69,7 +69,7 @@ type DataStorageLoS struct {
 	ProvisioningPolicy string `json:"provisioningPolicy,omitempty" yaml:"provisioningPolicy,omitempty"`
 
 	// IsSpaceEfficient indicates that the storage is compressed or deduplicated.
-	// The default value for this prperty is false.
+	// The default value for this property is false.
 	IsSpaceEfficient bool `json:"isSpaceEfficient,omitempty" yaml:"isSpaceEfficient,omitempty"`
 }
 ```
