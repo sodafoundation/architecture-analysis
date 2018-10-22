@@ -4,13 +4,7 @@ This repo contains [design specs](https://github.com/opensds/design-specs/tree/m
 ## OpenSDS Technical Meetings
 ### Meeting Time
 
-#### Meeting on Tuesdays
-Next Meeting Date: Oct 23, 2018
-
-It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm ET) on Tuesdays.
-
-Zoom Link: https://zoom.us/j/777978108
-
+Meeting on Oct. 23, 2018 is canceled due to Open Source Summit in Europe.
 
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
 Next Meeting Time will be on Nov 1, 2018 Thursday 6:00pm-7:00pm PT or 9:00pm-10:00pm ET (or Nov 2, 2018 Friday 1:00am-2:00am UTC)
@@ -18,6 +12,14 @@ Next Meeting Time will be on Nov 1, 2018 Thursday 6:00pm-7:00pm PT or 9:00pm-10:
 It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays (1:00am-2:00am UTC on Fridays).
 
 Zoom Link:  https://zoom.us/j/229373941
+
+
+#### Meeting on Tuesdays
+Next Meeting Date: Nov 6, 2018
+
+It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm ET) on Tuesdays.
+
+Zoom Link: https://zoom.us/j/777978108
 
 
 ### Meeting Agenda
