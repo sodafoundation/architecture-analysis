@@ -91,7 +91,9 @@ Job Manager: Job will be created after a plan starts to be executed based on the
 Metadata for Policy is as follows:
 
 `name`: Name of the policy.
+
 `description`: Description of the policy.
+
 `schedule`: Schedule of the policy, including `type` (once/day/week/month), `day` (1, 2, 3,...31,lastday), and `time`.
 
 ##### Connector Metadata
@@ -99,14 +101,23 @@ Metadata for Policy is as follows:
 Metadata for Connector is as follows:
 
 `selfDefine`: true or false. True means the connector will be defined automatically based on backends information. False means user input is needed to define the connector.
+
 `bucket`: Name of the bucket. Required when `selfDefine` is false.
+
 `type`: AWS-obj, Azure-obj, Ceph-obj, HWS-obj, NAS-cifs, etc.
+
 `location`: Valid endpoint.
+
 `selfDefBucket`: Corresponding bucket name when `selfDefine` is true.
+
 `ak`: Access key.
+
 `sk`: Secret key.
+
 `name`: User name. (valid for NAS)
+
 `password`: Password. (valid for NAS)
+
 `uuid`: Unique identifier of the connector.
 
 ##### Plan Metadata
@@ -114,32 +125,54 @@ Metadata for Connector is as follows:
 A Plan contains 2 Connectors, 0 or 1 Policy.  Metadata for Policy is as follows:
 
 `name`
+
 `description`
+
 `status`: active/deactive
+
 `isScheduling`: true/false
+
 `schedServer`: ID of the scheduler server
+
 `type`: migration is the only valid type currently.
+
 `sourceConnector`
+
 `sourceDir`
+
 `destConnector`
+
 `destDir`
+
 `overWrite`: true/false
+
 `remainSource`: true/false
+
 `lastSchedTime`
+
 `policy`:
+
 `filter`: Filter for the object.
+
 
 ##### Job Metadata
 
 When the scheduler executes a plan, a job is created.  Metadata for Job is as follows:
 
 `id`
+
 `type`: migration
+
 `planName`
+
 `totalCount`
+
 `passedCount`
+
 `totalCapacity`
+
 `sourceBackend`
+
 `destBackend`
 
 #### Dataflow Interfaces
@@ -176,10 +209,15 @@ Dataflow service supports the following interfaces:
 Backend service is defined by the following metadata.
 
 `type`: Type of backend, including AWS S3, Azure Blob, Ceph, Huawei OBS, etc.
+
 `endpoint`: The endpoint of the corresponding physical backend bucket.
+
 `physicalBucketName`: Name of the physical backend bucket.
+
 `ak`: AWS access key (It is called sn in Azure Blob).
+
 `sk`: AWS secret key
+
 `uuid`: Unique identifier for the backend.
 
 #### Backend Interfaces
@@ -206,52 +244,95 @@ Backend service supports the following interfaces.
 #### Bucket Metadata
 
 `name`: Name of the bucket.
+
 `owner`: Owner of the bucket.
+
 `ownerDisplayName`: Display name of the owner.
+
 `creationDate`: Creation time of the bucket.
+
 `acl`: Policy of the bucket.
+
 `transient`: true/false. Indicates whether the bucket is temporary.
+
 `deleted`: true/false. Indicates whether the bucket is deleted.
+
 `serverSideEncryption`: Encryption method.
+
 `versioningConfiguration`: Version configuration.
+
 `locationConstraint`: Location constraint of the bucket.
+
 `websiteConfiguration`: Website configuration.
+
 `cors`: Cross region configuration.
+
 `replicationConfiguration`: Replication configuration.
+
 `lifecycleConfiguration`: Life cycle configuration.
+
 `readLocationConstraint`: Location constraint on where to read from the bucket.
+
 `isNFS`: true/false
+
 `uuid`: Unique idenfication.
 
 #### Object Metadata
 
 `key`: Name of the object.
+
 `ownerId`: Name of the owner of the object.
+
 `ownerDisplayName`: Display name of the owner.
+
 `cacheControl`: Cache control.
+
 `contentDisposition`: Content disposition.
+
 `contentEncoding`: Content encoding type.
+
 `expires`: Response expiration time.
-`contentLength`: Length of the content. 
+
+`contentLength`: Length of the content.
+
 `contentType`: MIME type of the content.
+
 `contentMD5`: MD5
+
 `x-amz-version-id`: Version id.
+
 `x-amz-server-version-id`: Version id of the server.
+
 `x-amz-storage-class`: Storage class of the object.
+
 `x-amz-server-side-encryption`: Encryption method.
+
 `x-amz-server-side-encryption-aws-kms-key-id`: Key id.
+
 `x-amz-server-side-encryption-customer-algorithm`: Encryption algorithm.
+
 `x-amz-server-side-encryption-customer-key`: Encryption key.
+
 `x-amz-server-side-encryption-customer-key-MD5`: MD5 for encryption key.
+
 `x-amz-website-redirect-location`: Redirect location.
+
 `acl`: Permissions control.
+
 `location`: Information on uploading in chunks.
-`is-null`: true/false. True indicates no version. 
+
+`is-null`: true/false. True indicates no version.
+
 `null-version-id`: Null version id.
+
 `isDeleteMarker`: Marked for deletion.
+
 `backendName`: Name of the backend bucket.
+
 `tags`: Tags.
+
 `replicationInfo`: Configuration info on replication.
+
 `lastAccessTime`: Last access time since 1970-01-01 00:00:00.
 
 #### S3 Interfaces
