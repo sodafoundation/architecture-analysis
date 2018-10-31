@@ -34,8 +34,6 @@ The upload snapshot design was initially drafted [here](https://docs.google.com/
 
 * In CreateVolume method, check snapshot id if provided.  From snapshot, check metadata to see if the snapshot is uploaded.  Also we should add a flag in CreateVolume to indicate the source snapshot should be the one uploaded in the cloud.  This is because we actually have two snapshots, one on the block storage itself, and the other one in a S3 object store.
 
-Note: This needs some thought.  If the snapshot on block storage is available, why do we need to use the one in S3 object store?  I think we only need it if the snapshot on block storage got deleted for some reason.  Maybe our snapshot retention policy will keep the one in S3 longer than the one on block storage?  In that case, we need to make sure the database entry for the snapshot is still valid in OpenSDS.
-
 * We need to attach the volume, download data from S3 and copy to the volume.
 
 * After it is done, we need to detach the volume.
@@ -47,5 +45,6 @@ Add the following driver interfaces:
 * Initialize_connection_snapshot()
 * Terminate_connection_snapshot()
 
-For connector and target, we may be able to use existing interfaces with very little change.  Try to separate the logic about snapshot from the logic about volume if needed for clarity.
-For LVM driver, we don’t need to actually attach in Bali due to time constraint. We can use local path as LVM is local and we will be demonstrating with one node OpenSDS cluster.  We should do the real attach afterwards.
+For connector and target, use existing interfaces if possible and separate the logic about snapshot from the logic about volume if needed for clarity.
+
+For LVM driver, we can use local path as LVM is local.  The real attach work will be implemented post-Bali to support multi-node.
