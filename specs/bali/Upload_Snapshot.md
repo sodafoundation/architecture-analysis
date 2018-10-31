@@ -1,5 +1,7 @@
 # Upload Snapshot
 
+**Authors:** [Xing Yang](https://github.com/xing-yang)
+
 This is the design spec for the upload snapshot feature.
 
 The upload snapshot design was initially drafted [here](https://docs.google.com/document/d/1pkAocf4oZ_QF3F_p5YEIlQL9XkDulOr5kMVaZYgyAlI/edit?usp=sharing) as a seperate API design. Since then we have decided to focus on phase one of the design which was drafted [here](https://docs.google.com/document/d/1YoxqZuprbL2C79HoNvYuTh8Yonz9JE42xluTGPdwI3U/edit?usp=sharing).
