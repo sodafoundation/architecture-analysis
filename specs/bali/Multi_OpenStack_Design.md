@@ -62,3 +62,37 @@ This diagram show how OpenStack can use volumes created using native OpenSDS dri
 ```
 
 `volume uuid` is the id of the volume in OpenSDS.  `instance uuid` is the id of the Nova VM.
+
+
+## Appendix
+
+### How Does OpenStack Nova VM Consume OpenSDS Native Volumes
+
+This example assumes there is an OpenStack deployment and an OpenSDS deployment, and Cinder Compatible API Adapter is configured. It describes how to create a volume using OpenSDS CLI and how the volume is attached to a Nova instance in OpenStack.
+
+#### Use OpenSDS CLI to Create a Volume
+
+* Run the command "export OPENSDS_AUTH_STRATEGY=keystone".
+* Run the command "export OPENSDS_ENDPOINT=http://localhost:50040".
+* Run the command "source /opt/stack/devstack/openrc admin admin".
+* Run the command "osdsctl volume create 1 --name testVolume“.
+
+#### Attach/Detach Volume to Nova VM Using OpenStack CLI
+
+* Login to the OpenStack node.
+* Run the command "source /opt/stack/devstack/openrc admin admin".
+* Run the command "export OS_VOLUME_API_VERSION=3".
+* Run the command "glance image-list" to get the <cirros image ID>.
+* Run the command "nova boot testServer --flavor c1 --image <cirros image ID>“ to boot a new test server.
+* Run the command "nova volume-attach <test server ID> <test volume ID>“
+* Run the command "nova get-vnc-console <test server ID> novnc" to get a vnc console.
+* Use the vnc console URL to enter the test server. Then check if the result is correct. The account number is "cirros" and the password is "cubswin:)".
+* Run command ‘sudo fdisk -l’ in the test server. If the volume was successfully attached to the test server, then in the result of "sudo fdisk -l", there is a disk whose name is the same as the value of the device in the result of the "nova volume-attach" command and its size is the same as the size of the volume.
+* Run the command "nova  volume-detach <test server ID> <test volume ID>" to detach volume.
+
+### List Attachments and Delete Attachments
+
+* Login the openstack node.
+* Run command ‘source openrc’ to get the authentification EVN variable.
+* Run command ‘cinder attachment-list’ to list all attachments.
+* Run ‘cinder attachment-delete <attachment ID>’ to delete an attachment
