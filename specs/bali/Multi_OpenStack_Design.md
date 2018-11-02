@@ -68,7 +68,7 @@ This diagram show how OpenStack can use volumes created using native OpenSDS dri
 
 ### How Does OpenStack Nova VM Consume OpenSDS Native Volumes
 
-This example assumes there is an OpenStack deployment and an OpenSDS deployment, and Cinder Compatible API Adapter is configured. It describes how to create a volume using OpenSDS CLI and how the volume is attached to a Nova instance in OpenStack.
+This example assumes there is an OpenStack deployment and an OpenSDS deployment, and Cinder Compatible API Adapter is configured. It describes how to create a volume using OpenSDS CLI and how the volume is attached to a Nova instance in OpenStack. This is for use case 2.
 
 #### Use OpenSDS CLI to Create a Volume
 
