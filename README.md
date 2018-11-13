@@ -15,7 +15,7 @@ are spread out to try to ease participation for different timezones.
 
 Meeting on November 6th, 2018 is canceled due to F2F meeting with Swordfish team.
 
-Meeting on November 15th, 2018 will be canceled due to KubeCon Shanghai.
+Meeting on November 15th, 2018 will be canceled due to KubeCon in Shanghai and OpenStack Summit in Berlin.
 
 #### Meeting on Tuesdays
 
