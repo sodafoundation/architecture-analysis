@@ -11,21 +11,6 @@ are spread out to try to ease participation for different timezones.
 
 ### Meeting Time
 
-#### Meeting Cancellations
-
-Meeting on November 6th, 2018 is canceled due to F2F meeting with Swordfish team.
-
-Meeting on November 15th, 2018 will be canceled due to KubeCon in Shanghai and OpenStack Summit in Berlin.
-
-#### Meeting on Tuesdays
-
-Next Meeting Date: Nov 20, 2018
-
-It is held bi-weekly at 4:00pm-5:00pm UTC (8:00am-9:00am PT and 11:00am-12:00pm
-ET) on Tuesdays.
-
-Zoom Link: [https://zoom.us/j/777978108](https://zoom.us/j/777978108)
-
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
 
 Next Meeting Time will be on Nov 29, 2018 Thursday 5:00pm-6:00pm PT or
@@ -35,6 +20,15 @@ It is held bi-weekly at 5:00pm-6:00pm PT or 8:00pm-9:00pm ET on Thursdays
 (1:00am-2:00am UTC on Fridays).
 
 Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
+
+#### Meeting on Tuesdays
+
+Next Meeting Date: Dec 04, 2018
+
+It is held bi-weekly at 4:00pm-5:00pm UTC (8:00am-9:00am PT and 11:00am-12:00pm
+ET) on Tuesdays.
+
+Zoom Link: [https://zoom.us/j/777978108](https://zoom.us/j/777978108)
 
 ### Meeting Agenda
 
