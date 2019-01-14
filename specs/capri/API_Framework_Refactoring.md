@@ -21,6 +21,8 @@ Considering those problems above, decoupling api-server from `osdslet` daemon is
 
 * Decouple opensds api-server from opensds-controller and run them as separate processes.
 * Choose `grpc` as the communication mechanism betweeen api-server and controller.
+* For protobuf model defined for grpc communicating between api-server and controller, it should keep the same model
+with what defined in dock module.
 
 ### Non-Goals
 
@@ -69,6 +71,14 @@ type OsdsLet struct {
 	LogFlushFrequency time.Duration `conf:"log_flush_frequency,5s"` // Default value is 5s
 }
 ```
+
+##### unified protobuf model
+If we consider to make grpc communication easier to maintain, then we should design a unified protobuf model for the
+whole opensds system, which means we only need to define one protobuf file and all modules of opensds could import it
+if required.
+
+But to achieve this goal, we would change a lot of code in controller module, so it's better to spilt this change into
+separate PR after the items above are resolved.
 
 ### Data model impact
 
@@ -129,6 +139,8 @@ service Controller {
 message CreateVolumeOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // DeleteVolumeOpts is a structure which indicates all required properties
@@ -136,6 +148,8 @@ message CreateVolumeOpts {
 message DeleteVolumeOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // ExtendVolumeOpts is a structure which indicates all required properties
@@ -145,6 +159,8 @@ message ExtendVolumeOpts {
     string id = 1;
     // The message of request, required.
     string message = 2;
+    // The Context
+    string context = 3;
 }
 
 // CreateVolumeAttachmentOpts is a structure which indicates all required properties
@@ -152,6 +168,8 @@ message ExtendVolumeOpts {
 message CreateVolumeAttachmentOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // CreateVolumeAttachmentOpts is a structure which indicates all required properties
@@ -159,6 +177,8 @@ message CreateVolumeAttachmentOpts {
 message DeleteVolumeAttachmentOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // CreateVolumeSnapshotOpts is a structure which indicates all required properties
@@ -166,6 +186,8 @@ message DeleteVolumeAttachmentOpts {
 message CreateVolumeSnapshotOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // DeleteVolumeSnapshotOpts is a structure which indicates all required properties
@@ -173,6 +195,8 @@ message CreateVolumeSnapshotOpts {
 message DeleteVolumeSnapshotOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // CreateReplicationOpts is a structure which indicates all required properties
@@ -181,6 +205,8 @@ message DeleteVolumeSnapshotOpts {
 message CreateReplicationOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // Delete ReplicationOpts is a structure which indicates all required properties
@@ -189,6 +215,8 @@ message CreateReplicationOpts {
 message DeleteReplicationOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 
@@ -196,19 +224,25 @@ message DeleteReplicationOpts {
 message EnableReplicationOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // Delete ReplicationOpts is a structure which indicates all required properties
 message DisableReplicationOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 // Delete ReplicationOpts is a structure which indicates all required properties
 message FailoverReplicationOpts {
     // The message of request, required.
     string message = 1;
-	string failoverMessage = 2;
+    string failoverMessage = 2;
+    // The Context
+    string context = 3;
 }
 
 // CreateVolumeGroupOpts is a structure which indicates all required
@@ -216,18 +250,24 @@ message FailoverReplicationOpts {
 message CreateVolumeGroupOpts {
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 message UpdateVolumeGroupOpts{
     // The message of request, required.
     string message = 1;
-	repeated string addVolMessage = 2;
-	repeated string rmVolMessage = 3;
+    repeated string addVolMessage = 2;
+    repeated string rmVolMessage = 3;
+    // The Context
+    string context = 4;
 }
 
 message DeleteVolumeGroupOpts{
     // The message of request, required.
     string message = 1;
+    // The Context
+    string context = 2;
 }
 
 message GenericResponse {}
@@ -319,18 +359,20 @@ None
 
 ## Use Cases
 
-See [Motivation](#Motivation) section.
+See [Motivation](#motivation) section.
 
 ## Implementation
 
-See [Design](#Design Details) section.
+See [Design Details](#design-details) section.
 
 ## Alternatives considered
 
-There would be some other conmmunication mechanism could be considered, but currently `grpc` is recommended as the
+There would be some other communication mechanisms could be considered, but currently `grpc` is recommended as the
 default option. 
 
 ## Open issues
 
-There are some remaining issues about async handling in `osds-apiserver` process, we would try to resolve them after
+* There are some remaining issues about async handling in `osds-apiserver` process, we would try to resolve them after
 this proposal get merged.
+* In the Phase 2 we would design a unified protobuf model utilized by all modules, which would be a separate PR after
+the items above are resolved.
