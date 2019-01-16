@@ -9,7 +9,7 @@ standard three-layer architecture: `api-server`, `controller` and `dock`.
 
 ## Motivation
 
-Currently api-server and controller modules are tightly coupled into one process. Although they are already devided into
+Currently api-server and controller modules are tightly coupled into one process. Although they are already divided into
 different modules, there are still some problems when coming across these situations:
 * controller module is NOT REQUIRED in thin-opensds scenario.
 * api-server should support scaling-out when meeting heavy workloads.
@@ -20,19 +20,19 @@ Considering those problems above, decoupling api-server from `osdslet` daemon is
 ### Goals
 
 * Decouple opensds api-server from opensds-controller and run them as separate processes.
-* Choose `grpc` as the communication mechanism betweeen api-server and controller.
+* Choose `grpc` as the communication mechanism between api-server and controller.
 * For protobuf model defined for grpc communicating between api-server and controller, it should keep the same model
 with what defined in dock module.
 
 ### Non-Goals
 
-* Enable `real` async communication between api-server and controller, so that the system can respond the long
-time-consumed operation to users immediately.
+* Enable `real` async communication between api-server and controller, so that the system can respond to long
+time-consuming operations to users immediately.
 * Update the global configuration and deployment scripts (in opensds-installer). 
 
 ## Design Details
 
-To achieve the goal above, there are mainly several itmes should be focused:
+To achieve the goal above, there are mainly several items should be focused:
 
 ##### api-server construction
 This design requires constructing a new entry into `api-server` service, which means some logic code inside the current
@@ -77,7 +77,7 @@ If we consider to make grpc communication easier to maintain, then we should des
 whole opensds system, which means we only need to define one protobuf file and all modules of opensds could import it
 if required.
 
-But to achieve this goal, we would change a lot of code in controller module, so it's better to spilt this change into
+But to achieve this goal, we would change a lot of code in controller module, so it's better to split this change into
 separate PR after the items above are resolved.
 
 ### Data model impact
@@ -287,7 +287,13 @@ None
 
 ### Performance impact
 
-None
+##### Pros
+Decoupling `api-server` from `controller` would make `api-server` much easier to scale out, and therefore improving
+performance when handling heavy workloads.
+
+##### Cons
+There is no doubt that the time for handling every single request would increase a bit because of grpc communication,
+but actually it could be ignored for async operations and it has no impact on users' experience.
 
 ### Other deployer impact
 
