@@ -58,11 +58,13 @@ type Config struct {
 }
 
 type OsdsApiServer struct {
-	ApiEndpoint       string        `conf:"api_endpoint,localhost:50040"`
-	AuthStrategy      string        `conf:"auth_strategy,noauth"`
-	PolicyPath        string        `conf:"policy_path,/etc/opensds/policy.json"`
-	Daemon            bool          `conf:"daemon,false"`
-	LogFlushFrequency time.Duration `conf:"log_flush_frequency,5s"` // Default value is 5s
+	ApiEndpoint        string        `conf:"api_endpoint,localhost:50040"`
+	AuthStrategy       string        `conf:"auth_strategy,noauth"`
+	PolicyPath         string        `conf:"policy_path,/etc/opensds/policy.json"`
+	Daemon             bool          `conf:"daemon,false"`
+	LogFlushFrequency  time.Duration `conf:"log_flush_frequency,5s"` // Default value is 5s
+	BeegoHTTPSCertFile string        `conf:"beego_https_cert_file,/opt/opensds-security/opensds/opensds-cert.pem"`
+	BeegoHTTPSKeyFile  string        `conf:"beego_https_key_file,/opt/opensds-security/opensds/opensds-key.pem"`
 }
 
 type OsdsLet struct {
@@ -72,7 +74,7 @@ type OsdsLet struct {
 }
 ```
 
-##### unified protobuf model
+##### Unified protobuf model
 If we consider to make grpc communication easier to maintain, then we should design a unified protobuf model for the
 whole opensds system, which means we only need to define one protobuf file and all modules of opensds could import it
 if required.
@@ -82,7 +84,7 @@ separate PR after the items above are resolved.
 
 ### Data model impact
 
-Because grpc model requires generated from protobuf, so some protobuf files should be added:
+Because grpc model requires generated code from protobuf, so some protobuf files should be added:
 ```shell
 service Controller {
     // Create a volume
@@ -288,17 +290,14 @@ None
 ### Performance impact
 
 ##### Pros
-Decoupling `api-server` from `controller` would make `api-server` much easier to scale out, and therefore improving
-performance when handling heavy workloads.
+Decoupling `api-server` from `controller` would make `api-server` much easier to scale out, and therefore improving performance when handling heavy workloads.
 
 ##### Cons
-There is no doubt that the time for handling every single request would increase a bit because of grpc communication,
-but actually it could be ignored for async operations and it has no impact on users' experience.
+There is no doubt that the time for handling every single request would increase a bit because of gRPC communication.
 
 ### Other deployer impact
 
-We would have a standalone `osds-apiserver` process installed, so there would be some changes in `opensds.conf` file,
-and this is an updated example below:
+We would have a standalone `osds-apiserver` process installed, so there would be some changes in `opensds.conf` file, and this is an updated example below:
 ```conf
 [osdsapiserver]
 api_endpoint = 0.0.0.0:50040
@@ -373,12 +372,9 @@ See [Design Details](#design-details) section.
 
 ## Alternatives considered
 
-There would be some other communication mechanisms could be considered, but currently `grpc` is recommended as the
-default option. 
+There would be some other communication mechanisms could be considered, but currently `grpc` is recommended as the default option. 
 
 ## Open issues
 
-* There are some remaining issues about async handling in `osds-apiserver` process, we would try to resolve them after
-this proposal get merged.
-* In the Phase 2 we would design a unified protobuf model utilized by all modules, which would be a separate PR after
-the items above are resolved.
+* There are some remaining issues about async handling in `osds-apiserver` process, we would try to resolve them after this proposal get merged.
+* In phase 2 we would design a unified protobuf model utilized by all modules, which would be a separate PR after the items above are resolved.
