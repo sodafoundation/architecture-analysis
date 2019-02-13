@@ -1,0 +1,118 @@
+# Title
+
+**Author(s)**: [Jack Li](https://github.com/lasshpanzer)
+
+## Summary
+
+This document is a design proposal to provide a password security mechanism for OpenSDS.
+
+## Motivation
+
+Currently, the password used by other components such as cinder, kubernetes, MultiCloud to interact with OpenSDS is not encrypted, which causes the user’s information to be easily leaked.
+
+### Goals
+
+The password shall be encrypted when other components use it to interact with OpenSDS.
+
+1.A default encryption tool will be provided for users to obtain the cipher text.
+
+2.Which encryption tool is selected and whether the password is encrypted can be configurable. By default, the encryption tool is AES provided by the community, and the password is not encrypted.
+
+### Non-Goals
+
+None
+
+## Design Details
+
+1.Add options to the OpenSDS configuration file that enable user to choose the password encrypter tool they want and choose whether to encrypt the password. The encryption tools can be implemented by themselves. These two options added to the opensds.conf are as follows:
+
+// Whether to encrypt the password. If enabled, the value of the password must be cipher text.
+enable_encrypted = False
+// Encryption and decryption tool. Default value is aes. The decryption tool can only decrypt the corresponding ciphertext.
+pwd_encrypter = aes
+
+Calling example in code:
+
+    // Get the cipher text of the password	
+    var pwdCiphertext = opt.Password
+    if opt.EnableEncrypted {
+        // Instantiate an encryption tool
+        pwdTool := pwd.NewPwdEncrypter(opt.PwdEncrypter)
+        // Decrypt the password and obtain the original password.
+        password, err := pwdTool.Decrypter(pwdCiphertext)
+        if err != nil {
+	        return nil, err
+        }
+        pwdCiphertext = password
+    }
+    opt.Password = pwdCiphertext
+
+2.Provide OpenSDS default AES password encryption tool, so that user can use this tool to get cipher text and shell scripts can call it for automatic encryption during the deployment process. 
+
+AES encryption tool user guide：
+build/out/bin/pwdEncrypter password
+
+3.Provide a unified code framework for encryption and decryption that enables 
+user to implement their own encryption tool.
+
+type PwdEncrypter interface {
+	Encrypter(password string) (string, error)
+	Decrypter(code string) (string, error)
+}
+
+### Data model impact
+
+Add two attributes PwdEncrypter and EnableEncrypted in AuthOptions struct.
+type AuthOptions struct {
+	Strategy        string `yaml:"Strategy"`
+	AuthUrl         string `yaml:"AuthUrl,omitempty"`
+	DomainName      string `yaml:"DomainName,omitempty"`
+	UserName        string `yaml:"UserName,omitempty"`
+	Password        string `yaml:"Password,omitempty"`
+	PwdEncrypter    string `yaml:"PwdEncrypter,omitempty"`
+	EnableEncrypted bool   `yaml:"EnableEncrypted,omitempty"`
+	TenantName      string `yaml:"TenantName,omitempty"`
+}
+
+### REST API impact
+
+None
+
+### Security impact
+
+Increased user information security.
+
+### Other end user impact
+
+None
+
+### Performance impact
+
+None
+
+### Other deployer impact
+
+When multi-cloud, dorado, cinder, kubernetes docking the OpenSDS, user needs to change the value of enable_encrypted and pwd_encrypter in the configuration file to decide whether to encrypt the password and choose which encryption tool to use or keep the default values.
+
+### Developer impact
+
+Developers can implement their own encryption and decryption functions in the OpenSDS encryption framework according to their own needs.
+
+## Use Cases
+
+Before deployment, user change EnableEncrypted to true and keep PwdEncrypter option as default in the configuration file, then use aes encryption tool get cipher text and write it to the password option.
+
+## Implementation
+
+1.Implement the encryption tool framework.
+2.Implement AES encryption and decryption functions.
+3.Implement AES encryption CLI tool.
+4.Modify multi-cloud, dorado, cinder and kubernetes configuration file, AuthOptions struct and corresponding code.
+
+## Alternatives considered
+
+None
+
+## Open issues
+
+None
