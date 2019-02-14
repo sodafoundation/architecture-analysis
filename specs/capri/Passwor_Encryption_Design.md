@@ -8,7 +8,7 @@ This document is a design proposal to provide a password security mechanism for 
 
 ## Motivation
 
-Currently, the password used by other components such as cinder, kubernetes, MultiCloud to interact with OpenSDS is not encrypted, which causes the user’s information to be easily leaked.
+Currently, the password used by other components such as cinder, kubernetes, MultiCloud to interact with OpenSDS is not encrypted, which causes the user’s information being easily leaked.
 
 ### Goals
 
@@ -92,7 +92,7 @@ None
 
 ### Other deployer impact
 
-When multi-cloud, dorado, cinder, kubernetes docking the OpenSDS, user needs to change the value of enable_encrypted and pwd_encrypter in the configuration file to decide whether to encrypt the password and choose which encryption tool to use or keep the default values.
+When multi-cloud, dorado, cinder, kubernetes, keystone docking the OpenSDS, user needs to change the value of enable_encrypted and pwd_encrypter in the configuration file to decide whether to encrypt the password and choose which encryption tool to use or keep the default values.
 
 ### Developer impact
 
@@ -107,7 +107,7 @@ Before deployment, user change EnableEncrypted to true and keep PwdEncrypter opt
 1.Implement the encryption tool framework.
 2.Implement AES encryption and decryption functions.
 3.Implement AES encryption CLI tool.
-4.Modify multi-cloud, dorado, cinder and kubernetes configuration file, AuthOptions struct and corresponding code.
+4.Modify multi-cloud, dorado, cinder, kubernetes and keystone configuration file, AuthOptions struct and corresponding code.
 
 ## Alternatives considered
 
