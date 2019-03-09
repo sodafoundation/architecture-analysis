@@ -79,7 +79,8 @@ Planned feature designs can be found for each release cycle here.
 ## Project Tracking
 
 Progress is tracked through our
-[project tracking sheet](https://docs.google.com/spreadsheets/d/1OZat5p1Hz5Df7eCb30stPp112Wg8_pfnceVvATGgeVI/edit?usp=sharing).
+[project tracking board](Project tracking board: https://github.com/orgs/opensds/projects
+).
 
 ## Conference Presentations
 
