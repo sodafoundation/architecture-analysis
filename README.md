@@ -54,6 +54,8 @@ Planned feature designs can be found for each release cycle here.
 
 [AK/SK Management Design](https://github.com/opensds/design-specs/pull/18)
 
+[Hotpot API Framework Decouple](https://github.com/opensds/design-specs/pull/17)
+
 [Object Lifecycle Management Design](https://docs.google.com/document/d/1XbA5lPLlJCBKf-Kk9BCwPy3VEj1bqEF7tvlriU83tAM/edit#)
 
 [Telemetry Design](https://docs.google.com/document/d/1cEXyjbIW6uGrYD60GYCL-_feGVUsgPobXR0oGchalWQ/edit?usp=sharing)
