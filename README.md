@@ -11,16 +11,6 @@ are spread out to try to ease participation for different timezones.
 
 ### Meeting Time
 
-#### Meeting on Thursdays Pacific Time (or Fridays UTC)
-
-Next Meeting Time will be on March 7th, 2019 Thursday 5:00pm-6:00pm PT or
-8:00pm-9:00pm ET (or March 8th, 2019 Friday 1:00am-2:00am UTC)
-
-It is held bi-weekly at 5:00pm-6:00pm PT or 8:00pm-9:00pm ET on Thursdays
-(1:00am-2:00am UTC on Fridays).
-
-Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
-
 #### Meeting on Tuesdays
 
 Next Meeting Date: March 12, 2019
@@ -29,6 +19,17 @@ It is held bi-weekly at 4:00pm-5:00pm UTC (8:00am-9:00am PT and 11:00am-12:00pm
 ET) on Tuesdays.
 
 Zoom Link: [https://zoom.us/j/777978108](https://zoom.us/j/777978108)
+
+#### Meeting on Thursdays Pacific Time (or Fridays UTC)
+
+Next Meeting Time will be on March 21th, 2019 Thursday 5:00pm-6:00pm PT or
+8:00pm-9:00pm ET (or March 22th, 2019 Friday 1:00am-2:00am UTC)
+
+It is held bi-weekly at 5:00pm-6:00pm PT or 8:00pm-9:00pm ET on Thursdays
+(1:00am-2:00am UTC on Fridays).
+
+Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
+
 
 ### Meeting Agenda
 
