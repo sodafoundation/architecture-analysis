@@ -104,11 +104,17 @@ Like AWS S3, OpenSDS supports a waterfall model for transitioning between storag
 As showed in the diagram, the transition from one storage class to another is one-way.
 
 Depends on cloud vendor, there may have minimum storage time requirements, that means you need to pay minimum storage charges, for example:
+
 1.For AWS, an objects must be stored at least 30 days in the storage class of STANDARD, STANDARD_IA, INTELLIGENT_TIERING, ONEZONE_IA, and at least 90 days in GLACIER;
+
 2.For Azure, a blob must be stored at least 30 days in STANDARD_IA (cool tier in Azure), and at least 180 days in GLACIER (archive tier in Azure).
+
 For OpenSDS, lifecycle transitions have the following constraints:
+
 1.Objects must be stored at least 30 days in the current storage class before you can transition them to STANDARD_IA or ONEZONE_IA. For example, you cannot create a lifecycle rule to transition objects to the STANDARD_IA storage class one day after you create them.
+
 2.For larger objects, there is a cost benefit for transitioning to INTELLIGENT_TIERING. OpenSDS does not transition objects that are smaller than 128 KB to the INTELLIGENT_TIERING storage class because it's not cost effective.
+
 3.For cross-cloud transition, the supported target storage class depends on the type of target backend. The following table shows which storage class of each backend type can be used as target storage class.
 
 |  | STANDARD | STANDARD_IA | INTELLIGENT_TIERING | ONEZONE_IA | GLACIER |
@@ -124,7 +130,7 @@ For OpenSDS, lifecycle transitions have the following constraints:
 Conflicting Lifecycle Actions
 For OpenSDS, expiration action is precedence over transition action. 
 For example, there are two rules as below:
-<LifecycleConfiguration>
+```<LifecycleConfiguration>
   <Rule>
     <ID>Rule 1</ID>
     <Filter>
@@ -147,10 +153,12 @@ For example, there are two rules as below:
     </Transition>
    </Rule>
 </LifecycleConfiguration>
+```
+
 In this case, OpenSDS just chooses the expiration action on these objects.
 Overlapping Prefixes Resulting in Conflicting Lifecycle Actions
 For example, there are two rules as below:
-<LifecycleConfiguration>
+```<LifecycleConfiguration>
   <Rule>
     <ID>Rule 1</ID>
     <Filter>
@@ -174,22 +182,22 @@ For example, there are two rules as below:
     </Transition>
    </Rule>
 </LifecycleConfiguration>
-
+```
 In this case, OpenSDS will chooses to transition the subsets of objects with the logs/ key name prefix 10 days after creation.
 # APIs 
 ## PUT Bucket Lifecycle
 The PUT Bucket Lifecycle operation creates a new lifecycle configuration or replaces an existing one.
 Request Syntax
-PUT bucketname/?lifecycle HTTP/1.1
+```PUT bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x
 Content-Length: {{length}}
 Date: {{date}}
 Authorization: {{authorizationString}}
 Content-MD5: MD5
-
+```
 Request Body
 The lifecycle configuration can be specified in the request body. The configuration is specified as XML consisting of one or more rules.
-<LifecycleConfiguration>
+```<LifecycleConfiguration>
   <Rule>
     ...
   </Rule>
@@ -197,9 +205,9 @@ The lifecycle configuration can be specified in the request body. The configurat
     ...
   </Rule>
 </LifecycleConfiguration>
-
+```
 The following is a rule example:
-<LifecycleConfiguration>
+```<LifecycleConfiguration>
 <Rule>
 	<ID>rule_1</ID>
         <Filter>
@@ -234,10 +242,11 @@ The following is a rule example:
 		</AbortIncompleteMultipartUpload>
     </Rule>
 </LifecycleConfiguration>
+```
 Each rule consists of the following:
-● A filter identifying a subset of objects to which the rule applies. The filter can be based on a key name prefix.
-● A status, indicating whether the rule is in effect.
-● One or more lifecycle transition and expiration actions to perform on.
+- A filter identifying a subset of objects to which the rule applies. The filter can be based on a key name prefix.
+- A status, indicating whether the rule is in effect.
+- One or more lifecycle transition and expiration actions to perform on.
 
 The following table describe the elements in the lifecycle rule.
 
@@ -257,30 +266,33 @@ The following table describe the elements in the lifecycle rule.
 
 Response
 The following is a sample response. 
-HTTP/1.1 200 OK
+```HTTP/1.1 200 OK
 x-amz-id-2: r+qR7+nhXtJDDIJ0JJYcd+1j5nM/rUFiiiZ/fNbDOsd3JUE8NWMLNHXmvPfwMpdc
 x-amz-request-id: 9E26D08072A8EF9E
 Date: Wed, 14 May 2014 02:11:22 GMT
 Content-Length: 0
 Server: x.x.x.x
+```
 ## GET Bucket Lifecycle
 The GET Bucket Lifecycle operation returns the lifecycle configuration information set on the bucket. This operation does not use request parameters and elements.
 Request Syntax:
-GET bucketname/?lifecycle HTTP/1.1
+```GET bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x
 Date: {{date}}
 Authorization: {{authorizationString}}
+```
 Sample Request:
-GET bucketname/?lifecycle HTTP/1.1
+```GET bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x
 x-amz-date: Thu, 15 Nov 2012 00:17:21 GMT
 Authorization: signatureValue
+```
 Sample Response:
 The following is a sample response that shows a prefix of “projectdocs/” filter and multiple lifecycle configurations for these objects.
 - Transition (in-cloud) to STANDARD_IA after 30 days
 - Transition (in-cloud) to GLACIER after 365 days
 - Expire after 3,650 days
-HTTP/1.1 200 OK
+```HTTP/1.1 200 OK
 x-amz-id-2: ITnGT1y4RyTmXa3rPi4hklTXouTf0hccUjo0iCPjz6FnfIutBj3M7fPGlWO2SEWp
 x-amz-request-id: 51991C342C575321
 Date: Thu, 15 Nov 2012 00:17:23 GMT
@@ -308,28 +320,30 @@ Content-Length: 358
         </Expiration>
     </Rule>
 </LifecycleConfiguration>
+```
 ## DELETE Bucket Lifecycle
 The DELETE Bucket Lifecycle operations removes the lifecycle configurations set on a bucket. To use this operation, you must have permission to perform the PUT Bucket lifecycle action.
 The DELETE Bucket Lifecycle operation does not use request parameters and elements.
 Request Syntax
-DELETE bucketname/?lifecycle HTTP/1.1
+```DELETE bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x
 Date: date
 Authorization: authorization string
-
+```
 Request Sample :
-DELETE bucketname/?lifecycle HTTP/1.1
+```DELETE bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x  
 Date: Wed, 14 Dec 2011 05:37:16 GMT
 Authorization: signatureValue
-
+```
 Response Sample :
-HTTP/1.1 204 No Content 
+```HTTP/1.1 204 No Content 
 x-amz-id-2: Uuag1LuByRx9e6j5OnimrSAMPLEtRPfTaOAa==  
 x-amz-request-id: 656c76696e672SAMPLE5657374  
 Date: Wed, 14 Dec 2011 05:37:16 GMT
 Connection: keep-alive  
 Server: x.x.x.x   
+```
 ## Recover Object from Glacier Storage(Get the recover progress?)
 Objects in the GLACIER storage class are archived. To access an archived object, you must first initiate a restore request. This restores a copy of the archived object. The time it takes restore jobs to finish depends on which data access tier you specify, Expedited, Standard, or Bulk.
 Speed Option
@@ -347,20 +361,23 @@ Amazon S3 and Huawei OBS, after the specified period, the restored copy will be 
 - Azure, it is not used, after recovered, the object will be stored in the new storage class, not in Glacier any more.
 - Google Cloud Storage, it actually no need to recover before access the object stored in Glacier, so this option is meaningless. 
 Request Syntax
-POST bucketname/objectname?restore HTTP/1.1
+```POST bucketname/objectname?restore HTTP/1.1
 Host: x.x.x.x
 Date: date
 Authorization: authorization string
 Content-MD5: MD5
     request body
+```
 Request Body
 The following is an XML example of a request body for restoring an archive.
+```
 <RestoreRequest>
    <Days>2</Days> 
    <GlacierJobParameters>
      <Tier>Bulk</Tier>
    </GlacierJobParameters> 
 </RestoreRequest>
+```
 The following table explains the XML for archive restoration in the request body.
 
 | Name | Description | Required |
@@ -371,7 +388,7 @@ The following table explains the XML for archive restoration in the request body
 | Tier | The data access tier to use when restoring the archive. Standard is the default. Type: Enum Valid values: Expedited/Standard/Bulk Ancestors: GlacierJobParameters | No, use Standard as default. |
 
 Rrequest Example:
-POST bucketname/objectname?restore HTTP/1.1
+```POST bucketname/objectname?restore HTTP/1.1
 Host: x.x.x.x
 Date: Mon, 22 Oct 2012 01:49:52 GMT
 Authorization: authorization string
@@ -383,13 +400,15 @@ Content-Length: content length
     <Tier>Expedited</Tier>
   </GlacierJobParameters>
 </RestoreRequest>
-	Response Example:
-HTTP/1.1 202 Accepted
+```
+Response Example:
+```HTTP/1.1 202 Accepted
 x-amz-id-2: GFihv3y6+kE7KG11GEkQhU7/2/cHR3Yb2fCb2S04nxI423Dqwg2XiQ0B/UZlzYQvPiBlZNRcovw=
 x-amz-request-id: 9F341CD3C4BA79E0
 Date: Sat, 20 Oct 2012 23:54:05 GMT
 Content-Length: 0
 Server: x.x.x.x
+```
 
 # Changes on the current implementation
 ## S3 module
@@ -399,7 +418,7 @@ Server: x.x.x.x
 4.Provide the ability of filter objects by storage class in the list API.
 5.Add an API to update object metadata.
 6.Add the HEAD API to get object metadata.
-6.2scheduler module
+## scheduler module
 1.Periodically get lifecycle rules of each bucket, based on the Read API of S3. 
 2.For each rule, if it is active, then get object list by rule filter based on the List API of S3.
 3.For each object get in #2, send a LifecycleActionRequest to datamover through kafka.
