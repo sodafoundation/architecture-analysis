@@ -41,7 +41,7 @@ Notes:
 - For GCS, Regional storage is not supported.
 - We don't recommend using REDUCED_REDUNDANCY.
 
-There are three options described as below, we need to choose one of it.
+**There are three options described as below, we need to choose one of it.**
 ## Two ways to define lifecycle rules, one for bucket, the other for backend
 ### Solution describe
 Support to set lifecycle management rules both on bucket and backend.
