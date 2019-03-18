@@ -262,7 +262,7 @@ The following table describe the elements in the lifecycle rule.
 | StorageClass | Specifies the OpenSDS storage class to which you want the object to transition. Type: String Ancestor: Transition Valid values: GLACIER | STANDARD_IA | ONEZONE_IA | INTELLIGENT_TIERING | Yes, if you specify it’s ancestor. |
 | Backend | Specifies the backend which you want to transition to. Type: String Ancestor: Transition | No. If backend is specified, the transition should be cross-cloud transition, otherwise it is in-cloud transition. |
 | AbortIncompleteMultipartUpload | Container for specifying when an incomplete multipart upload becomes eligible for an abort operation. Child: DaysAfterInitiation Type: Container Ancestor: Rule. | Yes, if no other action is specified for the rule. |
-| DaysAfterInitiation	Specifies the number of days after initiating a multipart upload when the multipart upload must be completed. If it does not complete by the specified number of days, it becomes eligible for an abort operation and OpenSDS aborts the incomplete multipart upload. Type: Positive Integer. Ancestor: AbortIncompleteMultipartUpload. | Yes, if ancestor is specified. |
+| DaysAfterInitiation | Specifies the number of days after initiating a multipart upload when the multipart upload must be completed. If it does not complete by the specified number of days, it becomes eligible for an abort operation and OpenSDS aborts the incomplete multipart upload. Type: Positive Integer. Ancestor: AbortIncompleteMultipartUpload. | Yes, if ancestor is specified. |
 
 Response
 The following is a sample response. 
@@ -455,7 +455,8 @@ For example : If user decides to transit from STANDARD_IA of aws s3 to HOT in Az
 One way is to restrict in GUI or Dashboard , while creating the transition actions user will only be able to see the valid and significant storage classes where the object can be moved.
 For CLI , first we will retrieve the storage class where the bucket sits currently. And before any transition action happen we can check the destination storage class specified in rule and check if the transition is valid or not. 
 
-Other suggestion - RULE ENGINE, supports a waterfall model for transitioning between storage classes, as shown in chapter 4.1.
+Other suggestion - RULE ENGINE, supports a waterfall model for transitioning between storage classes, as shown in *Transition constraint*.
+
 4.  While transitioning to other storage class across cloud or within cloud , how will user know if there is any space left in the destination Storage class. 
 Actually, there is no space limitation for cloud object storage. Cloud vendor promise the storage space is enough.
 
