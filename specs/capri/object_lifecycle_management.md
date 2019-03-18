@@ -107,6 +107,7 @@ For OpenSDS, lifecycle transitions have the following constraints:
 1.Objects must be stored at least 30 days in the current storage class before you can transition them to STANDARD_IA or ONEZONE_IA. For example, you cannot create a lifecycle rule to transition objects to the STANDARD_IA storage class one day after you create them.
 2.For larger objects, there is a cost benefit for transitioning to INTELLIGENT_TIERING. OpenSDS does not transition objects that are smaller than 128 KB to the INTELLIGENT_TIERING storage class because it's not cost effective.
 3.For cross-cloud transition, the supported target storage class depends on the type of target backend. The following table shows which storage class of each backend type can be used as target storage class.
+
 |  | STANDARD | STANDARD_IA | INTELLIGENT_TIERING | ONEZONE_IA | GLACIER |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
 | AWS S3 | No | Yes | Yes | Yes | Yes |
@@ -236,6 +237,7 @@ Each rule consists of the following:
 ● One or more lifecycle transition and expiration actions to perform on.
 
 The following table describe the elements in the lifecycle rule.
+
 | Name | Description | Required |
 |-----------|--------------------------------------------|----------|
 | LifecycleConfiguration | Container for lifecycle rules. You can add as many as 1,000 rules. Type: Container Children: Rule Ancestor: None | Yes |
@@ -357,6 +359,7 @@ The following is an XML example of a request body for restoring an archive.
    </GlacierJobParameters> 
 </RestoreRequest>
 The following table explains the XML for archive restoration in the request body.
+
 | Name | Description | Required |
 |-----------------|------------------------------------------------------------------------|--------------|
 | RestoreRequest | Container for restore information. Type: Container | Yes |
