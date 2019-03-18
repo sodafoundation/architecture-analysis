@@ -52,6 +52,7 @@ Rules set on backend are used in the scenario of expiration and in-cloud transit
 - Less work for OpenSDS.
 - Can use all features of lifecycle management of each clouds.
 - No limitation for versioning.
+
 **CONS**
 - Need two sets of APIs, that’s different with lifecycle management in S3.
 - In-cloud transition is controlled by cloud vendor, it’s difficult to keep metadata of each object completely consistent with cloud all the time.
@@ -67,6 +68,7 @@ Only support to set lifecycle management rules on bucket, for each rule:
 APIs are compatible with S3.
 - Can manage lifecycle on the bucket level like cloud themselves.
 - No limitation for versioning.
+
 **CONS**
 - Can’t support to keep the object key in cloud be the same as it in OpenSDS. (As default, object key in cloud is composed of bucket name in OpenSDS and ’/’ and object key in OpenSDS.)
 - As an object of a bucket can be stored in any backends, the rule need to be set in all backends, and if a new backend is registered, it also need to add this rule.
@@ -84,6 +86,7 @@ Only support to set lifecycle management rules on bucket, all rules will be sche
 - Can manage lifecycle on the bucket level like cloud themselves.
 - All rules are controlled by OpenSDS, there is no sync up problems about lifecycle.
 - Because different cloud vendor provide different rules, with this solution we can provide user with the unified rule definition. 
+
 **CONS**
 - It’s not sure if the cost of using OpenSDS lifecycle and cloud lifecycle are the same for all cloud vendors. (Azure Blob, HW OBS, AWS S3, Google Cloud Storage… )
 - Because the limitation of cloud vendor that storage class of object in history (with versioning enabled) can’t be changed, object versioning need to be totally managed by OpenSDS, it can not use the versioning ability of cloud vendor.
