@@ -363,8 +363,8 @@ The following table explains the XML for archive restoration in the request body
 | Name | Description | Required |
 |-----------------|------------------------------------------------------------------------|--------------|
 | RestoreRequest | Container for restore information. Type: Container | Yes |
-| Days	Lifetime of the restored (active) copy. The minimum number of days that you can restore an object from Glacier is 1. Type: Positive integer Ancestors: RestoreRequest | Yes |
-| GlacierJobParameters	Container for Glacier job parameters. Type: Container Ancestors: RestoreRequest | No, use Standard as default. |
+| Days | Lifetime of the restored (active) copy. The minimum number of days that you can restore an object from Glacier is 1. Type: Positive integer Ancestors: RestoreRequest | Yes |
+| GlacierJobParameters | Container for Glacier job parameters. Type: Container Ancestors: RestoreRequest | No, use Standard as default. |
 | Tier | The data access tier to use when restoring the archive. Standard is the default. Type: Enum Valid values: Expedited/Standard/Bulk Ancestors: GlacierJobParameters | No, use Standard as default. |
 
 Rrequest Example:
