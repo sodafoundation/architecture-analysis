@@ -227,15 +227,15 @@ The following is a rule example:
 ```<LifecycleConfiguration>
 <Rule>
   <ID>rule_1</ID>
-    <Filter>
-      <Prefix>projectA/</Prefix>
-    </Filter>
-    <Status>Enabled</Status>
-    <Transition>
-      <Days>30</Days>
-      <StorageClass>GLACIER</StorageClass>
-      <Backend>backend_aws</Backend>
-    </Transition>
+  <Filter>
+    <Prefix>projectA/</Prefix>
+  </Filter>
+  <Status>Enabled</Status>
+  <Transition>
+    <Days>30</Days>
+    <StorageClass>GLACIER</StorageClass>
+    <Backend>backend_aws</Backend>
+  </Transition>
 </Rule>
 <Rule>
   <ID>rule_2</ID>
@@ -318,24 +318,24 @@ Content-Length: 358
 
 <?xml version="1.0" encoding="UTF-8"?>
 <LifecycleConfiguration>
-    <Rule>
-        <ID>Archive and then delete rule</ID>
-        <Filter>
-           <Prefix>projectdocs/</Prefix>
-        </Filter>
-        <Status>Enabled</Status>
-       <Transition>
-           <Days>30</Days>
-           <StorageClass>STANDARD_IA</StorageClass>
-        </Transition>
-        <Transition>
-           <Days>365</Days>
-           <StorageClass>GLACIER</StorageClass>
-        </Transition>
-        <Expiration>
-           <Days>3650</Days>
-        </Expiration>
-    </Rule>
+  <Rule>
+    <ID>Archive and then delete rule</ID>
+    <Filter>
+      <Prefix>projectdocs/</Prefix>
+    </Filter>
+    <Status>Enabled</Status>
+    <Transition>
+      <Days>30</Days>
+      <StorageClass>STANDARD_IA</StorageClass>
+    </Transition>
+    <Transition>
+      <Days>365</Days>
+      <StorageClass>GLACIER</StorageClass>
+    </Transition>
+    <Expiration>
+      <Days>3650</Days>
+      </Expiration>
+  </Rule>
 </LifecycleConfiguration>
 ```
 ## DELETE Bucket Lifecycle
