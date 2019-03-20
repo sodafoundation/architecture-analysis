@@ -73,7 +73,7 @@ Only support to set lifecycle management rules on bucket, for each rule:
 
 ### PROS & CONS
 **PROS**
-APIs are compatible with S3.
+- APIs are compatible with S3.
 - Can manage lifecycle on the bucket level like cloud themselves.
 - No limitation for versioning.
 
