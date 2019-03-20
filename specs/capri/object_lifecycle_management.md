@@ -226,38 +226,38 @@ The lifecycle configuration can be specified in the request body. The configurat
 The following is a rule example:
 ```<LifecycleConfiguration>
 <Rule>
-	<ID>rule_1</ID>
-        <Filter>
-           <Prefix>projectA/</Prefix>
-        </Filter>
-		<Status>Enabled</Status>
+  <ID>rule_1</ID>
+    <Filter>
+      <Prefix>projectA/</Prefix>
+    </Filter>
+    <Status>Enabled</Status>
     <Transition>
-		<Days>30</Days>
-		<StorageClass>GLACIER</StorageClass>
-		<Backend>backend_aws</Backend>
-	</Transition>
+      <Days>30</Days>
+      <StorageClass>GLACIER</StorageClass>
+      <Backend>backend_aws</Backend>
+    </Transition>
 </Rule>
 <Rule>
-	<ID>rule_2</ID>
-        <Filter>
-           <Prefix>projectB/</Prefix>
-        </Filter>
-		<Status>Enabled</Status>
-    <Expiration>
-		<Days>365</Days>
-	</Transition>
+  <ID>rule_2</ID>
+  <Filter>
+    <Prefix>projectB/</Prefix>
+  </Filter>
+  <Status>Enabled</Status>
+  <Expiration>
+    <Days>365</Days>
+  </Expiration>
 </Rule>
 
 <Rule>
-	<ID>rule_n</ID>
-        <Filter>
-           <Prefix> </Prefix>
-        </Filter>
-		<Status>Enabled</Status>
-        <AbortIncompleteMultipartUpload>
-			<DaysAfterInitiation>7</DaysAfterInitiation>
-		</AbortIncompleteMultipartUpload>
-    </Rule>
+  <ID>rule_n</ID>
+  <Filter>
+    <Prefix> </Prefix>
+  </Filter>
+  <Status>Enabled</Status>
+  <AbortIncompleteMultipartUpload>
+    <DaysAfterInitiation>7</DaysAfterInitiation>
+  </AbortIncompleteMultipartUpload>
+</Rule>
 </LifecycleConfiguration>
 ```
 Each rule consists of the following:
