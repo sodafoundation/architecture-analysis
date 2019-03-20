@@ -204,6 +204,7 @@ In this case, OpenSDS will chooses to transition the subsets of objects with the
 ## PUT Bucket Lifecycle
 
 The PUT Bucket Lifecycle operation creates a new lifecycle configuration or replaces an existing one.
+
 Request Syntax
 ```PUT bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x
@@ -292,6 +293,7 @@ Server: x.x.x.x
 ```
 ## GET Bucket Lifecycle
 The GET Bucket Lifecycle operation returns the lifecycle configuration information set on the bucket. This operation does not use request parameters and elements.
+
 Request Syntax:
 ```GET bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x
@@ -341,6 +343,7 @@ Content-Length: 358
 ## DELETE Bucket Lifecycle
 The DELETE Bucket Lifecycle operations removes the lifecycle configurations set on a bucket. To use this operation, you must have permission to perform the PUT Bucket lifecycle action.
 The DELETE Bucket Lifecycle operation does not use request parameters and elements.
+
 Request Syntax
 ```DELETE bucketname/?lifecycle HTTP/1.1
 Host: x.x.x.x
