@@ -380,6 +380,7 @@ But it only used for those backend which support restore period. For:
 Amazon S3 and Huawei OBS, after the specified period, the restored copy will be deleted, while the object remains archived.
 - Azure, it is not used, after recovered, the object will be stored in the new storage class, not in Glacier any more.
 - Google Cloud Storage, it actually no need to recover before access the object stored in Glacier, so this option is meaningless. 
+
 Request Syntax
 ```POST bucketname/objectname?restore HTTP/1.1
 Host: x.x.x.x
