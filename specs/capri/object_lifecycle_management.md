@@ -7,8 +7,8 @@
 - Object versioning is also supported in lifecycle configuration to customize your data retention approach and control storage costs. 
 
 **Actions taken in object lifecycle are:**		
-- Transition actions—Define when objects transition to another storage class. For example, in AWS S3 you might choose to transition objects to the STANDARD_IA storage class 30 days after you created them, or archive objects to the GLACIER storage class one year after creating them or in Google cloud where you can choose to transit the objects from Multi-Regional Storage to Coldline Storage. There are costs associated with the lifecycle transition requests. 						
-- Expiration actions—Define when objects expire. The lifecycle expiration costs depend on when you choose to expire objects. When an object reaches the end of its lifetime, it is queued for removal and gets removed asynchronously. There may be a delay between the expiration date and the date at which the object is removed. 
+- Transition actions: Define when objects transition to another storage class. For example, in AWS S3 you might choose to transition objects to the STANDARD_IA storage class 30 days after you created them, or archive objects to the GLACIER storage class one year after creating them or in Google cloud where you can choose to transit the objects from Multi-Regional Storage to Coldline Storage. There are costs associated with the lifecycle transition requests. 						
+- Expiration actions: Define when objects expire. The lifecycle expiration costs depend on when you choose to expire objects. When an object reaches the end of its lifetime, it is queued for removal and gets removed asynchronously. There may be a delay between the expiration date and the date at which the object is removed. 
 Note : There are different implementations for Transition and Expiration actions on versioning enabled/suspended and non-versioned buckets.
 
 ## When to use Lifecycle Configuration?
