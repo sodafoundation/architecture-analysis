@@ -57,7 +57,11 @@ Planned feature designs can be found for each release cycle here.
 
 [Object Lifecycle Management Design](https://docs.google.com/document/d/1XbA5lPLlJCBKf-Kk9BCwPy3VEj1bqEF7tvlriU83tAM/edit#)
 
+[File Share Design](https://docs.google.com/document/d/1lcaKI8ht7ZYyP0mGm8WN_jC1DH62wpJpZ5NiDuogT9g/edit)
+
 [Telemetry Design](https://docs.google.com/document/d/1cEXyjbIW6uGrYD60GYCL-_feGVUsgPobXR0oGchalWQ/edit?usp=sharing)
+
+[Anomaly Detection Design](https://docs.google.com/document/d/1rF9Dh16YQNhudfP3pQODuYTQvrL2AkpEyIbPUo7aud8/edit?usp=sharing)
 
 ### Bali Proposals
 
