@@ -88,15 +88,18 @@ None
 
 ### Performance impact
 
-None
+Note:These parts of hotpot should be considered encrypted:
+Southward volume drivers or other drivers: multi-cloud, dorado, fusionstorage, cinder. These parts use user name and password to connect with hotpot.
+Northward plugin:csi. These parts use user name and password to get token from keystone.
+
 
 ### Other deployer impact
 
-When multi-cloud, dorado, cinder, kubernetes, keystone docking the OpenSDS, user needs to change the value of enable_encrypted and pwd_encrypter in the configuration file to decide whether to encrypt the password and choose which encryption tool to use or keep the default values.
+When multi-cloud, dorado, cinder, kubernetes, keystone connect with the OpenSDS, user needs to change the value of enable_encrypted and pwd_encrypter in the configuration file to decide whether to encrypt the password and choose which encryption tool to use or keep the default one.
 
 ### Developer impact
 
-Developers can implement their own encryption and decryption functions in the OpenSDS encryption framework according to their own needs.
+Developers can implement their own encryption and decryption functions in the OpenSDS encryption framework based on their requirements. If there are new parts added to hotpot, you should consider whether to encrypt password.
 
 ## Use Cases
 
