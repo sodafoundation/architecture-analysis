@@ -8,7 +8,7 @@ This document is a design proposal to provide a password security mechanism for 
 
 ## Motivation
 
-Currently, the password used by other components such as cinder, kubernetes, MultiCloud to interact with OpenSDS is not encrypted, which causes the user’s information being easily leaked.
+Currently, the password used by other components such as cinder, kubernetes, MultiCloud to interact with OpenSDS is not encrypted, which means the user’s information can be leaked easily.
 
 ### Goals
 
@@ -16,15 +16,12 @@ The password shall be encrypted when other components use it to interact with Op
 
 1.A default encryption tool will be provided for users to obtain the cipher text.
 
-2.Which encryption tool is selected and whether the password is encrypted can be configurable. By default, the encryption tool is AES provided by the community, and the password is not encrypted.
+2.Which encryption tool is selected and whether the password is encrypted can be configurable. By default, the encryption tool is AES which is an open source tool, and the password is not encrypted.
 
-### Non-Goals
-
-None
 
 ## Design Details
 
-1.Add options to the OpenSDS configuration file that enable user to choose the password encrypter tool they want and choose whether to encrypt the password. The encryption tools can be implemented by themselves. These two options added to the opensds.conf are as follows:
+1.Add options to the OpenSDS configuration file that enable user to choose the password encrypter tool they want and choose whether to encrypt the password. The encryption tools can be implemented by the user. These two options added to the opensds.conf are as follows:
 
 // Whether to encrypt the password. If enabled, the value of the password must be cipher text.
 enable_encrypted = False
@@ -52,8 +49,7 @@ Calling example in code:
 AES encryption tool user guide：
 build/out/bin/pwdEncrypter password
 
-3.Provide a unified code framework for encryption and decryption that enables 
-user to implement their own encryption tool.
+3.Provide a unified code framework for encryption and decryption that enables user to implement their own encryption tool.
 
 type PwdEncrypter interface {
 	Encrypter(password string) (string, error)
@@ -89,8 +85,8 @@ None
 ### Performance impact
 
 Note:These parts of hotpot should be considered encrypted:
-Southward volume drivers or other drivers: multi-cloud, dorado, fusionstorage, cinder. These parts use user name and password to connect with hotpot.
-Northward plugin:csi. These parts use user name and password to get token from keystone.
+Southbound volume drivers or other drivers: multi-cloud, dorado, fusionstorage, cinder. These parts use user name and password to connect with hotpot.
+Northbound plugin:csi. These parts use user name and password to get token from keystone.
 
 
 ### Other deployer impact
