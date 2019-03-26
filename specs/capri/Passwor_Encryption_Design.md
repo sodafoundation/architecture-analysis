@@ -87,7 +87,7 @@ None
 Note:These parts of hotpot should be considered encrypted:
 Southbound volume drivers or other drivers: multi-cloud, dorado, fusionstorage, cinder. These parts use user name and password to connect with hotpot.
 Northbound plugin:csi. These parts use user name and password to get token from keystone.
-
+ 
 
 ### Other deployer impact
 
