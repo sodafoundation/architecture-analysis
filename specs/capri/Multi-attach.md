@@ -104,7 +104,7 @@ type VolumeSpec struct {
 	ReplicationId string `json:"replicationId,omitempty"`
 	ReplicationDriverData map[string]string `json:"replicationDriverData,omitempty"`
 	AttachStatus string
-	MultiAttach bool `json:"multiAttach,omitempty"`
+	MultiAttach bool `json:"multiAttach"`
 }
 ```
 
