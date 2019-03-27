@@ -20,19 +20,19 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 
 ## Design Details
 
-1.  A user can request for action (let’s say: create a share) through 
-     Northbound Plugins(NBP). We have already few plugins, but need to 
+1.  A user can request for action (let’s say: create a share) through
+     Northbound Plugins(NBP). We have already few plugins, but need to
      modify for file share request.
 2. Now, NBP can communicate to OpenSDS API server.
 3. Based on user request File Share API will be selected.
-4. Internally, OpenSDS File Share API talk to controllers. 
-5. Controllers will also maintain the File Share metadata in database. 
+4. Internally, OpenSDS File Share API talk to controllers.
+5. Controllers will also maintain the File Share metadata in database.
 6. Controller communicates to Dock, specific driver to create a share.
 
 ![FileShare Architecture Diagram](FileShare_Design.png?raw=true "File_Share_Design")
 
 #### Flow diagram:
-![FileShare Architecture Diagram](FileShare Flow diagram.png?raw=true "File_Share_Design")
+![FileShare Architecture Diagram](FileShare_Flow_diagram.png?raw=true "File_Share_Design")
 
 ### REST API impact
 
@@ -57,64 +57,68 @@ This is the list of proposal for API
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
   “updatedAt” : “2019-03-20T12:49:00.497Z”
-  
+
   “tenantId” : “string”
-  
+
   “name” : “string”
-  
+
   “protocol”: “string”
-  
+
   “description” : “string”
-  
-  “size” : “integer”
-  
+
+  “size” : “int64”
+
   “availabilityZone”: “string”
-  
+
   “status”: “string”
-  
+
   “profileId”: “string”
-  
+
   “poolId”: “string”
-  
+
   “snapshotId”: “string”
- 
+
+  “exportLocations” : “array”
+
 ##### 2. GET /v1beta/{tenantId}/file/shares/{shareId}
 * Shows details for a share.
 ##### Request
   “tenatId” : “string”
-  
+
   “shareId” : “string”
-  
+
+  “exportLocations” : “array”
+
   ##### Response parameters
   “Id” : “string”
-  
+
   “protocol” : “string”
-  
+
   “createdAt” : “2019-03-20T12:49:00.497Z”
-  
+
   “updatedAt” : “2019-03-20T12:49:00.497Z”
-  
+
   “tenatId” : “string”
-  
+
   “userId” : “string“
-  
+
   “name” : “string”
-  
+
   “description” : “string”
-  
-  “size” : “integer”
-  
+
+  “size” : “int64”
+
   “availabilityZone”: “string”
-  
+
   “status”: “string”
-  
+
   “profileId”: “string”
-  
+
   “poolId”: “string”
-  
+
   “snapshotId”: “string”
-  
-  “exportLocations” : “paths(json)”
+
+  “exportLocations” : “array”
 
 ##### 3.   POST /v1beta/{tenantId}/file/shares
 * Creates a share.
@@ -131,7 +135,7 @@ This is the list of proposal for API
 
   “availabilityZone”: “string”
 
-  “exportLocations” : “list”   // path[ ] //optional
+  “exportLocations” : “array”   // path[ ] //optional
 
   “profileId”: “string”
 
@@ -154,7 +158,7 @@ This is the list of proposal for API
 
  “description” : “string”
 
- “size” : “int 64”
+ “size” : “int64”
 
  “availabilityZone”: “string”
 
@@ -166,7 +170,7 @@ This is the list of proposal for API
 
  “snapshotId”: “string”
 
- “exportLocations” : “list”   // path[ ]
+ “exportLocations” : “array”   // path[ ]
 
 ##### 4. PUT /v1beta/{tenantId}/file/shares/{shareId}
 * Updates a share.
@@ -192,7 +196,7 @@ This is the list of proposal for API
 
  “description” : “string”
 
- “size” : “integer”
+ “size” : “int64”
 
  “availabilityZone”: “string”
 
@@ -203,7 +207,7 @@ This is the list of proposal for API
  “poolId”: “string”
 
  “snapshotId”: “string”
- 
+
 ##### 5. 	DELETE /v1beta/{tenantId}/file/shares/{shareId}
 * Deletes a share
 ##### Request
@@ -228,9 +232,9 @@ This is the list of proposal for API
 
  “description” : “string”
 
- “shareSize” : ”integer”
+ “shareSize” : ”int64”
 
- “snapshotSize” : “integer”
+ “snapshotSize” : “int64”
 
  “status”: “string”
 
@@ -252,9 +256,9 @@ This is the list of proposal for API
 
   “description” : “string”
 
-  “shareSize” : “integer”
+  “shareSize” : “int64”
 
-  “snapshotSize” : “integer”
+  “snapshotSize” : “int64”
 
   “status”: “string”
 
@@ -262,7 +266,7 @@ This is the list of proposal for API
 * Creates a snapshot from a share.
 ##### Request
   “description” : “string”
-  
+
   “name” : “string”
 
   “shareId” : “string“
@@ -282,12 +286,12 @@ This is the list of proposal for API
 
   “description” : “string”
 
-  “shareSize” : “integer”
+  “shareSize” : “int64”
 
-  “snapshotSize” : “integer”
+  “snapshotSize” : “int64”
 
   “status”: “string”
- 
+
 ##### 9.	PUT /v1beta/{tenantId}/file/snapshot/{snapshotId}
 * Updates a share snapshot.
 ##### Request
@@ -309,12 +313,12 @@ This is the list of proposal for API
 
   “description” : “string”
 
-  “shareSize” : “integer”
+  “shareSize” : “int64”
 
-  “snapshotSize” : “integer”
+  “snapshotSize” : “int64”
 
   “status”: “string”
- 
+
 ##### 10.	DELETE /v1beta/{tenantId}/file/shares/{snapshotId}
 * Deletes a share
 
@@ -327,10 +331,10 @@ This is the list of proposal for API
 
     “type” : “string”    // user/ip
 
-    “accessCapability” : read/write/execute 
+    “accessCapability” : read/write/execute
 
     “accessTo” : “user_list”
- 
+
 ##### 12.	PUT /v1beta/{tenantId}/file/accesses/{accessId}
 * Add access control for file share.
 ##### Request
@@ -342,3 +346,4 @@ NO
 ## Open issues
 
 NO
+
