@@ -313,7 +313,7 @@ type Metric struct {
 
         // Following are the labels associated with Metric, same as Prometheus labels
 
-        Example: {device="dm-0",instance="121.244.95.60:12419",job="prometheus"}
+        // Example: {device="dm-0",instance="121.244.95.60:12419",job="prometheus"}
 
         // Instance ID -\> volumeID/NodeID  
         instanceID string
@@ -518,7 +518,7 @@ migrate object, etc. (multicloud local backend)
 
 1.  POST API to trigger a collection
 
-/v1/{projectId}/metrics
+/v1/{tenantId}/metrics
 
 *JSON request body*
 ```json
@@ -564,7 +564,7 @@ migrate object, etc. (multicloud local backend)
 
 1.  GET API to get collected metrics
 
-        /v1/{projectId}/metrics
+        /v1/{tenantId}/metrics
 
 *JSON request body*
 ```json
