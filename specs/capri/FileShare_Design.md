@@ -48,8 +48,9 @@ This is the list of proposal for API
 ##### 1. GET /v1beta/{tenantId}/file/shares
 * Lists all shares.
  ##### Request
+ ```json
 "tenantId": "string"
-
+```
   ##### Response parameters
 ```json
   “Id” : “string”
