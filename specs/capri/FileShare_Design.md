@@ -307,7 +307,7 @@ This is the list of proposal for API
 
   “status”: “string”
 ```
-##### 9.	PUT /v1beta/{tenantId}/file/snapshot/{snapshotId}
+##### 9.	PUT /v1beta/{tenantId}/file/snapshots/{snapshotId}
 * Updates a share snapshot.
 ##### Request
 ```json
