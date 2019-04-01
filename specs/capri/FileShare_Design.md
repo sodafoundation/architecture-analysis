@@ -51,7 +51,7 @@ This is the list of proposal for API
 "tenantId": "string"
 
   ##### Response parameters
-
+```json
   “Id” : “string”
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
@@ -79,7 +79,7 @@ This is the list of proposal for API
   “snapshotId”: “string”
 
   “exportLocations” : “array”
-
+```
 ##### 2. GET /v1beta/{tenantId}/file/shares/{shareId}
 * Shows details for a share.
 ##### Request
