@@ -83,13 +83,16 @@ This is the list of proposal for API
 ##### 2. GET /v1beta/{tenantId}/file/shares/{shareId}
 * Shows details for a share.
 ##### Request
+```json
   “tenatId” : “string”
 
   “shareId” : “string”
 
   “exportLocations” : “array”
+```
 
   ##### Response parameters
+  ```json
   “Id” : “string”
 
   “protocol” : “string”
@@ -119,10 +122,12 @@ This is the list of proposal for API
   “snapshotId”: “string”
 
   “exportLocations” : “array”
+```
 
 ##### 3.   POST /v1beta/{tenantId}/file/shares
 * Creates a share.
 ##### Request
+```json
   “description” : “string”
 
   “protocol” : “array”
@@ -140,8 +145,9 @@ This is the list of proposal for API
   “profileId”: “string”
 
   “snapshotId” : “string”
+  ```
 ##### Response parameters
-
+```json
   “Id” : “string”
 
  “protocol” : “array”
@@ -171,15 +177,17 @@ This is the list of proposal for API
  “snapshotId”: “string”
 
  “exportLocations” : “array”   // path[ ]
-
+```
 ##### 4. PUT /v1beta/{tenantId}/file/shares/{shareId}
 * Updates a share.
 ##### Request
-
+```json
   “name” : “string”
 
   “description” : “string”
+```  
  ##### Response parameters
+ ```json
  “Id” : “string”
 
  “protocol” : “string”
@@ -207,19 +215,21 @@ This is the list of proposal for API
  “poolId”: “string”
 
  “snapshotId”: “string”
-
+```
 ##### 5. 	DELETE /v1beta/{tenantId}/file/shares/{shareId}
 * Deletes a share
 ##### Request
+```json
     “Id” : “string”
-
+```
 ##### 6.	GET /v1beta/{tenantId}/file/snapshots
 * Lists all share snapshots
 #### Request
+```json
   “tenantId”: “string”
-
+```
  ##### Response parameters
-
+```json
  “snapshotId”: “string”
 
  “protocol” : “string”
@@ -237,13 +247,15 @@ This is the list of proposal for API
  “snapshotSize” : “int64”
 
  “status”: “string”
-
+```
 ##### 7.	GET /v1beta/{tenantId}/file/snapshots/{snapshotId}
 * Show details of snapshot
 ##### Request
+```json
   “id”: “string”
+```  
 ##### Response parameters
-
+```json
   “snapshotId”: “string”
 
   “protocol” : “string”
@@ -261,17 +273,19 @@ This is the list of proposal for API
   “snapshotSize” : “int64”
 
   “status”: “string”
-
+```
 ##### 8.   POST /v1beta/{tenantId}/file/snapshot
 * Creates a snapshot from a share.
 ##### Request
+```json
   “description” : “string”
 
   “name” : “string”
 
   “shareId” : “string“
-
+```
   ##### Response parameters
+```json  
   “Id”: “string”
 
   “shareId” : “string”
@@ -291,14 +305,17 @@ This is the list of proposal for API
   “snapshotSize” : “int64”
 
   “status”: “string”
-
+```
 ##### 9.	PUT /v1beta/{tenantId}/file/snapshot/{snapshotId}
 * Updates a share snapshot.
 ##### Request
+```json
   “description” : “string”
 
   “name” : “string”
+```  
 ##### Response parameters
+```json
   “snapshotId”: “string”
 
   “shareId” : “string”
@@ -318,15 +335,17 @@ This is the list of proposal for API
   “snapshotSize” : “int64”
 
   “status”: “string”
-
+```
 ##### 10.	DELETE /v1beta/{tenantId}/file/shares/{snapshotId}
 * Deletes a share
-
+##### Request
+```json
   “snapshotId” : “sting”
-
+```
 ##### 11.	POST /v1beta/{tenantId}/file/accesses/
 * Add access control for file share.
 ##### Request
+```json
     “sharetId” : “sting”
 
     “type” : “string”    // user/ip
@@ -334,16 +353,16 @@ This is the list of proposal for API
     “accessCapability” : read/write/execute
 
     “accessTo” : “user_list”
-
+```
 ##### 12.	PUT /v1beta/{tenantId}/file/accesses/{accessId}
 * Add access control for file share.
 ##### Request
+```json
    “accessId” : “string”
-
+```
 ## Alternatives considered
 NO
 
 ## Open issues
 
 NO
-
