@@ -200,7 +200,21 @@ Controller handles POST and GET requests from API server.
 *DRIVER*
 
 1.  The metrics driver for a particular storage can be added to an existing
-    volume driver, or it can be an independent Metrics driver
+    volume driver, or it can be an independent Metrics driver. The metrics driver interface is defined below
+    ```go
+        // MetricDriver is an interface for exposing metrics collection operation of different components (Volume/CPU/Memory etc)
+        type MetricDriver interface {
+                //Any initialization the Metric driver does while starting.
+                Setup() error
+                //Any operation the Metric driver does while stopping.
+                Unset() error
+                //Every POST operation will trigger a CollectMetrics operation for specific MetricDriver
+                //metricList:- Controller  passed list of metrics .
+                //instanceID:- is the component name/id (VolumeID,CPU_ID)
+                //*model.Metric:-  The array of metrics collected .
+                CollectMetrics([]metricList string,instanceID string) ([]*model.Metric, error)
+                }
+    ```
 
 <br>**Alerting**
 ------------
@@ -363,8 +377,13 @@ type Metric struct {
         ie:- if collector is aggregating some metrics and producing a new metric of
         higher level constructs, then this field can be set as 'Total' to indicate it is
         aggregated/derived from other metrics.*/  
-
         aggr_type AGGR_TYPE  
+
+        //timestamp
+        timestamp int64
+        
+        //value
+        value float64
         }
 ```
 
