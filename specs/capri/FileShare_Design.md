@@ -1,6 +1,6 @@
 # Title
 
-**Author(s)**: [Pravin Ranjan](https://github.com/PravinRanjan10)
+**Author(s)**: [Pravin Ranjan](https://github.com/PravinRanjan10), [Shruti M N]
 
 ## Summary
 
