@@ -1,6 +1,6 @@
 # Title
 
-**Author(s)**: [Pravin Ranjan](https://github.com/PravinRanjan10), [Shruti M N]
+**Author(s)**:  [Shruthi MN](https://github.com/Shruthi-1MN), [Pravin Ranjan](https://github.com/PravinRanjan10)
 
 ## Summary
 
@@ -15,8 +15,14 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 
 ### Goals
 
-* To create and allow multiple access of a share using only one protocol(eg. NFS/CIFS)
-* To create and allow multiple access of a snapshot
+* Facilitating File Share Service by providing Standard API to manage multiple vendors, simplify File Share API definition  
+* File share across the users based on access capability
+* Scope for now is to support only NFS, SMB file share protocols
+
+### Non-Goals
+
+* Provide support for multiple other file share protocols ex: GlusterFS, HDFS etc.. 
+* Supporting Replication and Data Protection for file share profile
 
 ## Design Details
 
@@ -37,6 +43,24 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 ### REST API impact
 
 YES
+Existing Profile API's needs to be changed
+
+### Data model impact
+
+No
+
+### REST API impact
+
+Yes only Profile API's needs to be changed
+
+### Security impact
+
+No
+
+### Other end user impact
+
+No
+
 ## Use Cases
 
 Multiple users can access the same file share mount point.
@@ -361,6 +385,350 @@ This is the list of proposal for API
 ```json
    “accessId” : “string”
 ```
+## Implementation of file share APIs for Profiles consolidated with block storage
+Note : Highlighted with background color texts are specific to file share and those are only supported in file share. Rest all parameters are belongs to block storage
+
+##### 1.	POST /v1beta/{tenantId}/profiles
+* Create profiles
+
+##### Request
+```json
+body*
+   [
+     ""name"         : "string",
+     "storage type" : "string",
+     "description"  : "string",
+     "provisioningProperties" : {
+                "datastore""  : {
+
+                   ""characterCodeSet"        : "string",
+                    "maxFileNameLengthBytes"  : "int64",
+                    "storageAccessCapability" : "string",
+                    "recoveryTimeObjective"   : "int64",
+                    "provisioningPolicy"      : "string",
+                    "isSpaceEfficient"        : "bool"
+                },
+                "ioconnectivity" : {
+                  "accessProtocol" : "string",
+                  "maxIOPS"        : "int64",
+                  "maxBWS"         : "int64""
+                }
+      },
+      "replicationProperties" : {
+          "dataProtection" : {
+              "isIsolated"                  : "bool",
+              "minLifeTime"                 : "string",
+              "recoveryGeographicObjective" : "string",
+              "recoveryPointObjectiveTime"  : "string",
+              "recoveryTimeObjective"       : "string",
+              "replicaType"                 : "string"
+          },
+          "replicaInfos" : {
+              "replicaUpdateMode"    : "string",
+              "consistencyEnabled"   : "bool",
+              "replicationPeriod"    : "string",
+              "replicationBandwidth" : "int64"
+          }
+      },
+    ""snapshotProperties" : {
+            "name"        : "string",
+            "description" : "string",
+            "schedule" : {
+                  "datetime"  : "date",
+                  "occurence" : "string"
+            },
+            "replicaInfos":{
+                  "number"   : "int64",
+                  "duration" : "int64"
+            },
+            "topology" : {
+                  "location" : "string"
+            }
+      },"
+      "dataProtectionProperties" : {
+          "dataProtection" : {
+              "isIsolated"                  : "bool",
+              "minLifetime"                 : "string",
+              "recoveryGeographicObjective" : "string",
+              "recoveryPointObjectiveTime"  : "string",
+              "recoveryTimeObjective"       : "string",
+              "replicaType"                 : "string"
+          },
+          "consistencyEnalbed"              : "bool"
+      },
+     ""customProperties" : {
+          "additionalProp1" : {},
+          "additionalProp2" : {},
+          "additionalProp3" : {}
+      }"
+  ]
+  tenantId* : "string"  //The project UUID in a multi-tenancy environment
+```
+
+##### Response
+
+```json
+200 OK
+[
+  {
+      "id": "5d8c3732-a248-50ed-bebc-539a6ffd25c1",
+      "name": "Gold",
+      "description": "provide gold storage service",
+      "customProperties": {
+            "key1": "value1",
+            "key2": {
+                  "subKey1": "subValue1",
+                  "subKey2": "subValue2"
+            },
+            "key3": "value3"
+      }
+    }
+]
+400   Unauthorized
+403   Forbidden
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+```
+##### 2.	GET /v1beta/{tenantId}/profiles
+* Lists information for all profiles.
+
+##### Request
+
+```json
+tenantId* : "string"  //The project UUID in a multi-tenancy environment
+```
+##### Response
+
+```json
+200 OK
+[
+  {
+      "id": "5d8c3732-a248-50ed-bebc-539a6ffd25c1",
+      "name": "Gold",
+      "description": "provide gold storage service",
+      "customProperties": {
+            "key1": "value1",
+            "key2": {
+                  "subKey1": "subValue1",
+                  "subKey2": "subValue2"
+            },
+            "key3": "value3"
+      }
+    },
+    {
+    "id": "5d8c3732-a248-50ed-bebc-539a6ffd25c2",
+    "name": "Silver",
+    "description": "provide silver storage service",
+    "customProperties": {
+          "key1": "value1",
+          "key2": "value2"
+     }
+   }
+]
+400   Unauthorized
+403   Forbidden
+404   Resource doesn't exist
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+
+```
+##### 3.	GET /v1beta/{tenantId}/profiles/{profileId}
+* Gets profile detail by profile ID.
+
+##### Request
+
+```json
+tenantId* : "string"  //The project UUID in a multi-tenancy environment
+profileId* : "string" //The UUID of the Profile
+```
+##### Response
+
+```json
+
+[  
+  {
+    "id": "5d8c3732-a248-50ed-bebc-539a6ffd25c1",
+    "name": "Gold",
+    "description": "provide gold storage service",
+    "customProperties": {
+          "key1": "value1",
+          "key2": {
+                "subKey1": "subValue1",
+                "subKey2": "subValue2"
+          },
+          "key3": "value3"
+    }
+ }
+]
+400   Unauthorized
+403   Forbidden
+404   Resource doesn't exist
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+```
+##### 4.	PUT /v1beta/{tenantId}/profiles/{profileId}
+* Updates a profile by profile ID.
+
+Note : Updates only name and description rest all parameters in profiles are not allowed to update/change
+##### Request
+```json
+body*
+[
+  {
+    "name": "string",
+    "description": "string",
+   }
+]
+tenantId* : "string"  //The project UUID in a multi-tenancy environment
+profileId* : "string" //The UUID of the Profile
+```
+##### Response
+```json
+200   OK
+{
+    "id": "5d8c3732-a248-50ed-bebc-539a6ffd25c1",
+    "name": "Gold",
+    "description": "provide gold storage service",
+    "customProperties": {
+          "key1": "value1",
+          "key2": {
+                  "subKey1": "subValue1",
+                  "subKey2": "subValue2"
+          },
+          "key3": "value3"
+    }
+}
+
+400   Unauthorized
+403   Forbidden
+404   Resource doesn't exist
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+```
+##### 5.	DELETE /v1beta/{tenantId}/profiles/{profileId}
+* Deletes a profile.
+
+##### Request
+```json
+tenantId* : "string"  //The project UUID in a multi-tenancy environment
+profileId* : "string" //The UUID of the Profile  
+```
+##### Response
+```json
+200   OK
+400   Unauthorized
+403   Forbidden
+404   Resource doesn't exist
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+```
+##### 6.	POST /v1beta/{tenantId}/profiles/{profileId}/customeProperties
+* Adds customized property to the profile.
+
+##### Request
+```json
+body *
+{
+      "additionalProp1": {},
+      "additionalProp2": {},
+      "additionalProp3": {}
+}
+tenantId* : "string"  //The project UUID in a multi-tenancy environment
+profileId* : "string" //The UUID of the Profile
+
+```
+##### Response
+```json
+200   OK
+{
+    "key1": "value1",
+    "key2": {
+            "subKey1": "subValue1",
+            "subKey2": "subValue2"
+    },
+    "key3": "value3"
+}
+
+400   Unauthorized
+403   Forbidden
+404   Resource doesn't exist
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+```
+##### 7.	GET /v1beta/{tenantId}/profiles/{profileId}/customeProperties
+* Lists all customized properties for the profile.
+
+##### Request
+```json
+
+tenantId* : "string"  //The project UUID in a multi-tenancy environment
+profileId* : "string" //The UUID of the Profile
+
+```
+##### Response
+```json
+200   OK
+{
+    "key1": "value1",
+    "key2": {
+            "subKey1": "subValue1",
+            "subKey2": "subValue2"
+    },
+    "key3": "value3"
+}
+
+400   Unauthorized
+403   Forbidden
+404   Resource doesn't exist
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+```
+##### 8.	DELETE /v1beta/{tenantId}/profiles/{profileId}/customProperties/{customKey}
+* Remove a customized property from profile
+
+##### Request
+```json
+
+tenantId* : "string"  //The project UUID in a multi-tenancy environment
+profileId* : "string" //The UUID of the Profile
+customKey* : "string" //The key of the customized properties
+
+```
+##### Response
+```json
+200   OK
+400   Unauthorized
+403   Forbidden
+404   Resource doesn't exist
+500   An unexpected error occurred
+{
+  "code": 0,
+  "message": "string"
+}
+```
+
+
 ## Alternatives considered
 NO
 
