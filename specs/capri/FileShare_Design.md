@@ -18,6 +18,8 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 * Facilitating File Share Service by providing Standard API to manage multiple vendors, simplify File Share API definition  
 * File share across the users based on access capability
 * Scope for now is to support only NFS, SMB file share protocols
+* write a Manila driver and a default NFS/SMB driver
+* Provide CLI support for File Share service
 
 ### Non-Goals
 
@@ -28,7 +30,9 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 
 1.  A user can request for action (let’s say: create a share) through
      Northbound Plugins(NBP). We have already few plugins, but need to
-     modify for file share request.
+     modify for file share request. A User can also use CLI or dashboard.
+     So, all the actions(create, list, update, delete) should be supported
+     by CLI and dashboard.
 2. Now, NBP can communicate to OpenSDS API server.
 3. Based on user request File Share API will be selected.
 4. Internally, OpenSDS File Share API talk to controllers.
@@ -43,15 +47,11 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 ### REST API impact
 
 YES
-Existing Profile API's needs to be changed
+Fileshare API's needs to write and Existing Profile API's needs to be changed.
 
 ### Data model impact
 
-No
-
-### REST API impact
-
-Yes only Profile API's needs to be changed
+YES
 
 ### Security impact
 
@@ -87,7 +87,7 @@ This is the list of proposal for API
 
   “name” : “string”
 
-  “protocol”: “string”
+  “protocols”: “array”
 
   “description” : “string”
 
@@ -120,7 +120,7 @@ This is the list of proposal for API
   ```json
   “Id” : “string”
 
-  “protocol” : “string”
+  “protocols” : “array”
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -155,7 +155,7 @@ This is the list of proposal for API
 ```json
   “description” : “string”
 
-  “protocol” : “array”
+  “protocols” : “array”
 
   “name” : “string”
 
@@ -175,7 +175,7 @@ This is the list of proposal for API
 ```json
   “Id” : “string”
 
- “protocol” : “array”
+ “protocols” : “array”
 
  “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -215,7 +215,7 @@ This is the list of proposal for API
  ```json
  “Id” : “string”
 
- “protocol” : “string”
+ “protocols” : “array”
 
  “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -257,7 +257,7 @@ This is the list of proposal for API
 ```json
  “snapshotId”: “string”
 
- “protocol” : “string”
+ “protocols” : “array”
 
  “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -283,7 +283,7 @@ This is the list of proposal for API
 ```json
   “snapshotId”: “string”
 
-  “protocol” : “string”
+  “protocols” : “array”
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -315,7 +315,7 @@ This is the list of proposal for API
 
   “shareId” : “string”
 
-  “protocol” : “string”
+  “protocols” : “array”
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -345,7 +345,7 @@ This is the list of proposal for API
 
   “shareId” : “string”
 
-  “protocol” : “string”
+  “protocols” : “array”
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
