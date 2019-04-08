@@ -206,7 +206,7 @@ Controller handles POST and GET requests from API server.
                 //Any initialization the Metric driver does while starting.
                 Setup() error
                 //Any operation the Metric driver does while stopping.
-                Unset() error
+                Teardown() error
                 //Every POST operation will trigger a CollectMetrics operation for specific MetricDriver
                 //metricList:- Controller  passed list of metrics .
                 //instanceID:- is the component name/id (VolumeID,CPU_ID)
