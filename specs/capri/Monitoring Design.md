@@ -1,6 +1,6 @@
----
-"# Telemetry Design"
----
+
+# Telemetry Design
+
 
 **Authors:** [Xing Yang](<https://github.com/xing-yang>), [Sanil Kumar D](https://github.com/skdwriting), [Prakash R](https://github.com/rhsakarpos), [Najmudheen CT](https://github.com/NajmudheenCT)
 
