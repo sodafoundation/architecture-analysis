@@ -4,7 +4,7 @@
 
 ## Summary
 
-This design is proposed to enable multiattach of volumes.
+This design is proposed to enable multiAttach of volumes.
 
 ## Motivation
 
@@ -12,7 +12,7 @@ Currently we refuse to attach a volume that is already attached (in-use). There 
 
 ### Goals
 
-This spec proposes a set of changes to enable and control the use of multiattach volumes from the OpenSDS side.
+This spec proposes a set of changes to enable and control the use of multiAttach volumes from the OpenSDS side.
 
 
 ## Design Details
@@ -58,9 +58,9 @@ type StoragePoolSpec struct {
 	ReplicationType string `json:"replicationType,omitempty"`
 	ReplicationDriverName string `json:"replicationDriverName,omitempty"`
 
-	// Multiattach
-	// If true, this volume can attach to more than one instance. Default will be multiattach:False
-	Multiattach bool `json:"multiattach,omitempty"`
+	// MultiAttach
+	// If true, this volume can attach to more than one instance. Default will be multiAttach:False
+	MultiAttach bool `json:"multiAttach,omitempty"`
 }
 ```
 
@@ -83,7 +83,7 @@ type VolumeAttachmentSpec struct {
 }
 ```
 
-4. The volume struct adds multiAttach.
+4. The volume struct adds MultiAttach.
 
 ```
 type VolumeSpec struct {
@@ -126,11 +126,11 @@ N/A
 
 ### Other deployer impact
 
-How does it affect the deployment? Are there config option changes?
+N/A
 
 ### Developer impact
 
-Drivers will need to add a capabilities field "multiattach: True/False", and do any special handling on their end for connecting/disconnecting volumes in this category.
+Drivers will need to add a capabilities field "multiAttach: True/False", and do any special handling on their end for connecting/disconnecting volumes in this category.
 
 ## Use Cases
 
@@ -143,12 +143,8 @@ Describe how the feature will be implemented. This can be a list of work items.
 1. Update the dock to report capability of multi-attach.
 2. Update the controller to select the multi-attach enabled backend at volume create time.
 3. Update the CLI to enable create multi-attach volume.
-4. Update attach/detach to be multiattach aware.
-5. Update nbp to enable multiattach.
-
-## Open issues
-
-1. Should the capabilities field "multiattach: True/False" be added to dock spec or pool spec when dock reports multiAttach?
+4. Update attach/detach to be multiAttach aware.
+5. Update nbp to enable multiAttach.
 
 ## References
 
