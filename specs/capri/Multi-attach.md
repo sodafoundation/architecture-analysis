@@ -20,7 +20,7 @@ This spec proposes a set of changes to enable and control the use of multiAttach
 1. The backend devices that support multi-attach ability need to report this in their capabilities in yaml configuration file. And pools belong to this backend should inherit the capability, because multi-attach volume creation request will select multi-attach enabled pool from pools whch come from different backend that may not support this ability. 
 2. Attach a volume as one would normally do (Read Write access) to a host and then attach it to another host in Read Only mode or Read Write Mode. In order to implement this, add an item AttachMode to the volume attachment which has two values: RO (Read Only) and RW (Read Write), default is RW. 
 3. Add multiAttach bool to the volume model to enables/disables the ability of multi-attach. 
-4. Add 'multiattach': '<is> True' to the profile and do some corresponding changes to the controller to choose backend if user require a multi-attach volume.
+4. Add 'multiAttach': '<is> True' to the profile and do some corresponding changes to the controller to choose backend if user require a multi-attach volume.
 
 ### Data model impact
 
