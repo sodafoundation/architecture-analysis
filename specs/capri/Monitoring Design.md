@@ -1,9 +1,8 @@
 ---
-title: "# Telemetry Design"
+"# Telemetry Design"
 ---
 
-**Authors:** [Xing Yang](<https://github.com/xing-yang>), [Sanil Kumar D],
-Prakash R, Najmudheen CT
+**Authors:** [Xing Yang](<https://github.com/xing-yang>), [Sanil Kumar D](https://github.com/skdwriting), [Prakash R](https://github.com/rhsakarpos), [Najmudheen CT](https://github.com/NajmudheenCT)
 
 This documentation serves as the design spec for monitoring and alerting
 
@@ -336,7 +335,7 @@ type Metric struct {
         instanceName string
 
         // job -\> Prometheus/openSDS  
-        job string
+        job string //Optional
 
         /*associator - Some metric would need specific fields to relate components.
         Use case could be to query volumes of a particular pool. Attaching the related
@@ -351,12 +350,12 @@ type Metric struct {
 
         Example: associator[pool]=pool1 */
 
-        associator map[string]string
+        associator map[string]string //Optional
 
         // Following fields can be used to form a unique metric name
 
         // source -\> Node/Dock  
-        source string
+        source string //Optional
 
         // component -\> disk/logicalVolume/VG etc  
         component string
@@ -369,7 +368,7 @@ type Metric struct {
 
         // is aggregated
 
-        isAggregated bool 
+        isAggregated bool //Optional
 
         // aggr_type-\> Can be used to determine Total/Sum/Avg etc
 
@@ -377,7 +376,7 @@ type Metric struct {
         ie:- if collector is aggregating some metrics and producing a new metric of
         higher level constructs, then this field can be set as 'Total' to indicate it is
         aggregated/derived from other metrics.*/  
-        aggr_type AGGR_TYPE  
+        aggr_type AGGR_TYPE //Optional  
 
         //timestamp
         timestamp int64
@@ -550,13 +549,6 @@ migrate object, etc. (multicloud local backend)
 1.  instanceId is the specific instance of an entity like a pool or a volume
 
 2.  metrics is a list of metrics to be collected
-
-3.  endTime is the end time format in ISO 8601, UTC time
-
-4.  startTime is the start time format in ISO 8601, UTC time
-
-5.  latestOnly is a boolean, indicating to collect only the last known metric
-    value. If this is “true”, endTime and startTime are ignored
 
 *Response*
 
