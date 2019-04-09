@@ -87,7 +87,7 @@ This is the list of proposal for API
 
   “name” : “string”
 
-  “protocols”: “array”
+  “protocols”: "[]string"
 
   “description” : “string”
 
@@ -103,7 +103,7 @@ This is the list of proposal for API
 
   “snapshotId”: “string”
 
-  “exportLocations” : “array”
+  “exportLocations” : "[]string"
 ```
 ##### 2. GET /v1beta/{tenantId}/file/shares/{shareId}
 * Shows details for a share.
@@ -113,14 +113,14 @@ This is the list of proposal for API
 
   “shareId” : “string”
 
-  “exportLocations” : “array”
+  “exportLocations” : "[]string"
 ```
 
   ##### Response parameters
   ```json
   “Id” : “string”
 
-  “protocols” : “array”
+  “protocols” : "[]string"
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -146,7 +146,7 @@ This is the list of proposal for API
 
   “snapshotId”: “string”
 
-  “exportLocations” : “array”
+  “exportLocations” : “[]string”
 ```
 
 ##### 3.   POST /v1beta/{tenantId}/file/shares
@@ -155,17 +155,17 @@ This is the list of proposal for API
 ```json
   “description” : “string”
 
-  “protocols” : “array”
+  “protocols” : “[]string”
 
   “name” : “string”
 
-  “size” : “int 64”
+  “size” : “int64”
 
   “userId” : “string“
 
   “availabilityZone”: “string”
 
-  “exportLocations” : “array”   // path[ ] //optional
+  “exportLocations” : “[]string”
 
   “profileId”: “string”
 
@@ -175,7 +175,7 @@ This is the list of proposal for API
 ```json
   “Id” : “string”
 
- “protocols” : “array”
+ “protocols” : "[]string"
 
  “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -201,7 +201,7 @@ This is the list of proposal for API
 
  “snapshotId”: “string”
 
- “exportLocations” : “array”   // path[ ]
+ “exportLocations” : “[]string”
 ```
 ##### 4. PUT /v1beta/{tenantId}/file/shares/{shareId}
 * Updates a share.
@@ -215,7 +215,7 @@ This is the list of proposal for API
  ```json
  “Id” : “string”
 
- “protocols” : “array”
+ “protocols” : “[]string”
 
  “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -257,7 +257,7 @@ This is the list of proposal for API
 ```json
  “snapshotId”: “string”
 
- “protocols” : “array”
+ “protocols” : "[]string"
 
  “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -283,7 +283,7 @@ This is the list of proposal for API
 ```json
   “snapshotId”: “string”
 
-  “protocols” : “array”
+  “protocols” : "[]string"
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -315,7 +315,7 @@ This is the list of proposal for API
 
   “shareId” : “string”
 
-  “protocols” : “array”
+  “protocols” : "[]string"
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -345,7 +345,7 @@ This is the list of proposal for API
 
   “shareId” : “string”
 
-  “protocols” : “array”
+  “protocols” : "[]string"
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
