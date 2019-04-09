@@ -266,6 +266,8 @@ This is the list of proposal for API
  “name” : “string”
 
  “description” : “string”
+ 
+ "shareId" : "string"
 
  “shareSize” : ”int64”
 
