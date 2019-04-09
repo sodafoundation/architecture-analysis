@@ -17,8 +17,9 @@ DNS addresses such like `www.google.com` rather than some static IP address.
 Currently there are several services deployed in OpenSDS cluster: api-server,
 controller, dock, dashboard, authchecker and database. And the current design is
 that system admins have to remember all their IP addresses and configure them
-in `opensds.conf`. This could lead to several problems:
-* Quite difficult to scale-out. Multi-dock deployment could drive users to crazy
+in [opensds.conf](https://github.com/opensds/opensds/blob/master/examples/opensds.conf#L16).
+This could lead to several problems:
+* Quite difficult to scale-out. Multi-dock deployment could drive users crazy
 because they have to maintain the network topology manually.
 * With more and more service designed (metrics controller, file share controller,
 scheduler, policy controller), Hotpot becomes more like a microservie system,
@@ -57,15 +58,17 @@ Here are some terminology to help developers understand this design:
 format of this field should be exactly like `127.0.0.1:8088`. All Hotpot internal
 services should include it and also it should be configured properly.
 * DnsEndpoint: indicates the external IP and endpoint which the server would
-expose to other services. Normally the `DnsEdnpoint` should be the same with
-`ApiEndpoint`, but in K8S condition it should be the format like `FQDN`.
+expose to other services. Normally the `DnsEdnpoint` should be the same as
+`ApiEndpoint`, but in K8S it should be the format like `FQDN` (such as
+`apiserver.default.svc.cluster.local`).
 
 ### K8S related
-In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/18c9088053bd99aa363182cbc582e2e232361a74/install/kubernetes)) are added under `install/kubernetes` folder, and `README.md` provides a tutorial
-how to install OpenSDS on an existing Kubernetes cluster.
+In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/18c9088053bd99aa363182cbc582e2e232361a74/install/kubernetes)) are added under `install/kubernetes` folder, and `README.md`
+provides a tutorial on how to install OpenSDS on an existing Kubernetes cluster.
 
 ### Istio related
-In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/18c9088053bd99aa363182cbc582e2e232361a74/install/kubernetes/istio-networking)) are added under `install/kubernetes/istio-networking` folder.
+In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/18c9088053bd99aa363182cbc582e2e232361a74/install/kubernetes/istio-networking)) are added under `install/kubernetes/istio-networking`
+folder.
 
 ### Data model impact
 This design would have some impact on Hotpt global configure definition:
@@ -171,11 +174,11 @@ this design works, and then update their current implementation.
 
 ## Use Cases
 
-### OpenSDS Deployment on Kubernetes
+### OpenSDS deployment on Kubernetes
 In Kubernetes, all applications would be deployed and managed in `Pod`, and user
 can access to that application through `Service`. So if OpenSDS wants to take
 the advantages of K8S orchestration, it has to distinguish the concept of `PodIP`
-with `ClusterIP`. For detailed introduction of K8S Service, please refer to
+from `ClusterIP`. For detailed introduction of K8S Service, please refer to
 [here](https://kubernetes.io/docs/concepts/services-networking/service/).
 
 In this condition, users need to configure `opensds.conf` like below:
