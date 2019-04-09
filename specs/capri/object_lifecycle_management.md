@@ -1,6 +1,8 @@
+# Object Lifecycle Design
+**Author(s)**: [Shufang Zeng](https://github.com/sfzeng), [Neelam Gupta](https://github.com/neelamgupta1491)
 
-# Background
-## What is Lifecycle Configuration
+## Background
+### What is Lifecycle Configuration
 - A lifecycle configuration is a set of rules that define actions that applies to a group of objects.
 - Enforcing Lifecycle policies using S3 API is a great way of ensuring your data is managed safely (without experiencing unnecessary costs) and that your data is cleanly deleted once it is no longer required. 
 - Lifecycle policies allow you to automatically review your buckets and have them moved either to different cloud service provider or in the same cloud but to other storage class or have them deleted . You may want to do this for security, legislative compliance, internal policy compliance, or general housekeeping.
@@ -11,13 +13,13 @@
 - Expiration actions: Define when objects expire. The lifecycle expiration costs depend on when you choose to expire objects. When an object reaches the end of its lifetime, it is queued for removal and gets removed asynchronously. There may be a delay between the expiration date and the date at which the object is removed. 
 Note : There are different implementations for Transition and Expiration actions on versioning enabled/suspended and non-versioned buckets.
 
-## When to use Lifecycle Configuration?
+### When to use Lifecycle Configuration?
 Define lifecycle configuration rules for objects that have a well-defined lifecycle. For example:
 - If you upload periodic logs to a bucket, your application might need them for a week or a month. After that, you might want to delete them.
 - Some documents are frequently accessed for a limited period of time. After that, they are infrequently accessed. At some point, you might not need real-time access to them, but your organization or regulations might require you to archive them for a specific period. After that, you can delete them.
 - You might upload some types of data to the cloud primarily for archival purposes. For example, you might archive digital media, financial and healthcare records, raw genomics sequence data, long-term database backups, and data that must be retained for regulatory compliance.
 
-## Objectives
+### Objectives
 * Goal : Develop OpenSDS object lifecycle management mechanism. Allow tenants to manage lifecycle configuration policies through APIs. There are two scenarios in object lifecycle management.
 	* Scenario 1 - Object lifecycle management across different cloud service providers and support of choosing the storage class while setting the lifecycle rules.	
 Example: If there is a bucket in STANDARD storage class of AWS S3 and it needs to be    transitioned to COOL storage class of Azure Blob we can set a rule which will do it automatically.
@@ -29,8 +31,8 @@ For both the scenarios we must have APIs defined which can read the lifecycle ru
 * Sub-Goal 1 : Provide lifecycle configuration management for  non-versioned bucket.
 * Sub-Goal 2 : Provide lifecycle configuration management for versioning enabled/suspended bucket (This is not supported currently, but in the future).
 
-# Solution
-## Defining storage classes in OpenSDS
+## Solution
+### Defining storage classes in OpenSDS
 OpenSDS will define the following storage classes :
 STANDARD, STANDARD_IA, INTELLIGENT_TIERING, ONEZONE_IA, REDUCED_REDUNDANCY, GLACIER.  
 
@@ -44,14 +46,14 @@ Notes:
 
 **There are three options described as below, we need to choose one of it.**
 
-## Two ways to define lifecycle rules, one for bucket, the other for backend.
+### Two ways to define lifecycle rules, one for bucket, the other for backend.
 
-### Solution describe
+#### Solution describe
 Support to set lifecycle management rules both on bucket and backend.
 Rules set on bucket are used in the scenario of expiration and cross-cloud transition. All objects in the bucket will be controlled by those rules. The management of the rules are controlled by OpenSDS only. That means OpenSDS will schedule those rules and delete object or migrate object cross-cloud if necessary.
 Rules set on backend are used in the scenario of expiration and in-cloud transition. All objects, no matter which bucket it belongs to, stored in the backend will be controlled by those rules. The management of the rules are controlled by cloud vendor, OpenSDS do nothing except syncing up object meta data with cloud vendor. 
 
-### PROS & CONS
+#### PROS & CONS
 **PROS**
 - Less work for OpenSDS.
 - Can use all features of lifecycle management of each clouds.
@@ -62,16 +64,16 @@ Rules set on backend are used in the scenario of expiration and in-cloud transit
 - In-cloud transition is controlled by cloud vendor, it’s difficult to keep metadata of each object completely consistent with cloud all the time.
 - Can’t manage lifecycle completely on the bucket level. (Because those rules for backend.)
 
-## Define lifecycle rules on bucket, OpenSDS translate and set rules in cloud if needed.
+### Define lifecycle rules on bucket, OpenSDS translate and set rules in cloud if needed.
 
-### Solution describe
+#### Solution describe
 
 Only support to set lifecycle management rules on bucket, for each rule:
 - with expiration as it’s action, OpenSDS will call API to delete the object, rule will not be set in cloud.
 - with cross-cloud transition as it’s action, OpenSDS will migrate objects, rule will not be set in cloud.
 - with in-cloud transition as it’s action, OpenSDS will translate and set rule in cloud, the rule will be added a filter that with bucket name as it’s prefix. And OpenSDS need to sync up object metadata with cloud vendor. (Details of sync up?)
 
-### PROS & CONS
+#### PROS & CONS
 **PROS**
 - APIs are compatible with S3.
 - Can manage lifecycle on the bucket level like cloud themselves.
@@ -83,15 +85,15 @@ Only support to set lifecycle management rules on bucket, for each rule:
 - In-cloud transition is controlled by cloud vendor, it’s difficult to keep metadata of each object completely consistent with cloud all the time.
 - Not sure if all cloud support filter objects by prefix of object key.
 
-## Define lifecycle rules on bucket, no rules will be set in cloud.
+### Define lifecycle rules on bucket, no rules will be set in cloud.
 
-### Solution describe
+#### Solution describe
 Only support to set lifecycle management rules on bucket, all rules will be scheduled by OpenSDS, and for each rule:
 - with expiration as it’s action, OpenSDS will call API to delete the object, rule will not be set in cloud.
 - with cross-cloud transition as it’s action, OpenSDS will migrate objects, rule will not be set in cloud.
 - with in-cloud transition as it’s action, OpenSDS will call API to change object’s storage class if needed, no rule will be set in cloud. No need to sync up metadata with cloud vendor.
 
-### PROS & CONS
+#### PROS & CONS
 **PROS**
 - APIs are compatible with S3.
 - Can manage lifecycle on the bucket level like cloud themselves.
@@ -103,14 +105,14 @@ Only support to set lifecycle management rules on bucket, all rules will be sche
 - Because the limitation of cloud vendor that storage class of object in history (with versioning enabled) can’t be changed, object versioning need to be totally managed by OpenSDS, it can not use the versioning ability of cloud vendor.
 - If cloud vendors add some new features to lifecycle management or versioning, there is a risk that we can’t achive the same goal like those new features by ourselves.
 
-## Final choice
+### Final choice
 Number 3 is chosen as the final solution.
 
-# Framework
+## Framework
 ![lifecycle_framework diagram](lifecycle_framework.png?raw=true "lifecycle_framework diagram")
 
-# Constraint
-## Transition constraint
+## Constraint
+### Transition constraint
 
 Like AWS S3, OpenSDS supports a waterfall model for transitioning between storage classes as below:
 ![waterflow_model diagram](waterflow_model.png?raw=true "waterflow_model diagram")
@@ -119,17 +121,17 @@ As showed in the diagram, the transition from one storage class to another is on
 
 Depends on cloud vendor, there may have minimum storage time requirements, that means you need to pay minimum storage charges, for example:
 
-1.For AWS, an objects must be stored at least 30 days in the storage class of STANDARD, STANDARD_IA, INTELLIGENT_TIERING, ONEZONE_IA, and at least 90 days in GLACIER;
+1. For AWS, an objects must be stored at least 30 days in the storage class of STANDARD, STANDARD_IA, INTELLIGENT_TIERING, ONEZONE_IA, and at least 90 days in GLACIER;
 
-2.For Azure, a blob must be stored at least 30 days in STANDARD_IA (cool tier in Azure), and at least 180 days in GLACIER (archive tier in Azure).
+2. For Azure, a blob must be stored at least 30 days in STANDARD_IA (cool tier in Azure), and at least 180 days in GLACIER (archive tier in Azure).
 
 For OpenSDS, lifecycle transitions have the following constraints:
 
-1.Objects must be stored at least 30 days in the current storage class before you can transition them to STANDARD_IA or ONEZONE_IA. For example, you cannot create a lifecycle rule to transition objects to the STANDARD_IA storage class one day after you create them.
+1. Objects must be stored at least 30 days in the current storage class before you can transition them to STANDARD_IA or ONEZONE_IA. For example, you cannot create a lifecycle rule to transition objects to the STANDARD_IA storage class one day after you create them.
 
-2.For larger objects, there is a cost benefit for transitioning to INTELLIGENT_TIERING. OpenSDS does not transition objects that are smaller than 128 KB to the INTELLIGENT_TIERING storage class because it's not cost effective.
+2. For larger objects, there is a cost benefit for transitioning to INTELLIGENT_TIERING. OpenSDS does not transition objects that are smaller than 128 KB to the INTELLIGENT_TIERING storage class because it's not cost effective.
 
-3.For cross-cloud transition, the supported target storage class depends on the type of target backend. The following table shows which storage class of each backend type can be used as target storage class.
+3. For cross-cloud transition, the supported target storage class depends on the type of target backend. The following table shows which storage class of each backend type can be used as target storage class.
 
 |  | STANDARD | STANDARD_IA | INTELLIGENT_TIERING | ONEZONE_IA | GLACIER |
 | ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
@@ -140,7 +142,7 @@ For OpenSDS, lifecycle transitions have the following constraints:
 | Ceph S3 | No | No | No | No | No |
 | FusionStorage Object | No | No | No | No | No |
 
-## About conflicting lifecycle actions
+### About conflicting lifecycle actions
 
 Conflicting Lifecycle Actions
 For OpenSDS, expiration action is precedence over transition action. 
@@ -200,8 +202,8 @@ For example, there are two rules as below:
 ```
 In this case, OpenSDS will chooses to transition the subsets of objects with the logs/ key name prefix 10 days after creation.
 
-# APIs 
-## PUT Bucket Lifecycle
+## APIs 
+### PUT Bucket Lifecycle
 
 The PUT Bucket Lifecycle operation creates a new lifecycle configuration or replaces an existing one.
 
@@ -291,7 +293,7 @@ Date: Wed, 14 May 2014 02:11:22 GMT
 Content-Length: 0
 Server: x.x.x.x
 ```
-## GET Bucket Lifecycle
+### GET Bucket Lifecycle
 The GET Bucket Lifecycle operation returns the lifecycle configuration information set on the bucket. This operation does not use request parameters and elements.
 
 Request Syntax:
@@ -340,7 +342,7 @@ Content-Length: 358
   </Rule>
 </LifecycleConfiguration>
 ```
-## DELETE Bucket Lifecycle
+### DELETE Bucket Lifecycle
 The DELETE Bucket Lifecycle operations removes the lifecycle configurations set on a bucket. To use this operation, you must have permission to perform the PUT Bucket lifecycle action.
 The DELETE Bucket Lifecycle operation does not use request parameters and elements.
 
@@ -364,7 +366,7 @@ Date: Wed, 14 Dec 2011 05:37:16 GMT
 Connection: keep-alive  
 Server: x.x.x.x   
 ```
-## Recover Object from Glacier Storage(Get the recover progress)
+### Recover Object from Glacier Storage(Get the recover progress)
 Objects in the GLACIER storage class are archived. To access an archived object, you must first initiate a restore request. This restores a copy of the archived object. The time it takes restore jobs to finish depends on which data access tier you specify, Expedited, Standard, or Bulk.
 Speed Option
 When restoring an archived object (or using a select request), you can specify one of the following options in the Tier element of the request body:
@@ -431,29 +433,29 @@ Content-Length: 0
 Server: x.x.x.x
 ```
 
-# Changes on the current implementation
+## Changes on the current implementation
 
-## S3 module
-1.Provide CRUD(Create/Read/Update/Delete) APIs of lifecycle rules on bucket.
+### S3 module
+1. Provide CRUD(Create/Read/Update/Delete) APIs of lifecycle rules on bucket.
 
-2.Provide the API of recover object from glacier storage.
+2. Provide the API of recover object from glacier storage.
 
-3.Provide the ability of filter objects by prefix in the list API. 
+3. Provide the ability of filter objects by prefix in the list API. 
 
-4.Provide the ability of filter objects by storage class in the list API.
+4. Provide the ability of filter objects by storage class in the list API.
 
-5.Add an API to update object metadata.
+5. Add an API to update object metadata.
 
-6.Add the HEAD API to get object metadata (including the glacier object recover progress).
+6. Add the HEAD API to get object metadata (including the glacier object recover progress).
 
-## Scheduler module
-1.Periodically get lifecycle rules of each bucket, based on the Read API of S3.
+### Scheduler module
+1. Periodically get lifecycle rules of each bucket, based on the Read API of S3.
 
-2.For each rule, if it is active, then get object list by rule filter based on the List API of S3.
+2. For each rule, if it is active, then get object list by rule filter based on the List API of S3.
 
-3.For each object get in #2, send a LifecycleActionRequest to datamover through kafka.
+3. For each object get in #2, send a LifecycleActionRequest to datamover through kafka.
 
-4.If rules of a specific bucket are conflict (see 4.2 About conflicting lifecycle actions), scheduler need to handle it.
+4. If rules of a specific bucket are conflict (see 4.2 About conflicting lifecycle actions), scheduler need to handle it.
 
 LifecycleActionRequest have the following parameters:
 
@@ -465,7 +467,7 @@ LifecycleActionRequest have the following parameters:
 | SourceBackend | Which backend object stored. | Yes, when actions is transition. |
 | TargetBackend | Which backend object will be transition to. | Yes, when actions is transition. |
 
-## Datamover module
+### Datamover module
 1. Add a LifecycleDriver which is responsible for handling the LifecycleActionRequest.
 2. For each cloud, there is a plugin.
 3. For each LifecycleActionRequest, LifecycleDriver will:
@@ -476,7 +478,7 @@ LifecycleActionRequest have the following parameters:
 	
   	c. For cross-cloud transition action, call cloud plugin to download and upload object. And Call API of S3 to update metadata.
 
-# Q & A
+## Q & A
 1. All the different cloud vendor have their Request body in different format , for example AWS S3 has it in XML format while Microsoft Azure has it in JSON format  How will OpenSDS implement one format which can support all cloud vendors request body ?
 
 	That’s where plug-in comes in , OpenSDS will implement different plug-ins for different cloud vendors which will convert the OpenSDS API request body (XML) into suitable format which is supported by mapped cloud vendor.
@@ -500,11 +502,11 @@ For CLI , first we will retrieve the storage class where the bucket sits current
     For bucket all cloud vendors allow lifecycle management , but AWS S3 allows to have lifecycle configured on objects in the buckets too. This is helpful while managing the versions of the objects. For example if user wants to delete/expire the previous versions of the object and to keep just the current version it should have object level lifecycle management. 
 Lifecycle Rules will be enforced at bucket level only , but the rules will  manage objects as well.
 TODO: 
-  1.Include IBM cloud in list of supported cloud vendors.
+  1. Include IBM cloud in list of supported cloud vendors.
 
-# Appendix
+## Appendix
 
-## How to access object with each storage class?
+### How to access object with each storage class?
 For AWS S3 :
 1. Object stored in each storage class except GLACIER can be accessed using the common API.
 2. Object stored in GLACIER needs to be restored before using the common API to access the object.
