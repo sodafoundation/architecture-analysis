@@ -77,7 +77,7 @@ This is the list of proposal for API
 ```
   ##### Response parameters
 ```json
-  “Id” : “string”
+  “id” : “string”
 
   “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -118,7 +118,7 @@ This is the list of proposal for API
 
   ##### Response parameters
   ```json
-  “Id” : “string”
+  “id” : “string”
 
   “protocols” : "[]string"
 
@@ -173,7 +173,7 @@ This is the list of proposal for API
   ```
 ##### Response parameters
 ```json
-  “Id” : “string”
+ “id” : “string”
 
  “protocols” : "[]string"
 
@@ -213,7 +213,7 @@ This is the list of proposal for API
 ```  
  ##### Response parameters
  ```json
- “Id” : “string”
+ “id” : “string”
 
  “protocols” : “[]string”
 
@@ -245,7 +245,7 @@ This is the list of proposal for API
 * Deletes a share
 ##### Request
 ```json
-    “Id” : “string”
+    “id” : “string”
 ```
 ##### 6.	GET /v1beta/{tenantId}/file/snapshots
 * Lists all share snapshots
@@ -255,7 +255,7 @@ This is the list of proposal for API
 ```
  ##### Response parameters
 ```json
- “snapshotId”: “string”
+ “id”: “string”
 
  “protocols” : "[]string"
 
@@ -281,7 +281,9 @@ This is the list of proposal for API
 ```  
 ##### Response parameters
 ```json
-  “snapshotId”: “string”
+  “id”: “string”
+  
+  “shareId” : “string“
 
   “protocols” : "[]string"
 
@@ -311,7 +313,7 @@ This is the list of proposal for API
 ```
   ##### Response parameters
 ```json  
-  “Id”: “string”
+  “id”: “string”
 
   “shareId” : “string”
 
@@ -341,7 +343,7 @@ This is the list of proposal for API
 ```  
 ##### Response parameters
 ```json
-  “snapshotId”: “string”
+  “id”: “string”
 
   “shareId” : “string”
 
@@ -365,7 +367,7 @@ This is the list of proposal for API
 * Deletes a share
 ##### Request
 ```json
-  “snapshotId” : “sting”
+  “id” : “sting”
 ```
 ##### 11.	POST /v1beta/{tenantId}/file/accesses/
 * Add access control for file share.
@@ -383,7 +385,7 @@ This is the list of proposal for API
 * Add access control for file share.
 ##### Request
 ```json
-   “accessId” : “string”
+   “id” : “string”
 ```
 ## Implementation of file share APIs for Profiles consolidated with block storage
 Note : Highlighted with background color texts are specific to file share and those are only supported in file share. Rest all parameters are belongs to block storage
