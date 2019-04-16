@@ -14,34 +14,16 @@ Currently we refuse to attach a volume that is already attached (in-use). There 
 
 This spec proposes a set of changes to enable and control the use of multiAttach volumes from the OpenSDS side.
 
-
 ## Design Details
 
-1. The backend devices that support multi-attach ability need to report this in their capabilities in yaml configuration file. And pools belong to this backend should inherit the capability, because multi-attach volume creation request will select multi-attach enabled pool from pools whch come from different backend that may not support this ability. 
+1. The drivers that support multi-attach ability need to report this in their capabilities through pool configuration file. The multi-attach volume creation request will select multi-attach enabled pool from pools which come from different drivers that many of them may not support this ability. 
 2. Attach a volume as one would normally do (Read Write access) to a host and then attach it to another host in Read Only mode or Read Write Mode. In order to implement this, add an item AttachMode to the volume attachment which has two values: RO (Read Only) and RW (Read Write), default is RW. 
 3. Add multiAttach bool to the volume model to enables/disables the ability of multi-attach. 
-4. Add 'multiAttach': '<is> True' to the profile and do some corresponding changes to the controller to choose backend if user require a multi-attach volume.
+4. Add 'multiAttach': '<is> True' to the profile and do some corresponding changes to the controller to choose driver if user require a multi-attach volume.
 
 ### Data model impact
 
-1. Add MultiAttach field in dock spec and dock will load configuration file that has the key value pair multiAttach:true/false and then fill the field.
-```
-type DockSpec struct {
-	*BaseModel
-	Type string `json:"type,omitempty"`
-	Name string `json:"name,omitempty"`
-	Description string `json:"description,omitempty"`
-	Status string `json:"status,omitempty"`
-	StorageType string `json:"storageType,omitempty"`
-	Endpoint string `json:"endpoint,omitempty"`
-	NodeId string `json:"nodeId,omitempty"`
-	DriverName string `json:"driverName,omitempty"`
-	MultiAttach bool `json:"multiAttach,omitempty"`
-	Metadata map[string]string `json:"metadata,omitempty"`	
-}
-```
-
-2. Add MultiAttach field in pool spec
+1. Add MultiAttach field in pool spec
 
 ```
 type StoragePoolSpec struct {
@@ -65,7 +47,7 @@ type StoragePoolSpec struct {
 ```
 
 
-3. The volume attachment struct adds AttachMode, read-only (‘ro’) or read-and-write (‘rw’), default is ‘rw’.
+2. The volume attachment struct adds AttachMode, read-only (‘ro’) or read-and-write (‘rw’), default is ‘rw’.
 
 ```
 type VolumeAttachmentSpec struct {
@@ -83,7 +65,7 @@ type VolumeAttachmentSpec struct {
 }
 ```
 
-4. The volume struct adds MultiAttach.
+3. The volume struct adds MultiAttach.
 
 ```
 type VolumeSpec struct {
@@ -118,11 +100,15 @@ N/A
 
 ### Other end user impact
 
-The CLI need some changes that enable to create a multi-attach volume.
+N/A
 
 ### Performance impact
 
-N/A
+User first needs to use the following command to create a multi-attach related profile and specify it in volume creation.
+
+```
+osdsctl profile create '{"name": "multi-attach", "description": "multi attach profile","customProperties":{"multiAttach":"<is> true"}}'
+```
 
 ### Other deployer impact
 
@@ -130,7 +116,7 @@ N/A
 
 ### Developer impact
 
-Drivers will need to add a capabilities field "multiAttach: True/False", and do any special handling on their end for connecting/disconnecting volumes in this category.
+Drivers will need to add a capabilities field "multiAttach: True/False" to their pool configuration files, and do any special handling on their end for connecting/disconnecting volumes in this category.
 
 ## Use Cases
 
@@ -139,12 +125,11 @@ Drivers will need to add a capabilities field "multiAttach: True/False", and do 
 
 ## Implementation
 
-Describe how the feature will be implemented. This can be a list of work items.
-1. Update the dock to report capability of multi-attach.
-2. Update the controller to select the multi-attach enabled backend at volume create time.
-3. Update the CLI to enable create multi-attach volume.
-4. Update attach/detach to be multiAttach aware.
-5. Update nbp to enable multiAttach.
+1. Update the configuration files of pools belong to a driver that support multi-attach to report this capability.
+2. Update the state machine to accommodate multi-attach.
+2. Update the controller to select a multi-attach enabled pool based on profile at volume create time.
+3. Update attach/detach to be multiAttach aware.
+4. Update nbp to enable multiAttach.
 
 ## References
 
