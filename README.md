@@ -51,17 +51,19 @@ Planned feature designs can be found for each release cycle here.
 
 ### Capri Proposals
 
-[AK/SK Management Design](https://github.com/opensds/design-specs/pull/18)
+[AK/SK Management Design](https://github.com/opensds/design-specs/blob/master/specs/capri/MultiCloud_AK-SK_Management_Design.md)
 
-[Hotpot API Framework Decouple](https://github.com/opensds/design-specs/pull/17)
+[Hotpot API Framework Decouple](https://github.com/opensds/design-specs/blob/master/specs/capri/API_Framework_Refactoring.md)
 
-[Object Lifecycle Management Design](https://docs.google.com/document/d/1XbA5lPLlJCBKf-Kk9BCwPy3VEj1bqEF7tvlriU83tAM/edit#)
+[Object Lifecycle Management Design](https://github.com/opensds/design-specs/pull/24)
 
-[File Share Design](https://docs.google.com/document/d/1lcaKI8ht7ZYyP0mGm8WN_jC1DH62wpJpZ5NiDuogT9g/edit)
+[File Share Design](https://github.com/opensds/design-specs/pull/27)
 
-[Telemetry Design](https://docs.google.com/document/d/1cEXyjbIW6uGrYD60GYCL-_feGVUsgPobXR0oGchalWQ/edit?usp=sharing)
+[Telemetry Design](https://github.com/opensds/design-specs/pull/28)
 
 [Anomaly Detection Design](https://docs.google.com/document/d/1rF9Dh16YQNhudfP3pQODuYTQvrL2AkpEyIbPUo7aud8/edit?usp=sharing)
+
+[NVMeoF Support](https://github.com/opensds/design-specs/blob/master/specs/capri/nvmeof_support.md)
 
 ### Bali Proposals
 
