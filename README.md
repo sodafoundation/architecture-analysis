@@ -65,6 +65,8 @@ Planned feature designs can be found for each release cycle here.
 
 [NVMeoF Support](https://github.com/opensds/design-specs/blob/master/specs/capri/nvmeof_support.md)
 
+[Automation and Orchestration](https://github.com/opensds/design-specs/pull/30)
+
 ### Bali Proposals
 
 [Multi-Cloud Design](specs/bali/MultiCloud_Design.md)
