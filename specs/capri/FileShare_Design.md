@@ -109,7 +109,7 @@ This is the list of proposal for API
 * Shows details for a share.
 ##### Request
 ```json
-  “tenatId” : “string”
+  “tenantId” : “string”
 
   “shareId” : “string”
 
@@ -126,7 +126,7 @@ This is the list of proposal for API
 
   “updatedAt” : “2019-03-20T12:49:00.497Z”
 
-  “tenatId” : “string”
+  “tenantId” : “string”
 
   “userId” : “string“
 
@@ -155,8 +155,6 @@ This is the list of proposal for API
 ```json
   “description” : “string”
 
-  “protocols” : “[]string”
-
   “name” : “string”
 
   “size” : “int64”
@@ -174,8 +172,6 @@ This is the list of proposal for API
 ##### Response parameters
 ```json
  “id” : “string”
-
- “protocols” : "[]string"
 
  “createdAt” : “2019-03-20T12:49:00.497Z”
 
@@ -369,13 +365,13 @@ This is the list of proposal for API
 * Deletes a share
 ##### Request
 ```json
-  “id” : “sting”
+  “id” : “string”
 ```
 ##### 11.	POST /v1beta/{tenantId}/file/accesses/
 * Add access control for file share.
 ##### Request
 ```json
-    “sharetId” : “sting”
+    “sharetId” : “string”
 
     “type” : “string”    // user/ip
 
@@ -413,7 +409,7 @@ body*
                     "isSpaceEfficient"        : "bool"
                 },
                 "ioconnectivity" : {
-                  "accessProtocol" : "string",
+                  "accessProtocol" : "[]string",
                   "maxIOPS"        : "int64",
                   "maxBWS"         : "int64""
                 }
