@@ -409,7 +409,7 @@ body*
                     "isSpaceEfficient"        : "bool"
                 },
                 "ioconnectivity" : {
-                  "accessProtocol" : "[]string",
+                  "accessProtocol" : "string",
                   "maxIOPS"        : "int64",
                   "maxBWS"         : "int64""
                 }
