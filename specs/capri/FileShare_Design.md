@@ -395,15 +395,15 @@ Note : Highlighted with background color texts are specific to file share and th
 ```json
 body*
    [
-     ""name"         : "string",
+     "name"         : "string",
      "storage type" : "string",
      "description"  : "string",
      "provisioningProperties" : {
                 "datastore""  : {
 
-                   ""characterCodeSet"        : "string",
-                    "maxFileNameLengthBytes"  : "int64",
-                    "storageAccessCapability" : "string",
+                   # "characterCodeSet"        : "string",
+                   # "maxFileNameLengthBytes"  : "int64",
+                   # "storageAccessCapability" : "string",
                     "recoveryTimeObjective"   : "int64",
                     "provisioningPolicy"      : "string",
                     "isSpaceEfficient"        : "bool"
@@ -430,7 +430,7 @@ body*
               "replicationBandwidth" : "int64"
           }
       },
-    ""snapshotProperties" : {
+    "snapshotProperties" : {
             "name"        : "string",
             "description" : "string",
             "schedule" : {
