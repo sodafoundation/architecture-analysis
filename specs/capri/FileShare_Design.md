@@ -362,7 +362,7 @@ This is the list of proposal for API
   “status”: “string”
 ```
 ##### 10.	DELETE /v1beta/{tenantId}/file/snapshots/{snapshotId}
-* Deletes a share
+* Deletes a snapshot
 ##### Request
 ```json
   “id” : “string”
