@@ -73,7 +73,7 @@ This is the list of proposal for API
 * Lists all shares.
  ##### Request
  ```json
-"tenantId": "string"
+"*tenantId": "string"
 ```
   ##### Response parameters
 ```json
@@ -109,9 +109,9 @@ This is the list of proposal for API
 * Shows details for a share.
 ##### Request
 ```json
-  “tenantId” : “string”
+  “*tenantId” : “string”
 
-  “shareId” : “string”
+  “*shareId” : “string”
 
   “exportLocations” : "[]string"
 ```
@@ -153,19 +153,21 @@ This is the list of proposal for API
 * Creates a share.
 ##### Request
 ```json
+  “*tenantId” : “string“
+
+  “*name” : “string”
+
+  “*size” : “int64”
+  
+  “*profileId”: “string”
+  
   “description” : “string”
-
-  “name” : “string”
-
-  “size” : “int64”
 
   “userId” : “string“
 
   “availabilityZone”: “string”
 
   “exportLocations” : “[]string”
-
-  “profileId”: “string”
 
   “snapshotId” : “string”
   ```
@@ -241,13 +243,13 @@ This is the list of proposal for API
 * Deletes a share
 ##### Request
 ```json
-    “id” : “string”
+    “*id” : “string”
 ```
 ##### 6.	GET /v1beta/{tenantId}/file/snapshots
 * Lists all share snapshots
 #### Request
 ```json
-  “tenantId”: “string”
+  “*tenantId”: “string”
 ```
  ##### Response parameters
 ```json
@@ -275,7 +277,7 @@ This is the list of proposal for API
 * Show details of snapshot
 ##### Request
 ```json
-  “id”: “string”
+  “*id”: “string”
 ```  
 ##### Response parameters
 ```json
@@ -303,11 +305,12 @@ This is the list of proposal for API
 * Creates a snapshot from a share.
 ##### Request
 ```json
+  “*shareId” : “string“
+
   “description” : “string”
 
   “name” : “string”
 
-  “shareId” : “string“
 ```
   ##### Response parameters
 ```json  
@@ -365,25 +368,25 @@ This is the list of proposal for API
 * Deletes a snapshot
 ##### Request
 ```json
-  “id” : “string”
+  “*id” : “string”
 ```
 ##### 11.	POST /v1beta/{tenantId}/file/accesses/
 * Add access control for file share.
 ##### Request
 ```json
-    “sharetId” : “string”
+    “shareId” : “string”
 
     “type” : “string”    // user/ip
 
-    “accessCapability” : read/write/execute
+    “accessCapability” : "string   //"read/write/execute
 
-    “accessTo” : “user_list”
+    “accessTo” : "[]string"   //“user_list”
 ```
 ##### 12.	PUT /v1beta/{tenantId}/file/accesses/{accessId}
 * Add access control for file share.
 ##### Request
 ```json
-   “id” : “string”
+   “*id” : “string”
 ```
 ## Implementation of file share APIs for Profiles consolidated with block storage
 Note : Highlighted with background color texts are specific to file share and those are only supported in file share. Rest all parameters are belongs to block storage
