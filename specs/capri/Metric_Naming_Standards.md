@@ -8,21 +8,20 @@ model.MetricSpec{
 			InstanceID,
 			InstanceName,
 			Job,
-			Associator,
-			Source,
+			Labels,
 			Component,
 			Name,
 			Unit,
-			IsAggregated,
+			Aggr_type,
 			MetricValues[]{timestamp,value},
 		}
 		
 ### metric name format
 
-MetricSpec.Job_MetricSpec.Component_MetricSpec.Name_MetricSpec.unit
+MetricSpec.Job_MetricSpec.Component_MetricSpec.Name_MetricSpec.unit_<Aggr_type>
 Example:OpensSDS_Volume_ResponseTime_ms
 
 ### metric label format
   
-  {"instanceID":MetricSpecInstanceID.,"device":MetricSpec.InstanceName,"source":MetricSpec.Source}
-Example: {device="sda",instanceID="sda",source="Node"}
+  Labels will go as map[string]string in the Labels map.
+Example: {device="sda"}
