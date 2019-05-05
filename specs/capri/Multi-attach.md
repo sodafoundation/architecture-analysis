@@ -4,22 +4,22 @@
 
 ## Summary
 
-This design is proposed to enable multiAttach of volumes.
+This design is proposed to enable MultiAttach of volumes.
 
 ## Motivation
 
-Currently we refuse to attach a volume that is already attached (in-use). There are situations where a cloud user may have deployed a clustered file-system on a Cinder volume and they would like the ability to attach a volume to multiple hosts/servers at the same time.
+Currently a request to attach a volume that is already attached (in-use) will be rejected. There are situations where a cloud user may have deployed a clustered file-system and they would like the ability to attach a volume to multiple hosts/servers at the same time.
 
 ### Goals
 
-This spec proposes a set of changes to enable and control the use of multiAttach volumes from the OpenSDS side.
+This spec proposes a set of changes to enable and control the use of MultiAttach volumes from the OpenSDS side.
 
 ## Design Details
 
-1. The drivers that support multi-attach ability need to report this in their capabilities through pool configuration file. The multi-attach volume creation request will select multi-attach enabled pool from pools which come from different drivers that many of them may not support this ability. 
+1. The drivers that support multi-attach ability need to report this in their capabilities through pool configuration file. The multi-attach volume creation request will select multi-attach enabled pool from pools which come from different drivers and many of them may not support this ability. 
 2. Attach a volume as one would normally do (Read Write access) to a host and then attach it to another host in Read Only mode or Read Write Mode. In order to implement this, add an item AttachMode to the volume attachment which has two values: RO (Read Only) and RW (Read Write), default is RW. 
 3. Add multiAttach bool to the volume model to enables/disables the ability of multi-attach. 
-4. Add 'multiAttach': '<is> True' to the profile and do some corresponding changes to the controller to choose driver if user require a multi-attach volume.
+4. Add 'multiAttach': '<is> True' to the profile and do some corresponding changes to the controller to choose driver if user requires a multi-attach volume.
 
 ### Data model impact
 
@@ -120,7 +120,7 @@ Drivers will need to add a capabilities field "multiAttach: True/False" to their
 
 ## Use Cases
 
-1. There are products that can be used like Oracle RAC that would make things like H/A databases via a shared Block device possible which is something of interest.
+1. There are products such as Oracle RAC that can leverage this feature. Oracle RAC uses H/A database via a shared block device.
 2. Passive stand-by servers/volumes.
 
 ## Implementation
@@ -134,3 +134,54 @@ Drivers will need to add a capabilities field "multiAttach: True/False" to their
 ## References
 
 https://github.com/openstack/cinder-specs/blob/master/specs/queens/enable-multiattach.rst#id2
+
+## Driver configuration yaml file example for Multi-Attach
+
+```
+authOptions:
+  username: "admin"
+  password: "IaaS@PORTAL-CLOUD9!"
+  # Whether to encrypt the password. If enabled, the value of the password must be ciphertext.
+  EnableEncrypted: false
+  # Encryption and decryption tool. Default value is aes. The decryption tool can only decrypt the corresponding ciphertext.
+  PwdEncrypter: "aes"
+  url: "https://8.46.195.74:28443"
+
+  fmIp: 8.46.195.74
+  fsaIp:
+    - 8.46.195.71
+    - 8.46.195.72
+    - 8.46.195.73
+
+pool:
+  0:
+    storageType: block
+    availabilityZone: default
+    multiAttach: true
+    extras:
+      dataStorage:
+        provisioningPolicy: Thin
+        isSpaceEfficient: false
+      ioConnectivity:
+        accessProtocol: iscsi
+        maxIOPS: 7000000
+        maxBWS: 600
+      advanced:
+        diskType: SSD
+        latency: 3ms
+  1:
+    storageType: block
+    availabilityZone: default
+    multiAttach: true
+    extras:
+      dataStorage:
+        provisioningPolicy: Thin
+        isSpaceEfficient: false
+      ioConnectivity:
+        accessProtocol: iscsi
+        maxIOPS: 3000000
+        maxBWS: 300
+      advanced:
+        diskType: SSD
+        latency: 500ms
+```
