@@ -11,24 +11,24 @@ are spread out to try to ease participation for different timezones.
 
 ### Meeting Time
 
-#### Meeting on Tuesdays
-
-Next Meeting Date: April 9th, 2019
-
-It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm
-ET) on Tuesdays.
-
-Zoom Link: [https://zoom.us/j/777978108](https://zoom.us/j/777978108)
-
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
 
-Next Meeting Time will be on April 18th, 2019 Thursday 6:00pm-7:00pm PT or
-9:00pm-10:00pm ET (or April 19th, 2019 Friday 1:00am-2:00am UTC)
+Next Meeting Time will be on May 2nd, 2019 Thursday 6:00pm-7:00pm PT or
+9:00pm-10:00pm ET (or May 3rd, 2019 Friday 1:00am-2:00am UTC)
 
 It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
 (1:00am-2:00am UTC on Fridays).
 
 Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
+
+#### Meeting on Tuesdays
+
+Next Meeting Date: May 7th, 2019
+
+It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm
+ET) on Tuesdays.
+
+Zoom Link: [https://zoom.us/j/777978108](https://zoom.us/j/777978108)
 
 ### Meeting Agenda
 
@@ -51,17 +51,21 @@ Planned feature designs can be found for each release cycle here.
 
 ### Capri Proposals
 
-[AK/SK Management Design](https://github.com/opensds/design-specs/pull/18)
+[AK/SK Management Design](https://github.com/opensds/design-specs/blob/master/specs/capri/MultiCloud_AK-SK_Management_Design.md)
 
-[Hotpot API Framework Decouple](https://github.com/opensds/design-specs/pull/17)
+[Hotpot API Framework Decouple](https://github.com/opensds/design-specs/blob/master/specs/capri/API_Framework_Refactoring.md)
 
-[Object Lifecycle Management Design](https://docs.google.com/document/d/1XbA5lPLlJCBKf-Kk9BCwPy3VEj1bqEF7tvlriU83tAM/edit#)
+[Object Lifecycle Management Design](https://github.com/opensds/design-specs/pull/24)
 
-[File Share Design](https://docs.google.com/document/d/1lcaKI8ht7ZYyP0mGm8WN_jC1DH62wpJpZ5NiDuogT9g/edit)
+[File Share Design](https://github.com/opensds/design-specs/pull/27)
 
-[Telemetry Design](https://docs.google.com/document/d/1cEXyjbIW6uGrYD60GYCL-_feGVUsgPobXR0oGchalWQ/edit?usp=sharing)
+[Telemetry Design](https://github.com/opensds/design-specs/pull/28)
 
 [Anomaly Detection Design](https://docs.google.com/document/d/1rF9Dh16YQNhudfP3pQODuYTQvrL2AkpEyIbPUo7aud8/edit?usp=sharing)
+
+[NVMeoF Support](https://github.com/opensds/design-specs/blob/master/specs/capri/nvmeof_support.md)
+
+[Automation and Orchestration](https://github.com/opensds/design-specs/pull/30)
 
 ### Bali Proposals
 
