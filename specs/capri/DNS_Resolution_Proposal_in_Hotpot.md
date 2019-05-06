@@ -74,11 +74,12 @@ OpensdsDockBindEndpoint = "0.0.0.0:50050"
 ```
 
 ### K8S related
-In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/18c9088053bd99aa363182cbc582e2e232361a74/install/kubernetes)) are added under `install/kubernetes` folder, and `README.md`
-provides a tutorial on how to install OpenSDS on an existing Kubernetes cluster.
+In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/development/install/kubernetes))
+are added under `install/kubernetes` folder, and `README.md` provides a tutorial
+on how to install OpenSDS on an existing Kubernetes cluster.
 
 ### Istio related
-In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/18c9088053bd99aa363182cbc582e2e232361a74/install/kubernetes/istio-networking)) are added under `install/kubernetes/istio-networking`
+In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/development/install/kubernetes/istio-networking)) are added under `install/kubernetes/istio-networking`
 folder.
 
 ### Data model impact
