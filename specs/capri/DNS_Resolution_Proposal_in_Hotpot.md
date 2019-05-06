@@ -33,7 +33,7 @@ configuration.
 
 ### Goals
 
-* Add the new term of `DnsEndpoint` to decouple bind IP address with external
+* Redesign the term of `ApiEndpoint` to decouple bind IP address with external
 IP address.
 * Provide an elegant deployment with Kubernetes based on DNS resolution feature.
 * Provide some deployment manifests of Istio to demonstrate how OpenSDS leverage
@@ -50,17 +50,28 @@ design.
 This design mainly includes three aspects of update work.
 
 ### Hotpot related
-In Hotpot source code, we need to add the new term of `DnsEndpoint` to decouple
-bind IP address with external IP address.
+In Hotpot source code, we need to redesign the term of `ApiEndpoint` defined in
+OsdsApiServer, OsdsLet and OsdsDock structures to decouple bind IP address with
+external IP address:
+* ApiEndpoint in OsdsApiServer: indicates the bind endpoint which the API server
+would listen to. User can configure it when starting `osdsapiserver` service, and
+the format of this field should be exactly like `127.0.0.1:50040`.
+* ApiEndpoint in OsdsLet and OsdsDock: indicates the external IP and endpoint
+which the controller and dock gRPC server would expose to other services. Normally
+the format should be like `127.0.0.1:50049`, but in K8S it should be the format
+like `FQDN` (such as `controller.default.svc.cluster.local`).
 
-Here are some terminology to help developers understand this design:
-* ApiEndpoint: indicates the bind endpoint which the server would listen to. The
-format of this field should be exactly like `127.0.0.1:8088`. All Hotpot internal
-services should include it and also it should be configured properly.
-* DnsEndpoint: indicates the external IP and endpoint which the server would
-expose to other services. Normally the `DnsEdnpoint` should be the same as
-`ApiEndpoint`, but in K8S it should be the format like `FQDN` (such as
-`apiserver.default.svc.cluster.local`).
+And another change is for osdslet and osdsdock service, the bind endpoint should
+be set statically so that these two services would run without affected by outside
+of world. So we need to create two constants below:
+```go
+// OpensdsCtrBindEndpoint indicates the bind endpoint which the opensds
+// controller grpc server would listen to.
+OpensdsCtrBindEndpoint = "0.0.0.0:50049"
+// OpensdsDockBindEndpoint indicates the bind endpoint which the opensds
+// dock grpc server would listen to.
+OpensdsDockBindEndpoint = "0.0.0.0:50050"
+```
 
 ### K8S related
 In this design, some manifests (see [here](https://github.com/opensds/opensds/tree/18c9088053bd99aa363182cbc582e2e232361a74/install/kubernetes)) are added under `install/kubernetes` folder, and `README.md`
@@ -71,48 +82,8 @@ In this design, some manifests (see [here](https://github.com/opensds/opensds/tr
 folder.
 
 ### Data model impact
-This design would have some impact on Hotpt global configure definition:
-```go
-type OsdsApiServer struct {
-	ApiEndpoint        string        `conf:"api_endpoint,localhost:50040"`
-+	DnsEndpoint        string        `conf:"dns_endpoint,localhost:50040"`
-	AuthStrategy       string        `conf:"auth_strategy,noauth"`
-	Daemon             bool          `conf:"daemon,false"`
-	PolicyPath         string        `conf:"policy_path,/etc/opensds/policy.json"`
-	LogFlushFrequency  time.Duration `conf:"log_flush_frequency,5s"` // Default value is 5s
-	HTTPSEnabled       bool          `conf:"https_enabled,false"`
-	BeegoHTTPSCertFile string        `conf:"beego_https_cert_file,/opt/opensds-security/opensds/opensds-cert.pem"`
-	BeegoHTTPSKeyFile  string        `conf:"beego_https_key_file,/opt/opensds-security/opensds/opensds-key.pem"`
-}
 
-type OsdsLet struct {
-	ApiEndpoint       string        `conf:"api_endpoint,localhost:50049"`
-+	DnsEndpoint       string        `conf:"dns_endpoint,localhost:50049"`
-	Daemon            bool          `conf:"daemon,false"`
-	LogFlushFrequency time.Duration `conf:"log_flush_frequency,5s"` // Default value is 5s
-}
-
-type OsdsDock struct {
-	ApiEndpoint                string        `conf:"api_endpoint,localhost:50050"`
-+	DnsEndpoint                string        `conf:"dns_endpoint,localhost:50050"`
-	DockType                   string        `conf:"dock_type,provisioner"`
-	EnabledBackends            []string      `conf:"enabled_backends,lvm"`
-	Daemon                     bool          `conf:"daemon,false"`
-	BindIp                     string        `conf:"bind_ip"` // Just used for attacher dock
-	HostBasedReplicationDriver string        `conf:"host_based_replication_driver,drbd"`
-	LogFlushFrequency          time.Duration `conf:"log_flush_frequency,5s"` // Default value is 5s
-	Backends
-}
-
-type Database struct {
--	Credential string `conf:"credential,username:password@tcp(ip:port)/dbname"`
--	Driver     string `conf:"driver,etcd"`
--	Endpoint   string `conf:"endpoint,localhost:2379,localhost:2380"`
-+	Credential  string `conf:"credential,username:password@tcp(ip:port)/dbname"`
-+	Driver      string `conf:"driver,etcd"`
-+	DnsEndpoint string `conf:"dns_endpoint,localhost:2379,localhost:2380"`
-}
-```
+None
 
 ### REST API impact
 
@@ -132,39 +103,7 @@ None
 
 ### Other deployer impact
 
-To enable DNS resolution, users need to change the `opensds.conf` like below:
-```conf
-[osdsapiserver]
-api_endpoint = 0.0.0.0:50040
-+dns_endpoint = localhost:50040
-auth_strategy = keystone
-# If https is enabled, the default value of cert file
-# is /opt/opensds-security/opensds/opensds-cert.pem,
-# and key file is /opt/opensds-security/opensds/opensds-key.pem
-https_enabled = False
-beego_https_cert_file =
-beego_https_key_file =
-# Encryption and decryption tool. Default value is aes.
-password_decrypt_tool = aes
-
-[osdslet]
-api_endpoint = 0.0.0.0:50049
-+dns_endpoint = localhost:50049
-
-[osdsdock]
-api_endpoint = 0.0.0.0:50050
-+dns_endpoint = localhost:50050
-# Choose the type of dock resource, only support 'provisioner' and 'attacher'.
-dock_type = provisioner
-# Specify which backends should be enabled, sample,ceph,cinder,lvm and so on.
-enabled_backends = sample
-
-[database]
--credential = opensds:password@127.0.0.1:3306/dbname
--endpoint = localhost:2379,localhost:2380
-+dns_endpoint = localhost:2379,localhost:2380
-driver = etcd
-```
+None
 
 ### Developer impact
 
@@ -185,8 +124,7 @@ In this condition, users need to configure `opensds.conf` like below:
 ```conf
 [osdsapiserver]
 api_endpoint = 0.0.0.0:50040
-dns_endpoint = apiserver.opensds.svc.cluster.local:50040
-auth_strategy = noauth
+auth_strategy = keystone
 # If https is enabled, the default value of cert file
 # is /opt/opensds-security/opensds/opensds-cert.pem,
 # and key file is /opt/opensds-security/opensds/opensds-key.pem
@@ -196,13 +134,28 @@ beego_https_key_file =
 # Encryption and decryption tool. Default value is aes.
 password_decrypt_tool = aes
 
+[keystone_authtoken]
+memcached_servers = authchecker.opensds.svc.cluster.local:11211
+signing_dir = /var/cache/opensds
+cafile = /opt/stack/data/ca-bundle.pem
+auth_uri = http://authchecker.opensds.svc.cluster.local/identity
+project_domain_name = Default
+project_name = service
+user_domain_name = Default
+password = opensds@123
+# Whether to encrypt the password. If enabled, the value of the password must be ciphertext.
+enable_encrypted = False
+# Encryption and decryption tool. Default value is aes. The decryption tool can only decrypt the corresponding ciphertext.
+pwd_encrypter = aes
+username = opensds
+auth_url = http://authchecker.opensds.svc.cluster.local/identity
+auth_type = password
+
 [osdslet]
-api_endpoint = 0.0.0.0:50049
-dns_endpoint = controller.opensds.svc.cluster.local:50049
+api_endpoint = controller.opensds.svc.cluster.local:50049
 
 [osdsdock]
-api_endpoint = 0.0.0.0:50050
-dns_endpoint = dock.opensds.svc.cluster.local:50050
+api_endpoint = dock.opensds.svc.cluster.local:50050
 # Choose the type of dock resource, only support 'provisioner' and 'attacher'.
 dock_type = provisioner
 # Specify which backends should be enabled, sample,ceph,cinder,lvm and so on.
@@ -216,7 +169,7 @@ config_path = /etc/opensds/driver/lvm.yaml
 host_based_replication_driver = DRBD
 
 [database]
-dns_endpoint = db.opensds.svc.cluster.local:2379,db.opensds.svc.cluster.local:2380
+endpoint = db.opensds.svc.cluster.local:2379,db.opensds.svc.cluster.local:2380
 driver = etcd
 ```
 
@@ -227,7 +180,8 @@ situations without any impact to business code.
 
 ## Implementation
 
-* Add `DnsEndpoint` field in global `Config` structure.
+* Add `OpensdsCtrBindEndpoint` and `OpensdsDockEndpoint` field in constants package.
+* Set the bind endpoint of osdslet and osdsdock service to static constants above.
 * Add some K8S deployment and service manifests.
 * Add some Istio gateway, virtual service and destination rule manifests.
 
