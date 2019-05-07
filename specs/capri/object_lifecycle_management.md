@@ -1,3 +1,4 @@
+
 # Object Lifecycle Design
 **Author(s)**: [Shufang Zeng](https://github.com/sfzeng), [Neelam Gupta](https://github.com/neelamgupta1491)
 
@@ -32,19 +33,36 @@ For both the scenarios we must have APIs defined which can read the lifecycle ru
 * Sub-Goal 2 : Provide lifecycle configuration management for versioning enabled/suspended bucket (This is not supported currently, but in the future).
 
 ## Solution
-### Defining storage classes in OpenSDS
-OpenSDS will define the following storage classes :
-STANDARD, STANDARD_IA, INTELLIGENT_TIERING, ONEZONE_IA, REDUCED_REDUNDANCY, GLACIER.  
+### Defining storage tiers in OpenSDS
 
-Each storage class can be mapped to a specific storage class of all cloud vendor we support in OpenSDS. The mapping is shown in the table below :
-![storage_class_definition Diagram](storage_class_definition.png?raw=true "storage_class_definition Diagram")
+Compared with storage class defined in AWS s3, OpenSDS use storage tier internally, and there is a mapping between storage class and storage tier. 
+
+OpenSDS s3 API is compatible with AWS s3, that means user can use storage class when they use the s3 API, OpenSDS will convert storage class to specific storage tier in background.
+
+As default, there are three tiers, Tier_1, Tier_99 and Tier_999, and the mapping between storage tier and class is showed as below:
+
+| | Tier_1 | Tier_99 | Tier_999 |
+|---------------|---------------|---------------|---------------|
+| AWS S3 | STANDARD | STANDARD_IA | GLACIER |
+| Azure Blob | HOT | COOL | ARCHIVE |
+| HW OBS | STANDARD | WARM | COLD |
+| GCP | Multi-Regional | NearLine | ColdLine |
+| Ceph S3 | STANDARD | - | - |
+| FusinoStorage Object | STANDARD | - | - |
 
 Notes:
-- Hyphen (-) means default storage class. For example when you upload an object   or bucket and set storage class as STANDARD_IA , but the related backend is Ceph S3 which do not support STANDARD_IA then this object or bucket will use the default storage class set to the bucket (STANDARD in Ceph).
-- For GCS, Regional storage is not supported.
-- We don't recommend using REDUCED_REDUNDANCY.
+- Hyphen(-) means the specific vendor does not support such tier.
+- In the future, we will provide the ability for users to add their own storage tiers and storage classes, and the mapping between the storage tiers with storage classes.
 
-**There are three options described as below, we need to choose one of it.**
+Generally, users use API to define lifecycle rules on bucket, and then OpenSDS wil scheduling according to those rules and manage the movement of objects.
+For each rule, there are two main factors:
+- Time:  When to take action, we use days after the creation of an object to define.
+- Action:
+	- Expiration:  Delete object.
+	- In-cloud transition:  Transition from one storage tier to another in the same backend.
+	- Cross-cloud transition:  Transition from one backend to another.
+
+***There are three options described as below, we need to choose one of it.***
 
 ### Two ways to define lifecycle rules, one for bucket, the other for backend.
 
@@ -112,35 +130,33 @@ Number 3 is chosen as the final solution.
 ![lifecycle_framework diagram](lifecycle_framework.png?raw=true "lifecycle_framework diagram")
 
 ## Constraint
+### common constraint
+
+**Charges**
+Depends on cloud vendor, there may have minimum storage time requirements, that means you need to pay minimum storage charges, for example:
+1. For AWS, an objects must be stored at least 30 days in the storage class of STANDARD, STANDARD_IA, INTELLIGENT_TIERING, ONEZONE_IA, and at least 90 days in GLACIER;
+2. For Azure, a blob must be stored at least 30 days in STANDARD_IA (cool tier in Azure), and at least 180 days in GLACIER (archive tier in Azure).
+User need to pay attention to those minimum storage charges when defining lifecycle rules.
+
+**Tier_999**
+1. Tier_999 is the last tier, object with Tier_999 can not be accessed directly, but need to be recovered first.
+
 ### Transition constraint
 
-Like AWS S3, OpenSDS supports a waterfall model for transitioning between storage classes as below:
-![waterflow_model diagram](waterflow_model.png?raw=true "waterflow_model diagram")
+**In-cloud transition**
+1. The transition from one storage tier to another is one-way, that is transition from lower storage tier to higher is allowed, but not allowed in turn. For example:
+- Tier_1 -> Tier_99: allowed
+- Tier_1 -> Tier_999: allowed
+- Tier_99 -> Tier_999: allowed
+- Tier_99 -> Tier_1: not allowed
+- Tier_999 -> Tier_1: not allowed
+- Tier_999 -> Tier_99: not allowed
+2. Some backends does not support  in-cloud transition, for example, Ceph S3 and FusionStorage Object, because they only support one kind of storage tier.
 
-As showed in the diagram, the transition from one storage class to another is one-way.
-
-Depends on cloud vendor, there may have minimum storage time requirements, that means you need to pay minimum storage charges, for example:
-
-1. For AWS, an objects must be stored at least 30 days in the storage class of STANDARD, STANDARD_IA, INTELLIGENT_TIERING, ONEZONE_IA, and at least 90 days in GLACIER;
-
-2. For Azure, a blob must be stored at least 30 days in STANDARD_IA (cool tier in Azure), and at least 180 days in GLACIER (archive tier in Azure).
-
-For OpenSDS, lifecycle transitions have the following constraints:
-
-1. Objects must be stored at least 30 days in the current storage class before you can transition them to STANDARD_IA or ONEZONE_IA. For example, you cannot create a lifecycle rule to transition objects to the STANDARD_IA storage class one day after you create them.
-
-2. For larger objects, there is a cost benefit for transitioning to INTELLIGENT_TIERING. OpenSDS does not transition objects that are smaller than 128 KB to the INTELLIGENT_TIERING storage class because it's not cost effective.
-
-3. For cross-cloud transition, the supported target storage class depends on the type of target backend. The following table shows which storage class of each backend type can be used as target storage class.
-
-|  | STANDARD | STANDARD_IA | INTELLIGENT_TIERING | ONEZONE_IA | GLACIER |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| AWS S3 | No | Yes | Yes | Yes | Yes |
-| Azure Blob | No | Yes | No | No | Yes |
-| Huawei OBS | No | Yes | No | No | Yes |
-| GCS | No | Yes | No | No | Yes |
-| Ceph S3 | No | No | No | No | No |
-| FusionStorage Object | No | No | No | No | No |
+**Cross-cloud transition**
+1. The transition from one storage tier to a higher storage tier or to the same storage tier is allowed, but transition from higher storage tier to lower is not allowed.
+2. Currently, use need to specify both target storage tier and backend (note: In the future user only need to choose storage tier and OpenSDS will choose a suitable backend automatically based on ML.)
+3. With a specific target tier, only those backends which support that tier can be selected as target backend.
 
 ### About conflicting lifecycle actions
 
@@ -274,10 +290,10 @@ The following table describe the elements in the lifecycle rule.
 |-----------|--------------------------------------------|----------|
 | LifecycleConfiguration | Container for lifecycle rules. You can add as many as 1,000 rules. Type: Container Children: Rule Ancestor: None | Yes |
 | Rule | Container for a lifecycle rule. A lifecycle configuration can contain as many as 1,000 rules. Type: Container Ancestor: LifecycleConfiguration | Yes |
-| ID | Unique identifier for the rule. The value cannot be longer than 255 characters. Type: String Ancestor: Rule | No |
+| ID | Unique identifier for the rule. The value cannot be longer than 255 characters. Type: String Ancestor: Rule | No |
 | Filter | Container for elements that describe the filter identifying a subset of objects to which the lifecycle rule applies. If you specify an empty filter (<Filter></Filter>), the rule applies to all objects in the bucket. Type: String Children: Prefix Ancestor: Rule | Yes |
 | Prefix | Object key prefix identifying one or more objects to which the rule applies. Empty prefix (<Prefix></Prefix>) indicates there is no filter based on key prefix. There can be at most one Prefix in a lifecycle rule Filter. Type: String Ancestor: Filter | No |
-| Status | If Enabled, OpenSDS executes the rule as scheduled. If Disabled, OpenSDS ignores the rule. Type: String Ancestor: Rule Valid values: Enabled, Disabled. | Yes |
+| Status | If Enabled, OpenSDS executes the rule as scheduled. If Disabled, OpenSDS ignores the rule. Type: String Ancestor: Rule Valid values: Enabled, Disabled. | Yes |
 | Transition | This action specifies a period in the objects' lifetime when OpenSDS should transition them to the STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING, or the GLACIER storage class. Type: Container Children: Days or Date, StorageClass, and Backend Ancestor: Rule | Yes, if no other action is present in the Rule. |
 | StorageClass | Specifies the OpenSDS storage class to which you want the object to transition. Type: String Ancestor: Transition Valid values: GLACIER/STANDARD_IA/ONEZONE_IA/INTELLIGENT_TIERING | Yes, if you specify it’s ancestor. |
 | Backend | Specifies the backend which you want to transition to. Type: String Ancestor: Transition | No. If backend is specified, the transition should be cross-cloud transition, otherwise it is in-cloud transition. |
@@ -367,7 +383,7 @@ Connection: keep-alive
 Server: x.x.x.x   
 ```
 ### Recover Object from Glacier Storage(Get the recover progress)
-Objects in the GLACIER storage class are archived. To access an archived object, you must first initiate a restore request. This restores a copy of the archived object. The time it takes restore jobs to finish depends on which data access tier you specify, Expedited, Standard, or Bulk.
+Objects in the GLACIER storage class are archived. To access an archived object, you must first initiate a restore request. This restores a copy of the archived object. The time it takes restore jobs to finish depends on which data access tier you specify, Expedited, Standard, or Bulk.
 Speed Option
 When restoring an archived object (or using a select request), you can specify one of the following options in the Tier element of the request body:
 - Expedited – Lets you quickly access your data when occasional urgent requests for a subset of archives are required. For all but the largest archived object (250 MB+), data accessed using Expedited retrievals are typically made available within 1–5 minutes.
@@ -442,11 +458,16 @@ Server: x.x.x.x
 
 3. Provide the ability of filter objects by prefix in the list API. 
 
-4. Provide the ability of filter objects by storage class in the list API.
+4. Provide the ability of filter objects by storage tier in the list API.
 
 5. Add an API to update object metadata.
 
 6. Add the HEAD API to get object metadata (including the glacier object recover progress).
+
+7. Add an API to get the storage classes and tiers supported by OpenSDS.
+
+### Backend module
+1. Provide the ability of filter backends by storage tier, that means get those backends that support the specific storage tier.
 
 ### Scheduler module
 1. Periodically get lifecycle rules of each bucket, based on the Read API of S3.
