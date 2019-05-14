@@ -15,6 +15,7 @@ Meeting on May 21th, 2019 will be canceled due to KubeCon Barcelona.
 
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
 
+##### May 16th Meeting
 Next Meeting Time will be on May 16th, 2019 Thursday 6:00pm-7:00pm PT or
 9:00pm-10:00pm ET (or May 17th, 2019 Friday 1:00am-2:00am UTC)
 
@@ -22,6 +23,16 @@ It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
 (1:00am-2:00am UTC on Fridays).
 
 Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
+
+##### May 30th Meeting
+The Thursday Meeting after May 16th will be on May 30th, 2019 Thursday 6:00pm-7:00pm PT or
+9:00pm-10:00pm ET (or May 31th, 2019 Friday 1:00am-2:00am UTC)
+
+It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
+(1:00am-2:00am UTC on Fridays).
+
+Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
+
 
 #### Meeting on Tuesdays
 
