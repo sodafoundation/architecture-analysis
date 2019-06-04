@@ -11,22 +11,11 @@ are spread out to try to ease participation for different timezones.
 
 ### Meeting Time
 
-Meeting on May 21th, 2019 will be canceled due to KubeCon Barcelona.
-
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
 
-##### May 16th Meeting
-Next Meeting Time will be on May 16th, 2019 Thursday 6:00pm-7:00pm PT or
-9:00pm-10:00pm ET (or May 17th, 2019 Friday 1:00am-2:00am UTC)
-
-It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
-(1:00am-2:00am UTC on Fridays).
-
-Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
-
-##### May 30th Meeting
-The Thursday Meeting after May 16th will be on May 30th, 2019 Thursday 6:00pm-7:00pm PT or
-9:00pm-10:00pm ET (or May 31th, 2019 Friday 1:00am-2:00am UTC)
+##### June 13th Meeting
+Next Meeting Time will be on June 13th, 2019 Thursday 6:00pm-7:00pm PT or
+9:00pm-10:00pm ET (or June 14th, 2019 Friday 1:00am-2:00am UTC)
 
 It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
 (1:00am-2:00am UTC on Fridays).
@@ -36,7 +25,7 @@ Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
 
 #### Meeting on Tuesdays
 
-Next Meeting Date: June 4th, 2019
+Next Meeting Date: June 18th, 2019
 
 It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm
 ET) on Tuesdays.
@@ -109,8 +98,7 @@ Planned feature designs can be found for each release cycle here.
 ## Project Tracking
 
 Progress is tracked through our
-[project tracking board](Project tracking board: https://github.com/orgs/opensds/projects
-).
+[project tracking board](https://github.com/orgs/opensds/projects)
 
 ## Conference Presentations
 
