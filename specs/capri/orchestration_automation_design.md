@@ -399,6 +399,10 @@ JSON Request:
 - Get service instance
 - Delete service instance
 
+With Capri release, there will be pre-defined workflows shipped with the product. User having appropriate privileges can define Service defintions based upon the workflows. Once the service definition is created, user with appropriate role and intent can create a Service instance. Once a service instance is created, user can track the status.
+API details can be found at:
+http://petstore.swagger.io/?url=https://raw.githubusercontent.com/opensds/orchestration/9869f5cb5fb740e91700c6200e67327b3dae0c6a/openapi-spec/swagger.yaml
+
 Here’s example about creating an instance.
 
 POST /v1/{tenantId}/catalog/instances
