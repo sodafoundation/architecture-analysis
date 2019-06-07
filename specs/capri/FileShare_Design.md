@@ -17,6 +17,7 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 
 * Facilitating File Share Service by providing Standard API to manage multiple vendors, simplify File Share API definition  
 * File share across the users based on access capability
+* File share facilitates with profiling
 * Scope for now is to support only NFS, SMB file share protocols
 * write a Manila driver and a default NFS/SMB driver
 * Provide CLI support for File Share service
