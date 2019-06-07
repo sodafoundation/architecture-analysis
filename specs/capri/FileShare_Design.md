@@ -38,7 +38,9 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 3. Based on user request File Share API will be selected.
 4. Internally, OpenSDS File Share API talk to controllers.
 5. Controllers will also maintain the File Share metadata in database.
-6. Controller communicates to Dock, specific driver to create a share.
+6. Scheduler which identifies the matching pool and selects the dock.
+7. Dock discovers the requested driver and pass the values to the southbound driver.
+8. Southbound drivers such as native nfs, ocenstor, manila performs the requested operations.  
 
 ![FileShare Architecture Diagram](FileShare_Design.png?raw=true "File_Share_Design")
 
