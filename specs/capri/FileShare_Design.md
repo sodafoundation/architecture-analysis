@@ -396,17 +396,17 @@ Note : Highlighted with background color texts are specific to file share and th
 
 ##### Request
 ```json
-body*
+body
+
    [
      "name"         : "string",
      "storage type" : "string",
      "description"  : "string",
      "provisioningProperties" : {
-                "datastore""  : {
-
-                   # "characterCodeSet"        : "string",
-                   # "maxFileNameLengthBytes"  : "int64",
-                   # "storageAccessCapability" : "string",
+                "datastore"  : {
+                    "characterCodeSet"        : "string",
+                    "maxFileNameLengthBytes"  : "int64",
+                    "storageAccessCapability" : "string",
                     "recoveryTimeObjective"   : "int64",
                     "provisioningPolicy"      : "string",
                     "isSpaceEfficient"        : "bool"
@@ -414,7 +414,7 @@ body*
                 "ioconnectivity" : {
                   "accessProtocol" : "string",
                   "maxIOPS"        : "int64",
-                  "maxBWS"         : "int64""
+                  "maxBWS"         : "int64"
                 }
       },
       "replicationProperties" : {
@@ -447,7 +447,7 @@ body*
             "topology" : {
                   "location" : "string"
             }
-      },"
+      },
       "dataProtectionProperties" : {
           "dataProtection" : {
               "isIsolated"                  : "bool",
@@ -459,11 +459,11 @@ body*
           },
           "consistencyEnalbed"              : "bool"
       },
-     ""customProperties" : {
+     "customProperties" : {
           "additionalProp1" : {},
           "additionalProp2" : {},
           "additionalProp3" : {}
-      }"
+      }
   ]
   tenantId* : "string"  //The project UUID in a multi-tenancy environment
 ```
