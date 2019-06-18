@@ -11,26 +11,28 @@ are spread out to try to ease participation for different timezones.
 
 ### Meeting Time
 
-#### Meeting on Thursdays Pacific Time (or Fridays UTC)
-
-##### June 13th Meeting
-Next Meeting Time will be on June 13th, 2019 Thursday 6:00pm-7:00pm PT or
-9:00pm-10:00pm ET (or June 14th, 2019 Friday 1:00am-2:00am UTC)
-
-It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
-(1:00am-2:00am UTC on Fridays).
-
-Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
-
+#### Meeting Cancellations
+Meeting on June 27th will be canceled due to KubeCon Shanghai.
 
 #### Meeting on Tuesdays
 
-Next Meeting Date: June 18th, 2019
+Next Meeting Date: July 2nd, 2019
 
 It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm
 ET) on Tuesdays.
 
 Zoom Link: [https://zoom.us/j/777978108](https://zoom.us/j/777978108)
+
+#### Meeting on Thursdays Pacific Time (or Fridays UTC)
+
+##### July 11th Meeting
+Next Meeting Time will be on July 11th, 2019 Thursday 6:00pm-7:00pm PT or
+9:00pm-10:00pm ET (or July 12th, 2019 Friday 1:00am-2:00am UTC)
+
+It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
+(1:00am-2:00am UTC on Fridays).
+
+Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
 
 ### Meeting Agenda
 
