@@ -336,7 +336,7 @@ List all service catalog information.
 
 Here’s example about register a service.
 
-POST /v1/{tenantId}/catalog/services
+POST /v1beta/{tenantId}/orchestration/services
 
 Content-Type: application/json
 Accept: application/json
@@ -405,7 +405,7 @@ http://petstore.swagger.io/?url=https://raw.githubusercontent.com/opensds/orches
 
 Here’s example about creating an instance.
 
-POST /v1/{tenantId}/catalog/instances
+POST /v1beta/{tenantId}/orchestration/instances
 
 Content-Type: application/json
 Accept: application/json
