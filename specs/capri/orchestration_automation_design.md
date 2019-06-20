@@ -72,7 +72,7 @@ It stitches actions together, define the order, transition conditions, and passi
 Actions are pieces of code that can perform arbitrary automation tasks.
 
 ## Design details
-![Orchestration Design Diagram](Orchestration_and_Automation_Design.png?raw=true "Orchestration Design Diagram")
+![Orchestration Design Diagram](Orchestration_and_Automation_Design.PNG?raw=true "Orchestration Design Diagram")
 
 ### Service 
 As mentioned above, services are diversified and vary according to users’ business requirement. Therefore, we provide a flexible way to enable users to flexibly define their own services based on existing action capabilities. User can define a template written in YAML or JSON to register a service. The system verifies that the template is valid and parses the template, then creates the service and registers the workflow in Workflow Manager. 
