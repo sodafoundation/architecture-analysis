@@ -490,7 +490,7 @@ body
       }
     }
 ]
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 500   An unexpected error occurred
 {
@@ -534,7 +534,7 @@ tenantId* : "string"  //The project UUID in a multi-tenancy environment
      }
    }
 ]
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 404   Resource doesn't exist
 500   An unexpected error occurred
@@ -572,7 +572,7 @@ profileId* : "string" //The UUID of the Profile
     }
  }
 ]
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 404   Resource doesn't exist
 500   An unexpected error occurred
@@ -614,7 +614,7 @@ profileId* : "string" //The UUID of the Profile
     }
 }
 
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 404   Resource doesn't exist
 500   An unexpected error occurred
@@ -634,7 +634,7 @@ profileId* : "string" //The UUID of the Profile
 ##### Response
 ```json
 200   OK
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 404   Resource doesn't exist
 500   An unexpected error occurred
@@ -670,7 +670,7 @@ profileId* : "string" //The UUID of the Profile
     "key3": "value3"
 }
 
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 404   Resource doesn't exist
 500   An unexpected error occurred
@@ -701,7 +701,7 @@ profileId* : "string" //The UUID of the Profile
     "key3": "value3"
 }
 
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 404   Resource doesn't exist
 500   An unexpected error occurred
@@ -724,7 +724,7 @@ customKey* : "string" //The key of the customized properties
 ##### Response
 ```json
 200   OK
-400   Unauthorized
+401   Unauthorized
 403   Forbidden
 404   Resource doesn't exist
 500   An unexpected error occurred
