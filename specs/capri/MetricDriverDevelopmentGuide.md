@@ -13,7 +13,7 @@ Opensds controller receives  the returned metric array and send to different tar
 MericSpec structure is declared in /pkg/model/metric.go, which contains name,timestamp,value and other attributes of a metric. Below is the MetricSpec structure.
 
 ```go
-pe MetricSpec struct {
+type MetricSpec struct {
 	/* Following are the fields used to form name and labels associated with a Metric, same as Prometheus guage name and labels
 	Example: node_disk_read_bytes_total{device="dm-0",instance="121.244.95.60:12419",job="prometheus"}
 	guage name can be formed by appending Job_Component_Name_Unit_AggrType */
