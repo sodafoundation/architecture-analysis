@@ -42,7 +42,7 @@ User can write a YAML or JSON template to register a service catalog which repre
 
 **StackStorm**: It’s an `IFTTT` framework which offers advanced automation, letting users create complex workflows to automate your world. Stackstorm breaks automation down into discrete actions and ties these actions together into workflows that can perform complex operations. StackStorm also provides a sophisticated event bus that can be used to implement event-based automation. Stackstorm enables OpenSDS Orchestration and Automation for the generic workflow actions based on OpenSDS projects such as hotpot, gelato and so forth.
 
-###Terminology
+### Terminology
 
  * Service Catalog Manager
 It manages service catalogs and is responsible for maintaining the Service Catalog, ensuring that all information within the Service Catalog is accurate and up-to-date.
