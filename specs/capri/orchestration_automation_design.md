@@ -2,7 +2,7 @@
 
 **Authors:** [Himanshu](https://github.com/himanshuvar), [Erik Xu](https://github.com/wisererik), [Ashit](https://github.com/kumarashit )
 
-This document proposes a design for automation and orchestration design.
+This document proposes a design for automation and orchestration.
 ## Background
 OpenSDS is aimed at addressing the storage integration challenges of both the cloud native environment and traditional IT environment. As part of this mission, Orchestration and Automation will be introduced in this document. 
 
@@ -44,31 +44,31 @@ User can write a YAML or JSON template to register a service catalog which repre
 
 ###Terminology
 
- Service Catalog Manager
+ * Service Catalog Manager
 It manages service catalogs and is responsible for maintaining the Service Catalog, ensuring that all information within the Service Catalog is accurate and up-to-date.
 
- Service
+ * Service
 It represents user defined business process. User can write a YAML or JSON template to register a service which on validation registers a workflow. Also, it can be pre-defined workflows shipped with the product.
 
- Instance
+ * Instance
 It is a consumable service. Once the registration is done, user can consume the service.
 
- Execution
+ * Execution
 A service instance can be executed immediately or scheduled later. It helps in tracking execution progress, result of service instance.
 
- Connection Manager
+ * Connection Manager
 Connection Manager handles the workflow connectors. It manages the connection between the OpenSDS Service Manager and the workflow manager.
 
- Connector
+ * Connector
 It is the OpenSDS orchestration adapter for inbound and outbound integration with the Workflow Manager.  
 
- Workflow Manager
+ * Workflow Manager
 It is the external framework to organize, centralize, and standardize workflows. 
 
- Workflow
+ * Workflow
 It stitches actions together, define the order, transition conditions, and passing the data. 
 
- Actions
+ * Actions
 Actions are pieces of code that can perform arbitrary automation tasks.
 
 ## Design details
@@ -393,13 +393,14 @@ JSON Request:
 }
 ```
 ### Instance
-- Create service instance??will run immediately
-- Run a service instance
-- List service instances
-- Get service instance
-- Delete service instance
+    - Create service instance 
+    - Run a service instance
+    - List service instances
+    - Get service instance
+    - Delete service instance
 
 With Capri release, there will be pre-defined workflows shipped with the product. User having appropriate privileges can define Service defintions based upon the workflows. Once the service definition is created, user with appropriate role and intent can create a Service instance. Once a service instance is created, user can track the status.
+
 API details can be found at:
 http://petstore.swagger.io/?url=https://raw.githubusercontent.com/opensds/orchestration/9869f5cb5fb740e91700c6200e67327b3dae0c6a/openapi-spec/swagger.yaml
 
@@ -429,12 +430,12 @@ JSON Request:
  }
 ```
 
-### Execution ?? move execution api to instance part
+### Execution 
 
 - List executions of service instance
 - Get execution by id
-- Get execution topology by service instance??
-- Re-run a failed or suspended execution??
+- Get execution topology by service instance
+- Re-run a failed or suspended execution
 
 
 Here’s example of getting an instance execution.
@@ -470,6 +471,8 @@ https://docs.stackstorm.com/
 
 ## Addendum
 Sample provisioning yaml file:
+### vol_provision.yaml
+```yaml
 ---
 Description: "Volume provisioning"
 Name: provision
@@ -525,3 +528,4 @@ workflows:
           ref: attach_vol
         on-success: ""
       description: "Attach a given volume"
+```
