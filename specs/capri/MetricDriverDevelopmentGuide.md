@@ -2,605 +2,204 @@
 # **Develop new metric driver for OpenSDS/Telemetry**
 
 Creating a new metric driver is similar to creating a new storage driver described [here](https://github.com/opensds/opensds/wiki/Develop-new-storage-driver-for-OpenSDS) .
-
-
 ### **Scope of Metric Driver**
+Metric driver is supposed to collect data for a storage/platform type. Metric driver should return an array of Metricspec structure . Each element in the array represents one metric .
 
-Metric Driver is supposed to collect data for a list of metrics  for an instance which is passed to the driver in each call. Metric driver should return an array of Metricspec structure . Each element in the array represent one metric from the metricList supplied ,
-
-Controller takes the returned metric array and send to different targets using adapters.
+Opensds controller receives  the returned metric array and send to different targets as configured in the controller.
 
 
 ### **What is Metricspec**
 
 MericSpec structure is declared in /pkg/model/metric.go, which contains name,timestamp,value and other attributes of a metric. Below is the MetricSpec structure.
 
-----------------------------
+```go
+pe MetricSpec struct {
+	/* Following are the fields used to form name and labels associated with a Metric, same as Prometheus guage name and labels
+	Example: node_disk_read_bytes_total{device="dm-0",instance="121.244.95.60:12419",job="prometheus"}
+	guage name can be formed by appending Job_Component_Name_Unit_AggrType */
 
-**type **MetricSpec **struct **{
+	// Instance ID -\> volumeID/NodeID
+	InstanceID string `json:"instanceID,omitempty"`
 
+	// instance name -\> volume name / node name etc.
+	InstanceName string `json:"instanceName,omitempty"`
 
+	// job -\> Prometheus/openSDS
+	Job string `json:"job,omitempty"`
 
-InstanceID string **`json:"InstanceID,omitempty"`**
+	/*Labels - There can be multiple componets/properties  associated with a metric , these are catured using this map
+	  Example: Labels[pool]="pool1";Labels[device]="dm-0" */
+	Labels map[string]string `json:"labels,omitempty"`
 
-InstanceName string **`json:"InstanceName,omitempty"`**
+	// component -\> disk/logicalVolume/VG etc
+	Component string `json:"component,omitempty"`
 
-Job string **`json:"Job,omitempty"`**
+	// name -\> metric name -\> readRequests/WriteRequests/Latency etc
+	Name string `json:"name,omitempty"`
 
-/* associator - Some metric would need specific fields to relate components.
+	// unit -\> seconds/bytes/MBs etc
+	Unit string `json:"unit,omitempty"`
 
-  Use case could be to query volumes of a particular pool. Attaching the related_
-  components as labels would help us to form promQl query efficiently.
-  Example: node_disk_read_bytes_total{instance="121.244.95.60"}_
-  Above query will respond with all disks associated with node 121.244.95.60_
-  Since associated components vary, we will keep a map in metric struct to denote
-  the associated component type as key and component name as value
-  Example: associator[pool]=pool1 */
+	// Can be used to determine Total/Avg etc
+	AggrType string `json:"aggrType,omitempty"`
 
- Associator **map**[string]string **`json:"Associator,omitempty"`**
+	/*If isAggregated ='True' then type of aggregation can be set in this field
+	  ie:- if collector is aggregating some metrics and producing a new metric of
+	  higher level constructs, then this field can be set as 'Total' to indicate it is
+	  aggregated/derived from other metrics.*/
 
-// Following fields can be used to form a unique metric name_**
-// source -\> Node/Dock_
- Source string **`json:"Source,omitempty"`**
-// component -\> disk/logicalVolume/VG etc_**
-Component string **`json:"Component,omitempty"`**
-// name -\> metric name -\> readRequests/WriteRequests/Latency etc_**
-Name string **`json:"Name,omitempty"`**
-// unit -\> seconds/bytes/MBs etc_**
-Unit string **`json:"Unit,omitempty"`**
-// is aggregated_**
-IsAggregated bool **`json:"IsAggregated,omitempty"`**
-
-MetricValues []Metric
-
+	MetricValues []*Metric `json:"metricValues,omitempty"`
 }
 
 type Metric struct {
-
-  Timestamp int64
-
-  Value float64
-
+	Timestamp int64   `json:"timestamp,omitempty"`
+	Value     float64 `json:"value"`
 }
 
-----------------------------------------------------------------
+```
 
 
-### **Who invokes Metric driver Collect?**
+### **Who invokes Metric driver collect method?**
 
-Dock will invoke ColelctMetrics(), which is either during a metric POST API request or a scrape request to Metric exporter by Prometheus .
+1.opensds dock process will invoke ColelctMetrics(), which is result of  POST API invocation.
 
+2.A scrape request to Metric exporter by prometheus/third party .
 
 ### **What Methods metric driver should implement ?**
 
 Metric driver should implement all methods defined in MetricDriver interface , which is  in drivers/drivers.go
 
--------------------
-
+```go
 type MetricDriver interface {
-
-  _//Any initialization the volume driver does while starting._
-
-Setup() error
-
-  _//Any operation the volume driver does while stopping._
-
-Unset() error
-
-  CollectMetrics(metricList []string,instanceID string) ([]model.MetricSpec, error)
-
-  ValidateMetricsSupportList(metricList []string,resourceType string) ([]string,error)
-
+	//Any initialization the metric driver does while starting.
+	Setup() error
+	//Any operation the metric driver does while stopping.
+	Teardown() error
+	// Collect metrics for all supported resources
+	CollectMetrics() ([]*model.MetricSpec, error)
 }
 
-------------------------
-
+```
 
 ### **Code development**
 
 All drivers should be implement in contrib/drivers/<driver type> .
 
-
-
 *   create a <yourdriver>metrics.go file.
 
     example:
-
-
-    touch contrib/drivers/lvm/lvmmetrics.go
-
-*   **Develop metrics collection code like below**
-
-    ----------------------------------------------
-
-package lvm
-
-import (
-	log "github.com/golang/glog"
-
-	"github.com/opensds/opensds/pkg/model"
-
-	"gopkg.in/yaml.v2"
-
-	"strconv"
-
-	"time"
-)
-
-/*const (
-
-
-  // yaml file which contins the supported metric list
-
-
-  ConfFile  = "/etc/opensds/driver/metric-config.yaml"
-
-
-  )*/
-
-// Todo: Move this Yaml config to a file
-
-var data = `
-
-
-resources:
-
-
- - resource: volume
-
-
-   metrics:
-
-
-     - IOPS
-
-
-     - ReadThroughput
-
-
-     - WriteThroughput
-
-
-     - ResponseTime
-
-
-     - ServiceTime
-
-
-     - UtilizationPercentage
-
-
-   units:
-
-
-     - tps
-
-
-     - KB/s
-
-
-     - KB/s
-
-
-     - ms
-
-
-     - ms
-
-
-     - '%'
-
-
- - resource: pool
-
-
-   metrics:
-
-
-     - ReadRequests
-
-
-     - WriteRequests
-
-
-     - ReponseTime
-
-
-   units:
-
-
-     - tps
-
-
-     - KB/s
-
-
-     - KB/s
-
-
-     - ms
-
-
-     - ms
-
-
-     - '%'
-
-
-`
-
-type Config struct {
-	Resource string
-
-	Metrics []string
-
-	Units []string
+    ```
+        touch contrib/drivers/lvm/lvmmetrics.go
+    ```
+#### **Develop metrics collection code as  below**
+
+```go
+func (d *MetricDriver) CollectMetrics() ([]*model.MetricSpec, error) {
+
+   // get Metrics to unit map
+   var metricToUnitMap map[string]string = map[string]string{"iops": "tps", "throughput": "kbs"}
+
+   //validate metric support list
+   supportedMetrics := [] string {"throughput","iops"}
+   var volumeList []string = []string{"vol1", "vol2"}
+
+   var labelMap map[string]map[string]string = map[string]map[string]string{"vol1": map[string]string{"device": "vol1_name"}, "vol2": map[string]string{"device": "vol2_name"}}
+   var metricMap map[string]map[string]string = map[string]map[string]string{"vol1": map[string]string{"InstanceName": "vol1", "iops": "8.77", "read_throughput": "12.22", "response_time": "0.01", "service_time": "0.01", "write_throughput": "32.56", "utilization": "12.21"},
+      "vol2": map[string]string{"InstanceName": "vol2", "iops": "6.26", "throughput": "8.27"},
+   }
+      
+   var tempMetricArray []*model.MetricSpec
+   // fill volume metrics
+   for _, volume := range volumeList {
+      convrtedVolID := convert(volume)
+      aMetricMap := metricMap[convrtedVolID]
+      aLabelMap := labelMap[convrtedVolID]
+      for _, element := range supportedMetrics {
+         val, _ := strconv.ParseFloat(aMetricMap[element], 64)
+         metricValue := &model.Metric{
+            Timestamp: getCurrentUnixTimestamp(),
+            Value:     val,
+         }
+         metricValues := make([]*model.Metric, 0)
+         metricValues = append(metricValues, metricValue)
+         metric := &model.MetricSpec{
+            InstanceID:   volume,
+            InstanceName: aMetricMap["InstanceName"],
+            Job:          "lvm",
+            Labels:       aLabelMap,
+            Component:    "volume",
+            Name:         element,
+            Unit:         metricToUnitMap[element],
+            AggrType:     "",
+            MetricValues: metricValues,
+         }
+         tempMetricArray = append(tempMetricArray, metric)
+      }
+   }
+   
+   metricArray := tempMetricArray
+   return metricArray, nil
 }
-
-type Configs struct {
-	Cfgs []Config `resources`
-}
-
-type MetricDriver struct {
-	cli *MetricCli
-}
-
-// CollectMetrics: Driver entry point to collect metrics. This will be invoked by the dock
-
-// metricsList-> posted metric list
-
-// instanceID -> posted instanceID
-
-// metricArray    -> the array of metrics to be returned
-
-func (lvmdriver *MetricDriver) CollectMetrics(metricsList []string, instanceID string) (metricArray []model.MetricSpec, err error) {
-
-	// get MEtrics to unit map
-
-	metrictounitmap := getMetricToUnitMap()
-
-	//validate metric support list
-
-	supportedMetrics, err := lvmdriver.ValidateMetricsSupportList(metricsList, "volume")
-
-	if supportedMetrics == nil {
-
-		log.Infof("No metrics found in the  supported metric list")
-
-	}
-
-	metricMap, err := lvmdriver.cli.CollectMetrics(supportedMetrics, instanceID)
-
-	var tempMetricArray []model.MetricSpec
-
-	for _, element := range metricsList {
-
-		val, _ := strconv.ParseFloat(metricMap[element], 64)
-
-		//Todo: See if association  is required here, resource discovery could fill this information
-
-		associatorMap := make(map[string]string)
-
-		metricValue := model.Metric{
-
-			Timestamp: getCurrentUnixTimestamp(),
-
-			Value: val,
-		}
-
-		metricValues := make([]model.Metric, 0)
-
-		metricValues = append(metricValues, metricValue)
-
-		metric := model.MetricSpec{
-
-			InstanceID: instanceID,
-
-			InstanceName: metricMap["InstanceName"],
-
-			Job: "OpenSDS",
-
-			Associator: associatorMap,
-
-			Source: "Node",
-
-			//Todo Take Componet from Post call, as of now it is only for volume
-
-			Component: "Volume",
-
-			Name: element,
-
-			//Todo : Fill units according to metric type
-
-			Unit: metrictounitmap[element],
-
-			//Todo : Get this information dynamically ( hard coded now , as all are direct values
-
-			IsAggregated: false,
-
-			MetricValues: metricValues,
-		}
-
-		tempMetricArray = append(tempMetricArray, metric)
-
-	}
-
-	metricArray = tempMetricArray
-
-	return
-
-}
-
-func metricInMetrics(metric string, metriclist []string) bool {
-
-	for _, m := range metriclist {
-
-		if m == metric {
-
-			return true
-
-		}
-
-	}
-
-	return false
-
-}
-
-func getCurrentUnixTimestamp() int64 {
-
-	now := time.Now()
-
-	secs := now.Unix()
-
-	return secs
-
-}
-
-func getMetricToUnitMap() map[string]string {
-
-	//construct metrics to value map
-
-	var configs Configs
-
-	//Read supported metric list from yaml config
-
-	//source, err := ioutil.ReadFile(ConfFile)
-
-	//Todo: Move this to read from file
-
-	source := []byte(data)
-
-	/*if err != nil {
-
-
-	  log.Errorf("Not able to read file  %s  %v", ConfFile, err)
-
-
-	  }*/
-
-	error := yaml.Unmarshal(source, &configs)
-
-	if error != nil {
-
-		log.Fatalf("Unmarshal error: %v", error)
-
-	}
-
-	metrictounitmap := make(map[string]string)
-
-	for _, resources := range configs.Cfgs {
-
-		switch resources.Resource {
-
-		//ToDo: Other Cases needs to be added
-
-		case "volume":
-
-			for index, metricName := range resources.Metrics {
-
-				metrictounitmap[metricName] = resources.Units[index]
-
-			}
-
-		}
-
-	}
-
-	return metrictounitmap
-
-}
-
-//     ValidateMetricsSupportList:- is  to check whether the posted metric list is in the uspport list of this driver
-
-//     metricList-> Posted metric list
-
-// supportedMetrics -> list of supported metrics
-
-func (d *MetricDriver) ValidateMetricsSupportList(metricList []string, resourceType string) (supportedMetrics []string, err error) {
-
-	var configs Configs
-
-	//Read supported metric list from yaml config
-
-	//source, err := ioutil.ReadFile(ConfFile)
-
-	//Todo: Move this to read from file
-
-	source := []byte(data)
-
-	/*if err != nil {
-
-
-	   log.Errorf("Not able to read file  %s%v", ConfFile, err)
-
-
-	}*/
-
-	error := yaml.Unmarshal(source, &configs)
-
-	if error != nil {
-
-		log.Fatalf("Unmarshal error: %v", error)
-
-	}
-
-	for _, resources := range configs.Cfgs {
-
-		switch resources.Resource {
-
-		//ToDo: Other Cases needs to be added
-
-		case "volume":
-
-			for _, metricName := range metricList {
-
-				if metricInMetrics(metricName, resources.Metrics) {
-
-					supportedMetrics = append(supportedMetrics, metricName)
-
-				} else {
-
-					log.Infof("metric:%s is not in the supported list", metricName)
-
-				}
-
-			}
-
-		}
-
-	}
-
-	return supportedMetrics, nil
-
-}
-
 func (d *MetricDriver) Setup() error {
 
-	cli, err := NewMetricCli()
-
-	if err != nil {
-
-		return err
-
-	}
-
-	d.cli = cli
-
 	return nil
-
 }
+func (*MetricDriver) Teardown() error { return nil }
 
-func (*MetricDriver) Unset() error { return nil }
-
-
-    --------------------------------------------------------------------------------------------
-
-*   **Add some code in contrib/drivers/driver.go, so osdsdock can find your driver.**
-
-    ------------
-
+```
+### Make changes in InitMetricDriver function in drivers.go  to pick your driver 
+```go
 func InitMetricDriver(resourceType string) MetricDriver {
-
 	var d MetricDriver
-
 	switch resourceType {
-
 	case config.LVMDriverType:
-
 		d = &lvm.MetricDriver{}
-
 		break
-
+	case config.CephDriverType:
+		d = &ceph.MetricDriver{}
+		break
+	case config.HuaweiDoradoDriverType:
+		d = &dorado.MetricDriver{}
+		break
 	default:
-
-		d = &sample.Driver{}
-
+		//d = &sample.Driver{}
 		break
-
 	}
-
 	d.Setup()
-
 	return d
-
 }
-    ------------------------------------------------------
+```
 
+###    **How to test driver code**
 
-###    **How to test Driver code**
-
-*   Method1
-    *   Write a test code which invokes CollectMetrics()
-
-        Lvmmetrics_test.go
-
-
-        -----------------------------------------------------
-
-
+*   Method1:
+     Write a test code which invokes CollectMetrics()
+ Lvmmetrics_test.go
+```go
        package lvm
-
        import (
        	"fmt"
-
        	"testing"
        )
-
        func TestMetricDriverSetup(t *testing.T) {
-
        	var d = &MetricDriver{}
-
        	if err := d.Setup(); err != nil {
-
        		t.Errorf("Setup lvm metric  driver failed: %+v\n", err)
-
        	}
-
        }
-
        func TestCollectMetrics(t *testing.T) {
-
-       	metricList := []string{"IOPS", "ReadThroughput", "WriteThroughput", "ResponseTime"}
-
-       	var metricDriver = &MetricDriver{}
-
-       	metricDriver.Setup()
-
-       	metricArray, err := metricDriver.CollectMetrics(metricList, "sda")
-
-       	if err != nil {
-
-       		t.Errorf("CollectMetrics call to lvm driver failed: %+v\n", err)
-
-       	}
-
+       	metricArray, err := metricDriver.CollectMetrics()
        	fmt.Println(metricArray)
-
        }
+```
+
+*   Method2:
+     Use  POST API to trigger collectMetrics()
+    
+    example: 
+    ```
+    "curl -d '{""driverType"":""lvm""}' -H ""Content-Type: application/json"" -X POST http://127.0.0.1:50040/v1beta/e93b4c0934da416eb9c8d120c5d04d96/metrics 
+    ```
+    
 
 
-*   Execute test code and make sure you get output like this for the Print statement.
-
-        --------------------
-
-
-        === RUN   TestCollectMetrics
-
-
-        [{sda 153.00 OpenSDS map[] Node Volume IOPS tps false [{1555731602 824}]} {sda 153.00 OpenSDS map[] Node Volume ReadThroughput KB/s false [{1555731602 1620}]} {sda 153.00 OpenSDS map[] Node Volume WriteThroughput KB/s false [{1555731602 15.97}]} {sda 153.00 OpenSDS map[] Node Volume ResponseTime ms false [{1555731602 0.39}]}]
-
-
-        --- PASS: TestCollectMetrics (1.07s)
-
-
-        PASS
-
-
-        --------------------------------------------------------
-
-*   Method2
-    *   If you have the POST API code integrated to your branch and prometheus and prometheus push gateway configured , you can initiate post request and see the metrics are available in prometheus
-    *
-
-<!-- Docs to Markdown version 1.0β17 -->
