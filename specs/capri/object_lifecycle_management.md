@@ -46,21 +46,22 @@ As default, there are three tiers, Tier_1, Tier_99 and Tier_999, and the mapping
 | AWS S3 | STANDARD | STANDARD_IA | GLACIER |
 | Azure Blob | HOT | COOL | ARCHIVE |
 | HW OBS | STANDARD | WARM | COLD |
-| GCP | Multi-Regional | NearLine | ColdLine |
+| GCP | Multi-Regional | - | - |
 | Ceph S3 | STANDARD | - | - |
 | Fusion Storage Object | STANDARD | - | - |
 
 Notes:
+- IBM Cloud storage is not supported for lifecycle management feature.
 - Hyphen(-) means the specific vendor does not support such tier.
 - In the future, we will provide the ability for users to add their own storage tiers and storage classes, and the mapping between the storage tiers with storage classes.
 
-Generally, users use API to define lifecycle rules on bucket, and then OpenSDS will scheduling according to those rules and manage the movement of objects.
+Generally, users use API to define lifecycle rules on bucket, and then OpenSDS will perform scheduling according to those rules and manage the movement of objects.
 For each rule, there are two main factors:
 - Time:  When to take action, we use days after the creation of an object to define.
 - Action:
 	- Expiration:  Delete object.
-	- In-cloud transition:  Transition from one storage tier to another in the same backend.
-	- Cross-cloud transition:  Transition from one backend to another.
+	- In-cloud transition:  Transition from one storage tier to another in the same storage backend.
+	- Cross-cloud transition:  Transition from one storage backend to another.
 
 
 ### Define lifecycle rules on bucket, no rules will be set in cloud.
@@ -81,8 +82,7 @@ Only support to set lifecycle management rules on bucket, all rules will be sche
 **CONS**
 - It’s not sure if the cost of using OpenSDS lifecycle and cloud lifecycle are the same for all cloud vendors. (Azure Blob, HW OBS, AWS S3, Google Cloud Storage… )
 - Because the limitation of cloud vendor that storage class of object in history (with versioning enabled) can’t be changed, object versioning need to be totally managed by OpenSDS, it can not use the versioning ability of cloud vendor.
-- If cloud vendors add some new features to lifecycle management or versioning, there is a risk that we can’t achive the same goal like those new features by ourselves.
-
+- If cloud vendors add some new features to lifecycle management or versioning, there is a risk that we can’t achieve the same goal like those new features by ourselves.
 
 ## Framework
 ![lifecycle_framework diagram](lifecycle_framework.png?raw=true "lifecycle_framework diagram")
@@ -121,7 +121,8 @@ User need to pay attention to those minimum storage charges when defining lifecy
 Conflicting Lifecycle Actions
 For OpenSDS, expiration action is precedence over transition action. 
 For example, there are two rules as below:
-```<LifecycleConfiguration>
+```xml
+<LifecycleConfiguration>
   <Rule>
     <ID>Rule 1</ID>
     <Filter>
@@ -149,7 +150,8 @@ For example, there are two rules as below:
 In this case, OpenSDS just chooses the expiration action on these objects.
 Overlapping Prefixes Resulting in Conflicting Lifecycle Actions
 For example, there are two rules as below:
-```<LifecycleConfiguration>
+```xml
+<LifecycleConfiguration>
   <Rule>
     <ID>Rule 1</ID>
     <Filter>
@@ -199,7 +201,7 @@ PUT http://{host_ip}/v1/s3/<bucket_name>/?lifecycle
 ```
 Request Body:
 The lifecycle configuration can be specified in the request body. The configuration is specified as XML consisting of one or more rules.
-```
+```xml
 <LifecycleConfiguration>
   <Rule>
     ...
@@ -210,7 +212,7 @@ The lifecycle configuration can be specified in the request body. The configurat
 </LifecycleConfiguration>
 ```
 The following is a rule example:
-```
+```xml
 <LifecycleConfiguration>
 <Rule>
   <ID>rule_1</ID>
@@ -365,10 +367,10 @@ Lifetime of the restored (active) copy
 In a restore request, you specify the number of days that you want the restored copy to exist.
 But it only used for those backend which support restore period. For:
 Amazon S3 and Huawei OBS, after the specified period, the restored copy will be deleted, while the object remains archived.
-- Azure, it is not used, after recovered, the object will be stored in the new storage class, not in Glacier any more.
-- Google Cloud Storage, it actually no need to recover before access the object stored in Glacier, so this option is meaningless. 
+- Azure, it is not used, after recovered, the object will be stored in the new storage class, not in Tier999 any more.
+- Google Cloud Storage, it actually no need to recover before access the object stored in Tier999, so this option is meaningless. 
 
-***Current implementation only uses Standard speed option for restoring the object from GLACIER***
+***Current implementation only uses Standard speed option for restoring the object from GLACIER(Tier999)***
 
 Request Syntax:
 ```
@@ -386,7 +388,7 @@ POST http://{host_ip}/v1/s3/<bucket_name>/<object_name>
 ```
 Request Body
 The following is an XML example of a request body for restoring an archive.
-```
+```xml
 <RestoreRequest>
    <Days>2</Days> 
    <GlacierJobParameters>
@@ -496,7 +498,7 @@ Server: AmazonS3
 ### Scheduler module
 1. Periodically get lifecycle rules of each bucket, based on the Read API of S3.
 
-2. For each rule, if it is active, then get object list by rule filter based on the List API of S3.
+2. For each rule, if it is Enabled, then get object list by rule filter based on the List API of S3.
 
 3. For each object get in #2, send a LifecycleActionRequest to datamover through kafka.
 
@@ -511,6 +513,10 @@ LifecycleActionRequest have the following parameters:
 | StorageClass | The target storage class. | Yes, when actions is transition. |
 | SourceBackend | Which backend object stored. | Yes, when actions is transition. |
 | TargetBackend | Which backend object will be transition to. | Yes, when actions is transition. |
+
+The below sequence diagram shows the work flow of lifecycle scheduler module:
+
+![lifecycle_scheduler diagram](scheduler.PNG?raw=true "lifecycle_scheduler diagram")
 
 ### Datamover module
 1. Add a LifecycleDriver which is responsible for handling the LifecycleActionRequest.
@@ -546,6 +552,46 @@ TODO:
   1. Include IBM cloud in list of supported cloud vendors.
 
 ## Appendix
+### Proposed Alternative Solutions
+The below two solutions are alternative implementation proposals for object lifecycle management feature:
+#### Solution 1: Two ways to define lifecycle rules, one for bucket, the other for backend.
+
+##### Description
+Support to set lifecycle management rules both on bucket and backend.
+Rules set on bucket are used in the scenario of expiration and cross-cloud transition. All objects in the bucket will be controlled by those rules. The management of the rules are controlled by OpenSDS only. That means OpenSDS will schedule those rules and delete object or migrate object cross-cloud if necessary.
+Rules set on backend are used in the scenario of expiration and in-cloud transition. All objects, no matter which bucket it belongs to, stored in the backend will be controlled by those rules. The management of the rules are controlled by cloud vendor, OpenSDS do nothing except syncing up object meta data with cloud vendor. 
+
+##### PROS & CONS
+**PROS**
+- Less work for OpenSDS.
+- Can use all features of lifecycle management of each clouds.
+- No limitation for versioning.
+
+**CONS**
+- Need two sets of APIs, that’s different with lifecycle management in S3.
+- In-cloud transition is controlled by cloud vendor, it’s difficult to keep metadata of each object completely consistent with cloud all the time.
+- Can’t manage lifecycle completely on the bucket level. (Because those rules for backend.)
+
+#### Solution 2: Define lifecycle rules on bucket, OpenSDS translate and set rules in cloud if needed.
+
+##### Description
+
+Only support to set lifecycle management rules on bucket, for each rule:
+- with expiration as it’s action, OpenSDS will call API to delete the object, rule will not be set in cloud.
+- with cross-cloud transition as it’s action, OpenSDS will migrate objects, rule will not be set in cloud.
+- with in-cloud transition as it’s action, OpenSDS will translate and set rule in cloud, the rule will be added a filter that with bucket name as it’s prefix. And OpenSDS need to sync up object metadata with cloud vendor. (Details of sync up?)
+
+##### PROS & CONS
+**PROS**
+- APIs are compatible with S3.
+- Can manage lifecycle on the bucket level like cloud themselves.
+- No limitation for versioning.
+
+**CONS**
+- Can’t support to keep the object key in cloud be the same as it in OpenSDS. (As default, object key in cloud is composed of bucket name in OpenSDS and ’/’ and object key in OpenSDS.)
+- As an object of a bucket can be stored in any backends, the rule need to be set in all backends, and if a new backend is registered, it also need to add this rule.
+- In-cloud transition is controlled by cloud vendor, it’s difficult to keep metadata of each object completely consistent with cloud all the time.
+- Not sure if all cloud support filter objects by prefix of object key.
 
 ### How to access object with each storage class?
 For AWS S3 :
