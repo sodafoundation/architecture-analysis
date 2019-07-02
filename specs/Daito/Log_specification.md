@@ -28,6 +28,8 @@ The log format is as follows:
   * line: Line Number.
   * funcname: function name
   * logMsg: log detail Messages
+
+Log files should be stored in "/var/log/" directory
  
 ### REST API impact
 
