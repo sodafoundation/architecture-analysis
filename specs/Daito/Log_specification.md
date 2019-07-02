@@ -29,7 +29,7 @@ The log format is as follows:
   * funcname: function name
   * logMsg: log detail Messages
 
-Log files should be stored in "/var/log/" directory,log file shoud be named "{YYYY-MM-DD}_{ProjectName}.log",for example: 2019-07-02_multi-cloud.log 
+Log files should be stored in "/var/log/" directory, log file shoud be named "{YYYY-MM-DD}_{ProjectName}.log",for example: "2019-07-02_multi-cloud.log" 
 ### REST API impact
 
 All the REST API which need logs.
