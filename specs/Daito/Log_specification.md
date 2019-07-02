@@ -19,7 +19,7 @@ Each OpenSDS developer uses a different log format, and the log location is diff
 ## Design Details
 The log format is as follows:
 * logContent := fmt.Sprintf("%s %s [pid: %d] %s [%v:%v %v] %v\n", timeNow, LogPrefix, os.Getpid(), logLevel, filename, line, funcname, logMsg)
-  * timeNow: Current system time, precise to subtle,for example:
+  * timeNow: Current system time, accurate to microseconds, for example:
       * timeNow := time.Now().Format("2006-01-02 15:04:05.000000")
   * LogPrefix: multi-cloud、hotpot、nbp
   * os.Getpid: current process id
