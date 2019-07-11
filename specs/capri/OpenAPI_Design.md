@@ -106,13 +106,13 @@ Further functions will be gradually added based on requirements later.
    - return
      **void**
 
-2. logout
+2. Logout
    - parameters
      **void**
    - return
      **void**
 
-3. createVolume
+3. CreateVolume
    - parameters
      **name**: volume name
 	 **pool**: storage pool which volume belongs
@@ -121,33 +121,33 @@ Further functions will be gradually added based on requirements later.
    - return
      **Volume object**
 
-4. deleteVolume
+4. DeleteVolume
    - parameters
      **volume**: volume object to delete
    - return
      **void**
 
-5. listVolume
+5. ListVolumes
    - parameters
      **pool**: (Optional)query all volumes belong to pool if specified, otherwise query all volumes in storage
    - return
      **List of volume object**
 
-6. attachVolume
+6. AttachVolume
    - parameters
      **volume**: volume object to attach
 	 **host**: host object to attach, which includes informations such as host name, os type, ip, initiators, etc.
    - return
      **void**
 
-7. detachVolume
+7. DetachVolume
    - parameters
      **volume**: volume object to detach
 	 **host**: host object to detach from
    - return
      **void**
 
-8. listStoragePool
+8. ListStoragePools
    - parameters
      **void**
    - return
