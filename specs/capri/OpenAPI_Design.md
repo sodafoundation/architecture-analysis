@@ -1,17 +1,17 @@
 # VMware Ecosystem OpenAPI
 
 **Author(s)**: [zengyingzhe](https://github.com/zengyingzhe)
-This documentation serves as the design spec for OpenAPI.
 
 ## Summary
 
-OpenAPI is a framework which provides generic storage related APIs to upper VMware plugins.
+This documentation serves as the design spec for VMware OpenAPI.
+VMware OpenAPI is a framework which provides generic storage related APIs to upper VMware plugins.
 
 ## Motivation
 
-VMware is one of the most important and popular virtualization platform that depends on storage, so it is very necessory to integrate OpenSDS to VMware platform, and this will also benefit for OpenSDS' further development.
-To achieve various purposes, VMware supports multi types of plugins. All of them rely on storage APIs to interact with backend storage system.
-So if we implement a common framework that encapsulates API details of backend storage and provision more generic interfaces, it would be much more easier for plugin developers to implement a plugin, because developers can concern more to plugin itself's logic, not stuck in communication with storage.
+VMware is one of the most important and popular virtualization platforms that depends on storage, so it is very necessary to integrate OpenSDS to VMware platform, and this will also benefit for OpenSDS' further development.
+To achieve various purposes, VMware supports multiple types of plugins. All of them rely on storage APIs to interact with backend storage system.
+So if we implement a common framework that encapsulates API details of backend storage and provisions more generic interfaces, it would be much easier for plugin developers to implement a plugin, because developers can concern more to plugin itself's logic, not stuck in communication with storage.
 
 ### Goals
 
@@ -27,16 +27,18 @@ None.
 ### OpenAPI Usage Architecture
 
 ![](media/OpenAPI_Usage_Architecture.png)
-OpenAPI is a language dependant library, such as a Jar package for Java.
+
+VMware OpenAPI is a language dependant library, such as a Jar package for Java.
 VMware plugins should import the OpenAPI library and call its northbound interfaces to communicate with corresponding storage.
 
 ### OpenAPI Module
 
 ![](media/OpenAPI_Module.png)
-OpenAPI provides unified northbound interfaces to VMware plugins, no matter what southbound storages connected.
+
+VMware OpenAPI provides unified northbound interfaces to VMware plugins, no matter what southbound storages connected.
 This could filter the differences between various of storages. Here we also see OpenSDS as a storage.
 To achieve the storage-not-aware purpose, each storage vendor must provide its own plugin to OpenAPI, which encapsulates storage calls based on storage's API definition.
-OpenAPI's northbound interfaces invokes these plugins' functions to actually interact with storages.
+VMware OpenAPI's northbound interfaces invokes these plugins' functions to actually interact with storages.
 
 ### Data model impact
 
@@ -64,12 +66,12 @@ No.
 
 ### Developer impact
 
-Developers can participate in OpenAPI to implement more functions, so that OpenAPI can provide more interfaces to VMware plugins.
+Developers can participate in VMware OpenAPI to implement more functions, so that it can provide more interfaces to VMware plugins.
 Or developers can commit 3rd-party plugin to scale OpenAPI up to other storages.
 
 ## Use Cases
 
-For OpenAPI, various of VMware plugins are users.
+For VMware OpenAPI, various of VMware plugins are users.
 Whenever VMware plugins want to operate with storages, they invoke unified interfaces of OpenAPI.
 
 ## Implementation
@@ -80,22 +82,22 @@ Whenever VMware plugins want to operate with storages, they invoke unified inter
 
 ### Device Northbound Interface Definitions
 
-For this very first version of OpenAPI, we only supply the most basic interfaces that VMware plugins might use.
+For this very first version of VMware OpenAPI, we only support the most basic interfaces that VMware plugins might use.
 Each plugin is supposed to inherit these interfaces and implement accordingly.
 Further functions will be gradually added based on requirements later.
 
 | Interface | Description |
 |--|--|
-| login | Login to storage |
-| logout | Logout from storage |
-| createVolume | Create a LUN |
-| deleteVolume | Delete a LUN |
-| listVolume | Batch query LUNs info |
-| attachVolume | Attach a LUN to host |
-| detachVolume | Detach a LUN from host |
-| listStoragePool | Batch query storage pool info |
+| Login | Login to storage |
+| Logout | Logout from storage |
+| CreateVolume | Create a LUN |
+| DeleteVolume | Delete a LUN |
+| ListVolumes | Batch query LUNs info |
+| AttachVolume | Attach a LUN to host |
+| DetachVolume | Detach a LUN from host |
+| ListStoragePools | Batch query storage pools info |
 
-1. login
+1. Login
    - parameters
      **ip**: manage ip of storage
 	 **port**: manage port of storage
