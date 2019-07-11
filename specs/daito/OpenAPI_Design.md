@@ -40,13 +40,16 @@ This could filter the differences between various of storages. Here we also see 
 To achieve the storage-not-aware purpose, each storage vendor must provide its own plugin to OpenAPI, which encapsulates storage calls based on storage's API definition.
 VMware OpenAPI's northbound interfaces invokes these plugins' functions to actually interact with storages.
 
+For the instance of integrating with OpenSDS Hotpot, OpenSDS community should push a customed plugin to OpenAPI framework.
+This plugin is supposed to inherit and implement northbound interfaces, and it calls the REST APIs that OpenSDS Hotpot provides to achieve interfaces' function.
+
 ### Data model impact
 
 No.
 
 ### REST API impact
 
-May require OpenSDS to provide more REST APIs.
+May require OpenSDS to provide more REST APIs, depending on the VMware plugins' requirements that might need in the future.
 
 ### Security impact
 
@@ -83,7 +86,6 @@ Whenever VMware plugins want to operate with storages, they invoke unified inter
 ### Device Northbound Interface Definitions
 
 For this very first version of VMware OpenAPI, we only support the most basic interfaces that VMware plugins might use.
-Each plugin is supposed to inherit these interfaces and implement accordingly.
 Further functions will be gradually added based on requirements later.
 
 | Interface | Description |
