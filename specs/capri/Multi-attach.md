@@ -18,8 +18,8 @@ This spec proposes a set of changes to enable and control the use of MultiAttach
 
 1. The drivers that support multi-attach ability need to report this in their capabilities through pool configuration file. The multi-attach volume creation request will select multi-attach enabled pool from pools which come from different drivers and many of them may not support this ability. 
 2. Attach a volume as one would normally do (Read Write access) to a host and then attach it to another host in Read Only mode or Read Write Mode. In order to implement this, add an item AttachMode to the volume attachment which has two values: RO (Read Only) and RW (Read Write), default is RW. 
-3. Add multiAttach bool to the volume model to enables/disables the ability of multi-attach. 
-4. Add 'multiAttach': '<is> True' to the profile and do some corresponding changes to the controller to choose driver if user requires a multi-attach volume.
+3. Add multiAttach bool to the volume model to enable/disable the ability of multi-attach. 
+4. Add 'capabilities:multiAttach': '<is> True' to the profile and do some corresponding changes to the controller to choose driver if user requires a multi-attach volume.
 
 ### Data model impact
 
@@ -100,14 +100,10 @@ N/A
 
 ### Other end user impact
 
-N/A
-
-### Performance impact
-
-User first needs to use the following command to create a multi-attach related profile and specify it in volume creation.
+User should specify whether the pool supports MultiAttach in the configuration file use the following command to create a multi-attach related profile and specify it in volume creation.
 
 ```
-osdsctl profile create '{"name": "multi-attach", "description": "multi attach profile","customProperties":{"multiAttach":"<is> true"}}'
+osdsctl profile create '{"name": "multi-attach", "description": "multi attach profile","customProperties":{"capabilities:multiAttach":"<is> true"}}'
 ```
 
 ### Other deployer impact
@@ -122,6 +118,7 @@ Drivers will need to add a capabilities field "multiAttach: True/False" to their
 
 1. There are products such as Oracle RAC that can leverage this feature. Oracle RAC uses H/A database via a shared block device.
 2. Passive stand-by servers/volumes.
+3. Multi-attach may be required active/active or active/passive scenario
 
 ## Implementation
 
@@ -145,13 +142,13 @@ authOptions:
   EnableEncrypted: false
   # Encryption and decryption tool. Default value is aes. The decryption tool can only decrypt the corresponding ciphertext.
   PwdEncrypter: "aes"
-  url: "https://8.46.195.74:28443"
+  url: "https://0.0.0.0:8088"
 
-  fmIp: 8.46.195.74
+  fmIp: 0.0.0.0
   fsaIp:
-    - 8.46.195.71
-    - 8.46.195.72
-    - 8.46.195.73
+    - 0.0.0.1
+    - 0.0.0.2
+    - 0.0.0.3
 
 pool:
   0:
@@ -185,3 +182,7 @@ pool:
         diskType: SSD
         latency: 500ms
 ```
+
+## Nbp changes
+In nbp, whether the volume can be attached to more than once will be determined: if the volume capability has MULTI_NODE mode, but the volume does enable MultiAttach, multiAttach will fail.
+
