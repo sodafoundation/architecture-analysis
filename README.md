@@ -16,15 +16,6 @@ Meeting on July 16th will be canceled due to Open Source Summit Japan.
 
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
 
-##### July 11th Meeting
-Next Meeting Time will be on July 11th, 2019 Thursday 6:00pm-7:00pm PT or
-9:00pm-10:00pm ET (or July 12th, 2019 Friday 1:00am-2:00am UTC)
-
-It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
-(1:00am-2:00am UTC on Fridays).
-
-Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
-
 ##### July 25th Meeting
 Next Meeting Time will be on July 25th, 2019 Thursday 6:00pm-7:00pm PT or
 9:00pm-10:00pm ET (or July 26th, 2019 Friday 1:00am-2:00am UTC)
