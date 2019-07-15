@@ -13,10 +13,22 @@ VMware is one of the most important and popular virtualization platforms that de
 To achieve various purposes, VMware supports multiple types of plugins. All of them rely on storage APIs to interact with backend storage system.
 So if we implement a common framework that encapsulates API details of backend storage and provisions more generic interfaces, it would be much easier for plugin developers to implement a plugin, because developers can concern more to plugin itself's logic, not stuck in communication with storage.
 
+Generally the upper layer VMware plugins should be provided by 3rd-party vendors who want to intergate their storages to VMware, so for the OpenSDS instance, OpenSDS community should implement these plugins and push them to community.
+This OpenAPI might be used for the following VMware plugins.
+| Plugin | Description |
+|--|--|
+| NGC(Next Generation Client) | Provide integrated storage management for VMware, including storage discovery, datastore provisioning, backup/restore service and so on. |
+| VASA(vSphere APIs for Storage Awareness) Provider | Provide VMware virtual volumes(VVOLs) from storages. |
+| VRO(vRealize Orchestrator) | Simplily the automation of complex IT tasks for storage management. |
+| SRA(Storage Replication Adapter) | Cooperate with VMware SRM to provide the VMs protection by using storage-based replication. |
+| vROps(vRealize Operations) | Provide integrated performance, capacity and configuration monitoring capabilities for storages. |
+| vRLog(vRealize Log Insight) | Provide intuitive, actionable dashboards, sophisticated analytics for storages. |
+
 ### Goals
 
 * Provide northbound generic APIs that encapsulate storage northbound APIs(through REST or others).
 * Open scalable&pluggable framework, 3rd parties can encapsulate its own storage's APIs following northbound interfaces' definition.
+* Integrate OpenSDS with the VMware infrastructure and allow users to view and use storage provisioned through OpenSDS or 3rd party storages.
 
 ### Non-Goals
 
@@ -28,8 +40,9 @@ None.
 
 ![](media/OpenAPI_Usage_Architecture.png)
 
-VMware OpenAPI is a language dependant library, such as a Jar package for Java.
-VMware plugins should import the OpenAPI library and call its northbound interfaces to communicate with corresponding storage.
+VMware OpenAPI is a language dependent library, such as a Jar package for Java.
+For VMware plugins, they should import the OpenAPI library and call its northbound interfaces to communicate with corresponding storage.
+This design only focuses on OpenAPI itself. VMware plugins are supposed to be desgined separately by other spec.
 
 ### OpenAPI Module
 
