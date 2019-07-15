@@ -15,6 +15,7 @@ So if we implement a common framework that encapsulates API details of backend s
 
 Generally the upper layer VMware plugins should be provided by 3rd-party vendors who want to intergate their storages to VMware, so for the OpenSDS instance, OpenSDS community should implement these plugins and push them to community.
 This OpenAPI might be used for the following VMware plugins.
+
 | Plugin | Description |
 |--|--|
 | NGC(Next Generation Client) | Provide integrated storage management for VMware, including storage discovery, datastore provisioning, backup/restore service and so on. |
