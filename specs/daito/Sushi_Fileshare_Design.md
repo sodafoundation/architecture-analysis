@@ -31,26 +31,6 @@ Fileshare replication can be implemented in kubernetes cluster in the next phras
 * NodePublishFileShare(req *csi.NodePublishVolumeRequest) (*csi.NodePublishVolumeResponse, error)
 * NodeUnpublishFileShare(req *csi.NodeUnpublishVolumeRequest) (*csi.NodeUnpublishVolumeResponse, error)
 
-### Data model impact
-
-None
-
-### REST API impact
-
-None
-
-### Security impact
-
-None
-
-### Other end user impact
-
-None
-
-### Performance impact
-
-None
-
 ### Fileshare configuration yaml 
 The fileshare yaml configuration file is the same as the volume, but note that the profile's storageTye is file.
 
