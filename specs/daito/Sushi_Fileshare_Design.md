@@ -68,7 +68,9 @@ allowedTopologies:
   - key: topology.csi-opensdsplugin/zone
     values:
     - default
----
+```
+
+```go
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -80,8 +82,9 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: csi-sc-opensdsplugin
+```
 
----
+```go
 apiVersion: v1
 kind: Pod
 metadata:
