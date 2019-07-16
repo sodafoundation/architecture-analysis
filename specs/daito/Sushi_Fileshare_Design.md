@@ -21,15 +21,15 @@ Fileshare replication can be implemented in kubernetes cluster in the next phras
  
 ## Design Details
 
-CreateFileShare(req *csi.CreateVolumeRequest) (*csi.CreateVolumeResponse, error)
-DeleteFileShare(shareID string) (*csi.DeleteVolumeResponse, error)
-ControllerPublishFileShare(req *csi.ControllerPublishVolumeRequest) (*csi.ControllerPublishVolumeResponse, error)
-ControllerUnpublishFileShare(req *csi.ControllerUnpublishVolumeRequest) (*csi.ControllerUnpublishVolumeResponse, error)
-ListFileShares(req *csi.ListVolumesRequest) (*csi.ListVolumesResponse, error)
-NodeStageFileShare(req *csi.NodeStageVolumeRequest) (*csi.NodeStageVolumeResponse, error)
-NodeUnstageFileShare(req *csi.NodeUnstageVolumeRequest) (*csi.NodeUnstageVolumeResponse, error)
-NodePublishFileShare(req *csi.NodePublishVolumeRequest) (*csi.NodePublishVolumeResponse, error)
-NodeUnpublishFileShare(req *csi.NodeUnpublishVolumeRequest) (*csi.NodeUnpublishVolumeResponse, error)
+* CreateFileShare(req *csi.CreateVolumeRequest) (*csi.CreateVolumeResponse, error)
+* DeleteFileShare(shareID string) (*csi.DeleteVolumeResponse, error)
+* ControllerPublishFileShare(req *csi.ControllerPublishVolumeRequest) (*csi.ControllerPublishVolumeResponse, error)
+* ControllerUnpublishFileShare(req *csi.ControllerUnpublishVolumeRequest) (*csi.ControllerUnpublishVolumeResponse, error)
+* ListFileShares(req *csi.ListVolumesRequest) (*csi.ListVolumesResponse, error)
+* NodeStageFileShare(req *csi.NodeStageVolumeRequest) (*csi.NodeStageVolumeResponse, error)
+* NodeUnstageFileShare(req *csi.NodeUnstageVolumeRequest) (*csi.NodeUnstageVolumeResponse, error)
+* NodePublishFileShare(req *csi.NodePublishVolumeRequest) (*csi.NodePublishVolumeResponse, error)
+* NodeUnpublishFileShare(req *csi.NodeUnpublishVolumeRequest) (*csi.NodeUnpublishVolumeResponse, error)
 
 ### Data model impact
 
