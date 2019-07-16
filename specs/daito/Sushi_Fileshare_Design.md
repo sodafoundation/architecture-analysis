@@ -54,7 +54,7 @@ None
 ### Fileshare configuration yaml 
 The fileshare yaml configuration file is the same as the volume, but note that the profile's storageTye is file.
 
-```go
+```yaml
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -68,9 +68,8 @@ allowedTopologies:
   - key: topology.csi-opensdsplugin/zone
     values:
     - default
-```
 
-```go
+---
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -82,9 +81,7 @@ spec:
     requests:
       storage: 1Gi
   storageClassName: csi-sc-opensdsplugin
-```
-
-```go
+---
 apiVersion: v1
 kind: Pod
 metadata:
