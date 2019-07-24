@@ -24,7 +24,7 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 
 ### Non-Goals
 
-* Provide support for multiple other file share protocols ex: GlusterFS, HDFS etc.. 
+* Provide support for multiple other file share protocols ex: GlusterFS, HDFS etc..
 * Supporting Replication and Data Protection for file share profile
 
 ## Design Details
@@ -161,9 +161,9 @@ This is the list of proposal for API
   “*name” : “string”
 
   “*size” : “int64”
-  
+
   “*profileId”: “string”
-  
+
   “description” : “string”
 
   “userId” : “string“
@@ -267,7 +267,7 @@ This is the list of proposal for API
  “name” : “string”
 
  “description” : “string”
- 
+
  "shareId" : "string"
 
  “shareSize” : ”int64”
@@ -285,7 +285,7 @@ This is the list of proposal for API
 ##### Response parameters
 ```json
   “id”: “string”
-  
+
   “shareId” : “string“
 
   “protocols” : "[]string"
@@ -373,20 +373,20 @@ This is the list of proposal for API
 ```json
   “*id” : “string”
 ```
-##### 11.	POST /v1beta/{tenantId}/file/accesses/
-* Add access control for file share.
+##### 11.	POST /v1beta/{tenantId}/file/acls/
+* Add access control list for file share.
 ##### Request
 ```json
     “shareId” : “string”
 
     “type” : “string”    // user/ip
 
-    “accessCapability” : "string   //"read/write/execute
+    “accessCapability” : "[]string"read/write
 
-    “accessTo” : "[]string"   //“user_list”
+    “accessTo” : "string"   //“The IP's”
 ```
-##### 12.	PUT /v1beta/{tenantId}/file/accesses/{accessId}
-* Add access control for file share.
+##### 12.	DELETE /v1beta/{tenantId}/file/acls/{aclId}
+* DELETE access control list for file share.
 ##### Request
 ```json
    “*id” : “string”
