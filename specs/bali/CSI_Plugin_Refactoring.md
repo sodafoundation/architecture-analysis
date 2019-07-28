@@ -116,4 +116,4 @@ The following code snippet is from ControllerPublishVolume in controller.go.
 
 Attach() and Detach() are the two methods that an OpenSDS driver with a different protocol needs to implement.  They are called by the Node RPCs in node.go.  Attach() is called in NodeStageVolume().  Detach() is called by delTargetPathInAttachment() which is called in NodeUnstageVolume().
 
-Connectors for different protocols such as iSCSI or RBD are currently under the nbp repo https://github.com/opensds/nbp/driver.  They will be merged with the connectors under the hotpot repo https://github.com/opensds/opensds/contrib/connector.  Before the merge is complete, driver developers for new drivers can continue to submit a new connector under https://github.com/opensds/nbp/driver and https://github.com/opensds/opensds/contrib/connector.
+Connectors for different protocols such as iSCSI or RBD are under the hotpot repo https://github.com/opensds/opensds/tree/master/contrib/connector.
