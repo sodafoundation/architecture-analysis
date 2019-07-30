@@ -12,13 +12,22 @@ are spread out to try to ease participation for different timezones.
 ### Meeting Time
 
 #### Meeting Cancellations
-Meeting on July 16th will be canceled due to Open Source Summit Japan.
+Meeting on August 13th will be canceled.
 
 #### Meeting on Thursdays Pacific Time (or Fridays UTC)
 
-##### July 25th Meeting
-Next Meeting Time will be on July 25th, 2019 Thursday 6:00pm-7:00pm PT or
-9:00pm-10:00pm ET (or July 26th, 2019 Friday 1:00am-2:00am UTC)
+##### August 8th Meeting
+Next Meeting Time will be on August 8th, 2019 Thursday 6:00pm-7:00pm PT or
+9:00pm-10:00pm ET (or August 9th, 2019 Friday 1:00am-2:00am UTC)
+
+It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
+(1:00am-2:00am UTC on Fridays).
+
+Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
+
+##### August 22th Meeting
+Meeting Time will be on August 22th, 2019 Thursday 6:00pm-7:00pm PT or
+9:00pm-10:00pm ET (or August 23th, 2019 Friday 1:00am-2:00am UTC)
 
 It is held bi-weekly at 6:00pm-7:00pm PT or 9:00pm-10:00pm ET on Thursdays
 (1:00am-2:00am UTC on Fridays).
@@ -27,9 +36,9 @@ Zoom Link: [https://zoom.us/j/229373941](https://zoom.us/j/229373941)
 
 #### Meeting on Tuesdays
 
-Next Meeting Date: July 30th, 2019
+Next Meeting Date: August 27th, 2019
 
-It is held bi-weekly at 4:00pm-5:00pm UTC (9:00am-10:00am PT and 12:00pm-1:00pm
+It is held bi-weekly at 1:00pm-2:00pm UTC (6:00am-7:00am PT and 9:00am-10:00am
 ET) on Tuesdays.
 
 Zoom Link: [https://zoom.us/j/777978108](https://zoom.us/j/777978108)
