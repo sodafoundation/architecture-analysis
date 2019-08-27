@@ -1,27 +1,27 @@
 # Multi-Cloud feature enhancements
 
-**Author(s)**: [Shufang Zeng](https://github.com/sfzeng) [Neelam Gupta](https://github.com/neelamgupta1491) [Ashit Kumar](https://github.com/kumarashit) 
+**Author(s)**: [Shufang Zeng](https://github.com/sfzeng), [Neelam Gupta](https://github.com/neelamgupta1491), [Ashit Kumar](https://github.com/kumarashit) 
 
 ## Summary
 
-OpenSDS provides multi-cloud management platform. The Goal of multi-cloud is to enable data autonomy for multi-cloud environments. Currently OpenSDS multi-cloud (Gelato) provides multiple features for Object Data Migration, Lifecycle and Management across multiple clouds like AWS, Azure, GCP, Huawei, IBM. Also, Gelato need to increase the multi-cloud supportability matrix. In the next release, OpenSDS will add some key features, add new on-prem Object storage i.e. YIG and integrate with YIG to enhance the multi-cloud features of OpenSDS.
-The purpose of this design is to add new features and analyse and facilitate the OpenSDS multi-cloud (Gelato) integration with YIG (Yet Another Index Gateway)
+OpenSDS provides multi-cloud management platform. The goal of multi-cloud is to enable data autonomy for multi-cloud environments. Currently OpenSDS multi-cloud (Gelato) provides multiple features for Object Data Migration, Lifecycle and Management across multiple clouds like AWS, Azure, GCP, Huawei, IBM. Additionally, Gelato need to increase the multi-cloud supportability matrix. In the next release, OpenSDS will add some key features, add new on-premise Object storage i.e. YIG (Yet another Index Gateway) and integrate with YIG team to enhance the multi-cloud features of OpenSDS.
+The purpose of this design is to add new features, analyse and facilitate the OpenSDS multi-cloud (Gelato) integration with YIG.
 
 
-One of the Key components of this is 'S3 service'. S3 service handles s3 API requests for communicating with Object Storage backends. OpenSDS multi-cloud API gateway should be compatible with any s3 compatible API service. This s3 service should provide or should be flexible to provide all the multi-cloud features. [YIG](https://github.com/journeymidnight/yig ) is Object Storage Framework which is s3 compatible. YIG brings in multiple features which fits-in into the multi-cloud requirements. 
+One of the key components of this is 'S3 service'. S3 service handles S3 API requests for communicating with Object Storage backends. OpenSDS multi-cloud API gateway should be compatible with any S3 compatible API service. This S3 service should provide or should be flexible to provide all the multi-cloud features. [YIG](https://github.com/journeymidnight/yig ) is Object Storage Framework which is s3 compatible. YIG brings in multiple features which fits into the multi-cloud requirements. 
 
 ## Motivation
 
 Currently OpenSDS multi-cloud comes with a set of feature and storage backends.
 
 ### Here is the list of features available in OpenSDS:
-Multi-cloud Management across public and private clouds (Data Migration, Lifecycle Management)
-Cloud Vendor Agnostic
-Policy based data mobility
-S3 based REST API
-Containerized deployment
-Metadata Management and monitoring
-Easy integration of backend storage adapters (on-prem or Cloud)
+* Multi-cloud Management across public and private clouds (Data Migration, Lifecycle Management)
+* Cloud Vendor Agnostic
+* Policy based data mobility
+* S3 based REST API
+* Containerized deployment
+* Metadata Management and monitoring
+* Easy integration of backend storage adapters (on-prem or Cloud)
 
 ### List of Object Storage backends supported:
     * AWS
@@ -42,7 +42,8 @@ Easy integration of backend storage adapters (on-prem or Cloud)
     * HEAD Bucket
     * HEAD Object
 
-### New Object Storage Backend support: YIG
+### New Object Storage Backend support: 
+* YIG
 
 #### Some of the key features of YIG:
 YIG can avoid data movement and I/O drop down caused by scaling up of Ceph cluster 
@@ -53,7 +54,7 @@ These features make YIG Ceph Pool an important on-premise Object Storage backend
 YIG brings in some of the features which can complement and enhance OpenSDS multi-cloud management platform. This also brings in opportunity for OpenSDS to be THE Platform for all multi-cloud management. YIG has some features which OpenSDS multi-cloud doesn't have. So YIG can help adding those features into OpenSDS multi-cloud.
 
  
-How YIG can help in enhancing multi-cloud capabilities of Gelato:
+#### How YIG can help in enhancing multi-cloud capabilities of Gelato:
 YIG already supports following features for the YIG Ceph pool:
 
     * Bucket and Object ACL
@@ -64,7 +65,7 @@ YIG already supports following features for the YIG Ceph pool:
     * Post object
 
 ### Goals
-This document will propose the feature enhancement to OpenSDS multi-cloud (Gelato) and integrating YIG to achieve this. The new set of features are:
+This document will propose the feature enhancement to OpenSDS multi-cloud (Gelato). The new set of features are:
 
     * Encryption of Data at rest
     * Bucket Location
@@ -77,13 +78,11 @@ This document will propose the feature enhancement to OpenSDS multi-cloud (Gelat
     * HEAD Object
 
 ### Non-Goals
-
-Features not supported by OpenSDS multi-cloud (Gelato) or YIG are not included.
+N/A
 
 ## Design Details
     
 ### Enhance multi-cloud (Gelato) and integrate with YIG
-
 
 #### For this approach here is the high-level architecture:
 
@@ -91,28 +90,30 @@ Features not supported by OpenSDS multi-cloud (Gelato) or YIG are not included.
 
 
 #### Expanding the YIG S3:
-    YIG uses tiDB for storing metadata. These metadata are:
-    Bucket information (includes ACL)
-    Object Metadata(ACL and contenttype)
-    Slice information of multipart
-    Scheduling
+YIG uses TiDB for storing metadata. These metadata are:
+    * Bucket information (includes ACL)
+    * Object Metadata(ACL and contenttype)
+    * Slice information of multipart
+    * Scheduling
     
     YIG caches the metadata for improved performance. 'redis' is used for this
     
-In current form, YIG supports Ceph as the Object storage. YIG will expand it to support multi-cloud Storage Backend for the new features of OpenSDS multi-cloud
-Here is the flow:
-    a) Client issue an API request
-    b) API Gateway receives the request, authenticates and sends it to s3 server
-    c) S3 server handles the request. It processes the request on a bucket, updates metadata into DB and cache
-    d) S3 server will get backend information from backend service
-    e) S3 server will connect with the backend and do the required operations
+In current form, YIG supports Ceph as the Object storage. 
+OpenSDS multicloud will leverage existing YIG code and extend it to build all the required features.
+Multicloud S3 service flow will remain the same.
+Here is the flow for S3 service:
+    * Client issues an API request
+    * API Gateway receives the request, authenticates and sends it to s3 server
+    * S3 server handles the request. It processes the request on a bucket, updates metadata into DB and cache
+    * S3 server will get backend information from backend service
+    * S3 server will connect with the backend and do the required operations
     
 
 ### Data model impact
 
-Gelato follows the database per service microservices architecture. This means that all the components will have their own database. Gelato microservices architecture currently provides the flexibility, per service, to have their own DB Adapter and interact with the respective database for persistent storage.
+Gelato follows the database per service microservices architecture. This means that all the components will have their own database. Gelato microservices architecture currently provides the flexibility, per service, to have their own DB adapter and interact with the respective database for persistent storage.
 With this release, Gelato will support MongoDB for services like Datamover, Dataflow and Backend. 
-S3 service can support both TiDB and MongoDB. YIG already comes with TiDB support, which can be leveraged.
+S3 service can support both TiDB and MongoDB. YIG project already comes with TiDB support, which can be leveraged.
 Note: In future OpenSDS multi-cloud will be enhanced to support multiple DBs for all components based upon the Go Plugin arch.
 
 #### TiDB:
@@ -138,11 +139,13 @@ Some comparisons:
 
 #### Modified schema for adding new features
 **Bucket**
+
 | Column | Type | Nullable | Remarks |
 | --- | --- | --- | --- |
-| ID | string | F |   |
+| id | string | F |   |
 | bucketname | string | F | User defined name |
-| userid | string | F |   |
+| ownerid | string | F | Owner id  |
+| ownername | string | F | Owner display name |
 | cors | string | T | JSON |
 | lifecycle | string  | T | JSON |
 | acl | string | T | JSON |
@@ -180,6 +183,7 @@ Some comparisons:
 | encryptionkey | string/blob | T | Data at rest (encryption) |
 | initializationvector | string/blob | T | Data at rest (encryption) |
 | tier | int32 | F | Storage tier |
+| storageClass | string | T | Storage class name |
 
 **Storage Tier**
 
@@ -187,9 +191,18 @@ Some comparisons:
 | --- | --- | --- | --- |
 | tier | int32 | F |   |
 | backendtype | int32 | F |   |
-| storageclass | int32 | F | Each backendhas it's own definition of storage classes,and each storage class can be mapped to a specific tier in OpenSDS. |
+| storageclass | int32 | F | Each backend has it's own definition of storage classes,and each storage class can be mapped to a specific tier in OpenSDS. |
 
-TBD: Schema for multipart and cluster
+**Cluster**
+
+| Column | Type | Nullable | Remark |
+| --- | --- | --- | --- |
+| clusterid | string | F | The system to which cluster belongs to. Ex. YIG system the cluster belongs to|
+| fsid | string| F | |
+| pool | string | T | |
+| weight | int | T | |
+
+
 
 ### REST API impact
 
@@ -264,12 +277,11 @@ Note: This can be supported in future
 
 ## Implementation
 
-a) YIG currently supports only Ceph as Object Storage Backend. It will need to support    
-   other Storage Backends too to be multi-cloud
-b) S3 API impact
-c) YIG will have to support go-micro framework. OpenSDS multi-cloud uses go-micro service   architecture
-d) Need to develop DB Adapter and Cache Adapter. DB Adapter should be scalable to support   any relevant DB. YIG provides this capability
-e) OpenSDS multi-cloud need to support YIG Ceph Pool as storage backend
+* YIG currently supports only Ceph as Object Storage Backend. This code base will have to be expanded to other Storage Backends too and then can fit into gelato
+* S3 API impact
+* YIG code will have to support go-micro framework. OpenSDS multi-cloud uses go-micro services architecture
+* Need to develop DB Adapter and Cache Adapter. DB Adapter should be scalable to support   any relevant DB. YIG provides this capability
+* OpenSDS multi-cloud need to support YIG Ceph Pool as storage backend
 
 ### S3 API impact for new features
 
@@ -315,10 +327,10 @@ N/A
 
 ## Open issues
 
-a) SQL DB ex, TiDB comes with relational SQL server and TiKV helping to get the scalability and performance of NoSQL. Currently OpenSDS multi-cloud management uses MongoDB.
+* SQL DB ex, TiDB comes with relational SQL server and TiKV helping to get the scalability and performance of NoSQL. Currently OpenSDS multi-cloud management uses MongoDB.
 If the data stored is only Object metadata, do we need to support SQL DB?
-b) Licensing of MongoDB: Apache 2.0 changed to SSPL for recent releases
-c) Going ahead OpenSDS multi-cloud management feature will not be limited only to Object storage and migration. It may encompass other key feature requirements like Bucket Management, Cost analysis, DR, Compute provisioning etc..
+* Licensing of MongoDB: Apache 2.0 changed to SSPL for recent releases
+* Going ahead OpenSDS multi-cloud management feature will not be limited only to Object storage and migration. It may encompass other key feature requirements like Bucket Management, Cost analysis, DR, Compute provisioning etc..
 Should we change the design in consideration to that?
 
 
