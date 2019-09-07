@@ -136,10 +136,11 @@ The DataStorageEngine will only provides I/O function to upper layer and manange
 
 ##### Components of DataStorageEngine
 
-Below are the components for DataStorageEngine.
-    **Driver Factory Manager**: Responsible for getting a correct driver factory which can create the StorageDriver
-    **Driver Factory**: Responsible for creating the specific StorageDriver
-    **Storage Driver**: It is the interface which abstracts all I/O functions for a stroage backend. It defines all the interface which can be called by upper layer
+Below are the components for DataStorageEngine:
+
+    * __Driver Factory Manager__: Responsible for getting a correct driver factory which can create the StorageDriver
+    * __Driver Factory__: Responsible for creating the specific StorageDriver
+    * __Storage Driver__: It is the interface which abstracts all I/O functions for a stroage backend. It defines all the interface which can be called by upper layer
 
 ##### Steps to add a driver for a new storage backend
 
