@@ -1,6 +1,6 @@
 # Multi-Cloud feature enhancements
 
-**Author(s)**: [Shufang Zeng](https://github.com/sfzeng), [Neelam Gupta](https://github.com/neelamgupta1491), [Ashit Kumar](https://github.com/kumarashit), [Yu Zou] (https://github.com/hopkings2008) 
+**Author(s)**: [Shufang Zeng](https://github.com/sfzeng), [Neelam Gupta](https://github.com/neelamgupta1491), [Ashit Kumar](https://github.com/kumarashit), [Yu Zou](https://github.com/hopkings2008)
 
 ## Summary
 
@@ -137,7 +137,6 @@ The DataStorageEngine will only provides I/O function to upper layer and manange
 ##### Components of DataStorageEngine
 
 Below are the components for DataStorageEngine.
-
     **Driver Factory Manager**: Responsible for getting a correct driver factory which can create the StorageDriver
     **Driver Factory**: Responsible for creating the specific StorageDriver
     **Storage Driver**: It is the interface which abstracts all I/O functions for a stroage backend. It defines all the interface which can be called by upper layer
