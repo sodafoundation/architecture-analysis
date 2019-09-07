@@ -49,6 +49,17 @@ Currently OpenSDS multi-cloud comes with a set of feature and storage backends.
 YIG can avoid data movement and I/O drop down caused by scaling up of Ceph cluster 
 With scale-out Ceph-cluster and ceph-libradosstripper APIs, YIG solves some of the key performance issues of Ceph
 These features make YIG Ceph Pool an important on-premise Object Storage backend.
+A high-level comparision of Ceph and YIG:
+
+| Ceph (radosgw) | YIG (Yet another Index Gateway) |
+|----------|-----------|
+| S3 and Swift compatible Object Storage Gateway | S3 compatible Object Storage Gateway |
+| Performance impact while storing small files | Uses KV store to overcome small file storage issue |
+| Performance impact for read and write of large files | Overcome read write issue of large files using optimized libradosstripper API |
+| Not so scalable Ceph OSD nodes | Using write consistency and dynamic buf it enables scaling of ceph OSD nodes |
+| | Avoids data movement and IO drop due o scale out clusters | 
+| | Allows more than one ceph cluster to work together and extend the storage pool capacity |
+
 
 ### Why YIG:
 YIG brings in some of the features which can complement and enhance OpenSDS multi-cloud management platform. This also brings in opportunity for OpenSDS to be THE Platform for all multi-cloud management. YIG has some features which OpenSDS multi-cloud doesn't have. So YIG can help adding those features into OpenSDS multi-cloud.
