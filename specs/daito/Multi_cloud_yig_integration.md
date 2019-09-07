@@ -1,6 +1,6 @@
 # Multi-Cloud feature enhancements
 
-**Author(s)**: [Shufang Zeng](https://github.com/sfzeng), [Neelam Gupta](https://github.com/neelamgupta1491), [Ashit Kumar](https://github.com/kumarashit) 
+**Author(s)**: [Shufang Zeng](https://github.com/sfzeng), [Neelam Gupta](https://github.com/neelamgupta1491), [Ashit Kumar](https://github.com/kumarashit), [Yu Zou] (https://github.com/hopkings2008) 
 
 ## Summary
 
@@ -102,6 +102,7 @@ N/A
 
 #### Expanding the YIG S3:
 YIG uses TiDB for storing metadata. These metadata are:
+
     * Bucket information (includes ACL)
     * Object Metadata(ACL and contenttype)
     * Slice information of multipart
@@ -113,12 +114,81 @@ In current form, YIG supports Ceph as the Object storage.
 OpenSDS multicloud will leverage existing YIG code and extend it to build all the required features.
 Multicloud S3 service flow will remain the same.
 Here is the flow for S3 service:
+
     * Client issues an API request
     * API Gateway receives the request, authenticates and sends it to s3 server
     * S3 server handles the request. It processes the request on a bucket, updates metadata into DB and cache
     * S3 server will get backend information from backend service
     * S3 server will connect with the backend and do the required operations
-    
+
+#### Integrate YIG Ceph pool as a storage backend into DataStorageEngine
+##### Motivation
+
+Refactor DataStorageEngine and provide a uniform framework to add a storage backend easily and integrate the existing Yig Ceph pool as a new storage backend.
+
+##### Goal of DataStorageEngine
+
+The DataStorageEngine will only provides I/O function to upper layer and mananges all kinds of different storage backends.
+
+##### Terms
+
+    * StorageDriver: It is equivalent to the storage backend and performs I/O function for specific storage backend
+
+##### Components of DataStorageEngine
+
+Below are the components for DataStorageEngine.
+
+    **Driver Factory Manager**: Responsible for getting a correct driver factory which can create the StorageDriver
+    **Driver Factory**: Responsible for creating the specific StorageDriver
+    **Storage Driver**: It is the interface which abstracts all I/O functions for a stroage backend. It defines all the interface which can be called by upper layer
+
+##### Steps to add a driver for a new storage backend
+
+    * Implement StorageDriver for the storage backend
+    * Implement DriverFactory for the new driver
+    * Register the new driver factory into DriverFactoryMgr. It can register the new driver factory in init() function under the module
+    * Import the new storage backend module into the init.go file under DataStorageEngine module
+
+##### The storage driver for YIG storage backend
+
+As there can be many instances of YIG storage backend, each one will serve as the related endpoint. Each storage backend will have a working storage driver, so there is only one driver for each endpoint. This means that for mulitple requests from user to the same endpoint, there will be the same storage driver which handles the request.
+
+##### How YIG regsiters as a storage backend for a specific endpoint
+
+When storage driver of YIG starts, it will get the configuration from a file. Currently, each config file will contain a section for endpoint information, and the driver factory will create the storage driver from it and relate the driver to the endpoint. To simplify the initial process of YIG storage driver registration, currently, the driver factory of YIG will monitor the changes of the specific folder which contains the configuation file. If a configuration for a new endpoint is added, the driver factory will create one new driver and relate it to the newly added endpoint. Then, the newly created driver can serve for requests to the new endpoint.
+
+##### Configuration for YIG storage driver
+
+Toml is used by the configuration for YIG storage driver. Below are the sections for the configuration of storage driver:    
+
+```toml
+# this section contains endpoint information
+[endpoint]
+url="xxx"
+# this section should be according to the common log module
+[log]
+log_path="/var/log/yig"
+log_level=
+# this section define the redis access info, and should be according to common cache module.
+[cache]
+# the redis mode we use: 0 for normal client, 1 for cluster, 2 for sentinel.
+redis_mode = 0 
+# for cluster nodes or sentinel nodes.
+redis_nodes = "192.168.1.1:6379, 192.168.1.2:6379"
+# the master name of the sentinel.
+redis_master_name = "master"
+redis_connect_timeout = 1 
+redis_read_timeout = 1 
+redis_write_timeout = 1 
+redis_keepalive = 60
+redis_pool_max_idle = 3 
+redis_pool_idle_timeout = 30
+# this section defines the database access info and should be according to the db layer
+[database]
+db_type=1
+db_url="root:@tcp(10.5.0.17:4000)/yig"
+db_password=""
+```
 
 ### Data model impact
 
