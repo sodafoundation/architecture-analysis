@@ -25,7 +25,7 @@ Having this identifier details in volume spec would help these platforms to asso
 ## Design Details
 
 ### Identifier 
-This type describes any additional identifiers for a volume.
+This type describes any additional identifiers for a volume as descibed in [Redfish schema](https://redfish.dmtf.org/schemas/DSP2046_2019.1.html#common-properties-Identifier_v1.8.1)
 
 
 | Property Name     | Type         | Description                              |
