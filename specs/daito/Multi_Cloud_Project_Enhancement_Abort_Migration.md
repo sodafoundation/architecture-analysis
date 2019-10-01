@@ -4,7 +4,7 @@
 
 ## Summary
 
-Using this feature, user will be able abort running migration process.
+Using this feature, user will be able to abort running migration process.
 
 ## Motivation
 
