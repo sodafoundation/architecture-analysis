@@ -60,5 +60,6 @@ If job is already completed, failed or aborted, it will show error
 
 ### Other end user impact
 
+* End user will get an option to abort running migration.
 * It will not rollback the migrated objects. When user call abort migration request, it will not delete the objects migrated to destination bucket. If remainSource is false, the object migrated before abortmigration request will not be available in source bucket.
 ### Performance impact
