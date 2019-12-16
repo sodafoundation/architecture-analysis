@@ -315,8 +315,58 @@ No impact on other developers except multi-cloud.
 OpenSDS should support a scalable and enriched multi-cloud management platform. Also, it should have a performant on-premise Object Storage backend. YIG s3 compatible object storage API with a highly performant Ceph storage Backend should support multi-cloud management.
 
 ### Encryption of Data at rest
-    * Regulatory compliance
-    * Data Security
+This relates to the data being encrypted at rest, in SODA, for the following backend object storage types
+
+	AWS S3 https://aws.amazon.com/s3/
+	GCP https://cloud.google.com/storage/docs/json_api/v1/objects
+	Azure Blob storage https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction
+	HWS https://intl.huaweicloud.com/en-us/product/obs.html
+	CEPH https://docs.ceph.com/docs/mimic/radosgw/
+	YIG https://github.com/journeymidnight/yig
+	
+Today, most of the cloud object storage providers that are S3 compatible, chiefly support 3 types of encryption on the server side, of client data at rest (give or take a few exceptions to this subset among different storage providers, listed in the matrix below)
+
+    1. Encryption with server managed keys, which we abbreviate to SSE_SMK
+    2. Encryption with customer provided keys, abbreviated to SSE_CPK
+    3. Encryption with KMS (example of a KMS here) provided keys, abbreviated to SSE_KMS.
+       In this option too, the key is provided by the customer, but stored in a key vault
+       instead of at the client side
+
+![gelato-multicloud-sse](ssetable.jpg?raw=true "SSE support comparison")
+
+For the DAITO release, we will support the Server Managed Key variant, explained below
+
+SSE_SMK
+
+![gelato-multicloud-ssesmk](ssesmk.jpg?raw=true "SSE SMK")
+
+    1. The encryption is handled on the server, with symmetric key AES 256 cipher used for encryption
+    2. Since it is symmetric key encryption, the same key is used to encrypt and decrypt the data
+    3. The key itself is also further encrypted, decrypted and used as needed, on the server side, without any explicit effort on the user side
+    4. On most providers, this is enabled by default on a bucket
+    5. A typical upload sequence would work like
+            Upload object
+            Use Key to encrypt data (NOT the metadata)
+            Encrypt and store encrypted key alongside encrypted data
+    6. Further, some providers also support bucket level policies on encrypted buckets like
+    7. Do not allow non-encrypted objects
+    8. Do not allow PUT requests that do NOT request encryption for the object
+       and so on…
+
+
+How this will work in OpenSDS
+
+    For SODA to support encryption of data on multiple backends, we follow the approach 
+     
+    1. Encrypt/Decrypt the data in SODA
+     
+    2. Store the encrypted byte[ ] on the cloud backend
+     
+    3. Do NOT enable encryption on the cloud backend
+    
+![gelato-multicloud-ssesmk](sseseq.jpg?raw=true "SSE SMK")
+   
+
 
 ### Bucket Location
     * Specify region where the bucket needs to be created
@@ -327,7 +377,79 @@ Note: This can be supported in future
     * Keep multiple variants of an object in same bucket
     * Recoverability from accidental deletions
     * Additional data protection (Backup)
+    the requirements and use cases for support for versioned object storage in SODA. These have been arrived at after looking primarily at the Versioning support in AWS S3, Azure (or the lack of it here) and GCP object storage.
+    
+    This document also lists the cross feature interactions with versioning and 
+    1. Object migration in SODA
+    2. Object lifecycle in SODA
+    
+Requirements
 
+    1. Support versioning on a bucket
+    2. Support suspend versioning on a bucket
+    3. Support resume versioning on a bucket
+    4. Support the below state transitions on a bucket w.r.t versioning  
+
+![gelato-multicloud-versioningst](versioningst.jpg?raw=true "Versioning State Machine")
+
+    5. Support recovery from accidental deletion or overwrite. For example:
+        If you delete an object, you can always restore the previous version
+        If you overwrite an object, it results in a new object version in the bucket. 
+        You can always restore the previous version
+    6. For a versioning enabled bucket, support
+        Adding Objects
+            - Using all supported means, including but not limited to the UI, API and CLI
+        Listing Objects
+            - Using all supported means, including but not limited to the UI, API and CLI
+            - Each request returns up to 1,000 versions, unless you specify a lower number. If the 
+            bucket contains more versions than this limit, you send a series of requests to retrieve 
+            the list of all versions. This process of returning results in "pages" is called pagination. 
+            - To show how pagination works, the examples limit each response to two object versions. 
+            - After retrieving the first page of results, each example checks to determine whether the version 
+            list was truncated. If it was, the example continues retrieving pages until all versions have 
+            been retrieved. As an example, In your bucket, if you have 2 objects a and b, a has 900 versions 
+            and b has 300 versions, the list call will return 900 versions of a and the most recent 100 
+            versions of b (total 1000)
+            - Object versions will be returned in the order in which they were stored, with the most recently 
+            stored returned first
+        Retrieval of a subset of all object versions in a bucket, for example, retrieve all 
+            versions of a specific object (filter by name or object identifier)
+            - When the response exceeds the max-value (1000), a second request can be submitted to retrieve 
+            the remaining object versions
+            - Retrieving Object Versions
+            - Using all supported means, including but not limited to the UI, API and CLI
+            - By default, always retrieve the most recent version
+            - Retrieval of a specific version of an object by specifying the Version Id
+        Deleting Object Versions
+            - Using all supported means, including but not limited to the UI, API and CLI
+            - On a versioning enabled bucket, DELETE will not delete the object permanently
+            - To delete the object permanently, support ‘DELETE Object VersionId’
+        Transitioning Object Versions
+            - Using all supported means, including but not limited to the UI, API and CLI
+            - An Expiration action that applies to the current object version and instead of deleting the current object version, marks it as non-current
+            - A NoncurrentVersionExpiration action that applies to noncurrent object versions, which will be permanently removed and cannot be recovered
+        Restoring Previous Versions
+            - Using all supported means, including but not limited to the UI, API and CLI
+            - To Copy a previous version of the object into the same bucket. The copied object becomes the current version of that object and all object versions are preserved
+            - To Permanently delete the current version of the object. This, in effect, turns the previous version into the current version of that object
+        Versioned Object Permissions
+            - PUT Object ACL Version Id to set the ACL for a specific object version
+            - GET Object Version Id to get the ACL for a specific object version
+            
+    7. For a versioning suspended bucket, support
+        Adding objects
+        Getting objects
+        Deleting objects
+
+    All the above requirements are to be supported for the following Object stores
+        AWS S3 https://aws.amazon.com/s3/
+        GCP https://cloud.google.com/storage/docs/json_api/v1/objects
+        Azure Blob storage https://docs.microsoft.com/en-us/azure/storage/blobs/storage-blobs-introduction
+        HWS https://intl.huaweicloud.com/en-us/product/obs.html
+        CEPH https://docs.ceph.com/docs/mimic/radosgw/
+        YIG https://github.com/journeymidnight/yig
+            
+        
 ### CORS
     * Cross Origin Resource Sharing
     * Intra Domain resource sharing for client Web application
