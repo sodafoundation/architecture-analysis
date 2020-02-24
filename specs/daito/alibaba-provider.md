@@ -18,22 +18,22 @@ In existing OpenSDS Gelato project, we don't have any option using which user ca
 
 
 
-By adding Alibaba OSS as adapter  in OpenSDS will help users to perform all object storage related operations as follow:
+By adding Alibaba OSS as adapter  in OpenSDS will help users to perform all bucket and object related operations as follow:
+* Add Backend for Alibaba OSS (`alibaba-oss` type)
 * Create OpenSDS Bucket on Alibaba OSS
 * Delete Bucket from Alibaba OSS
-* Upload Object on Alibaba OSS  
-* Download Object from Alibaba OSS
+* SSE supported
+* Upload Object on Alibaba OSS (PUT Object)  
+* Download Object from Alibaba OSS (GET Object)
+* Support for Multi-part Upload
 * Delete Object from Alibaba OSS
 * Lifecycle management by Alibaba OSS (Standard, IA, Archive)
 
-***Standard -> Tier 1***
+| | Tier_1 | Tier_99 | Tier_999 |
+|---------------|---------------|---------------|---------------|
+| Alibaba OSS | STANDARD | IA | Archive |
 
-***IA       ->  Tier 2***
-
-***Archive  -> Tier 3***
-
-
-* Manage Access control directly from OpenSDS application. 
+* Manage Access control directly from OpenSDS application.
 * Also, user will be able to migrate its bucket from any OpenSDS supported public cloud or local storage to Alibaba cloud and vice-versa.
 
 ### REST API impact
@@ -320,6 +320,13 @@ Status Code: 500 Internal server Error
 ```cassandraql
  Plan does not exist
 ```
+
+###  Schema impact 
+NA
+
+###  Installation impact 
+NA
+
 ### UI impact
 Add Support for Store Type :  ***"alibaba-oss"*** Object Storage.
 
