@@ -11,7 +11,7 @@ In existing OpenSDS Gelato project, we don't have any option using which user ca
 
 
 ### Design Details
-![picture](alibabacloudbackend.jpg)
+![picture](alibabacloud.jpg)
 
                     Figure: Architecture of Integration of Alibaba Cloud in OpenSDS/Multi-cloud
 
