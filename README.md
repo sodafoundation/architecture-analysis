@@ -1,82 +1,60 @@
 # OpenSDS Design Specs
 
-This repo contains
-[design specs](https://github.com/opensds/design-specs/tree/master/specs) for
-OpenSDS features.
+[![Releases](https://img.shields.io/github/release/sodafoundation/design-specs/all.svg?style=flat-square)](https://github.com/sodafoundation/design-specs/releases)
+[![LICENSE](https://img.shields.io/github/license/sodafoundation/design-specs.svg?style=flat-square)](https://github.com/sodafoundation/design-specs/blob/master/LICENSE)
 
-## OpenSDS Technical Meetings
+<img src="https://sodafoundation.io/wp-content/uploads/2020/01/SODA_logo_outline_color_800x800.png" width="200" height="200">
 
-Design specs and development progress are discussed weekly. Technical meetings
-are spread out to try to ease participation for different timezones.
+## Introduction
 
-### Meeting Time and Agenda
+design-specs repository provides all the architecture, design and analysis documents prepared during each release development window. It will give a very good understanding and background for each feature developed.
 
-Meeting time and agenda can be found
-[here](https://docs.google.com/document/d/1JlxAAOtvZvvf_KhVr8XQa6mUD7lkHOXlxuGruTKEukE/edit?usp=sharing).
+Currently all the architecture, design and analysis at SODA Foundation level and for all SODA Core projects are covered.
 
-## OpenSDS Architecture
+This is maintained by SODA Foundation directly.
 
-High level architecture of the OpenSDS system:
+## Documentation
 
-<img src="architecture.png" alt="architecture" width="500"/>
+[https://docs.sodafoundation.io](https://docs.sodafoundation.io/)
 
-## OpenSDS Roadmap
+## Quick Start - To Use/Experience
 
-<img src="roadmap.png" alt="OpenSDS roadmap" width="500"/>
+[https://docs.sodafoundation.io](https://docs.sodafoundation.io/)
 
-## Design Proposal Links
+## Quick Start - To Develop
 
-Planned feature designs can be found for each release cycle here.
+[https://docs.sodafoundation.io](https://docs.sodafoundation.io/)
 
-### Capri Proposals
+## Latest Releases
 
-[AK/SK Management Design](https://github.com/opensds/design-specs/blob/master/specs/capri/MultiCloud_AK-SK_Management_Design.md)
+[https://github.com/sodafoundation/design-specs/releases](https://github.com/sodafoundation/design-specs/releases)
 
-[Hotpot API Framework Decouple](https://github.com/opensds/design-specs/blob/master/specs/capri/API_Framework_Refactoring.md)
+## Support and Issues
 
-[Object Lifecycle Management Design](https://github.com/opensds/design-specs/pull/24)
+[https://github.com/sodafoundation/design-specs/issues](https://github.com/sodafoundation/design-specs/issues)
 
-[File Share Design](https://github.com/opensds/design-specs/pull/27)
+## Project Community
 
-[Telemetry Design](https://github.com/opensds/design-specs/pull/28)
+[https://sodafoundation.io/slack/](https://sodafoundation.io/slack/)
 
-[Anomaly Detection Design](https://docs.google.com/document/d/1rF9Dh16YQNhudfP3pQODuYTQvrL2AkpEyIbPUo7aud8/edit?usp=sharing)
+## How to contribute to this project?
 
-[NVMeoF Support](https://github.com/opensds/design-specs/blob/master/specs/capri/nvmeof_support.md)
+Join [https://sodafoundation.io/slack/](https://sodafoundation.io/slack/) and share your interest in the ‘general’ channel
 
-[Automation and Orchestration](https://github.com/opensds/design-specs/pull/30)
+Checkout [https://github.com/sodafoundation/design-specs/issues](https://github.com/sodafoundation/design-specs/issues) labelled with ‘good first issue’ or ‘help needed’ or ‘help wanted’ or ‘StartMyContribution’ or ‘SMC’
 
-### Bali Proposals
+## Project Roadmap
 
-[Multi-Cloud Design](specs/bali/MultiCloud_Design.md)
+Provides high quality architecture and design for SODA framework and its core projects. Also supported with precise and up-to date technical documentations.
 
-[Modularize OpenSDS](https://docs.google.com/document/d/1q02NVogtnzauzVwxyyLxwbAv_RktnYKHHpFuVWM6Ihs/edit#)
+[https://docs.sodafoundation.io](https://docs.sodafoundation.io/)
 
-[Thin OpenSDS](https://docs.google.com/document/d/16zLCE1X8bNjkGoKvBpqDZaxEHZapWluQVgdvlxuR_tE/edit#)
+## Join SODA Foundation
 
-[Multi-OpenStack](specs/bali/Multi_OpenStack_Design.md)
+Website : [https://sodafoundation.io](https://sodafoundation.io/)
 
-[OpenSDS Group Snapshots Design](https://docs.google.com/document/d/1mlnuVfRFhu_bczp8EWMdE2XR9xyNImOvVokLGgM6kCc/edit#)
+Slack  : [https://sodafoundation.io/slack/](https://sodafoundation.io/slack/)
 
-### Aruba Proposals
+Twitter  : @sodafoundation
 
-[Replication Design](specs/aruba/Replication_Design.md)
-
-[Host-based Replication Design](specs/aruba/Host-base_Replication_Design.md)
-
-[OpenSDS Profiles Design](https://docs.google.com/document/d/1irNnz019j0XuW6SZNigs6QuYFOCC3uL44EkRYJiHyq8/edit#)
-
-[OpenSDS Groups Design](https://docs.google.com/document/d/1bjDaeEQd1Zf9av8Vd4Yn7jfp1Eiv-bBBxafAAsAACrU/edit#)
-
-[OpenSDS Minimum Requirements](https://docs.google.com/document/d/1lOntboT99pN-5iS4Z6_gz1Dzwlx7y1Q2weo1VxC_Knk/edit#)
-
-[OpenSDS and OpenStack Integration](https://docs.google.com/document/d/1xZWMlVSd1ove-N-xWv3ZmRbiauzBmdgiQu2C6HRSJKI/edit#)
-
-## Project Tracking
-
-Progress is tracked through our
-[project tracking board](https://github.com/orgs/opensds/projects)
-
-## Conference Presentations
-
-You can find some of our past [conference presentations here](https://github.com/opensds/presentations)
+Mailinglist  : [https://lists.opensds.io](https://lists.opensds.io/groups)
