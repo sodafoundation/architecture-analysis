@@ -17,6 +17,14 @@ Provide a plug and play option for standard CSI drivers to SODA On prem data pla
 3.  All the SODA platform features will be available for all those backends (migration, telemetry and all)
     
 4.  CSI Drivers are mostly supported by the vendors directly , hence easy production ready solutions for kubernetes on SODA platform
+
+## Benefits for Storage Platforms with CSI Plug-n-Play
+
+-   Manage the complexity of installion of CSI drivers on multiple northbound CSI compatible platforms. Flavor of K8s + Operating systems. 
+
+-   SODA can help get additional telemetry information at cluster level by using Native Storage drivers. CSI can only volume level basic metrics can be obtained.
+
+-   Additional features: Telemetry, Smart Alerting, Auditing, Migration across clusters/platforms
     
 
 ### Non-Goals
@@ -28,6 +36,8 @@ No new specification or interface
 ### Assumptions and Constraints
 
 The current csi flow in SODA is working fine and no performance issues.
+
+Avoid becoming a single point of failure in the IO path compared to when Storage Platforms are directly integrated into Container Orchestrators. 
 
 ## Architecture Analysis
 
