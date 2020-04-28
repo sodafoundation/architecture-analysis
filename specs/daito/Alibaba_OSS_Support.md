@@ -35,7 +35,7 @@ By adding Alibaba OSS as adapter  in OpenSDS will help users to perform all buck
 | Fusion Storage Object | STANDARD | - | - |
 | Alibaba OSS | Standard | IA | Archive |
 
-In Alibaba OSS, `Standard` , `IA` and `Archive` storage classes are equivalent to `Tier_1` , `Tier_99` and `Tier_999` storage classes of AWS respectively.
+In Alibaba OSS, `Standard` , `IA` and `Archive` storage classes are equivalent to `Tier_1` , `Tier_99` and `Tier_999` storage classes of OpenSDS respectively.
 * Also, user will be able to migrate its bucket from any OpenSDS supported public cloud or local storage to Alibaba cloud and vice-versa.
 
 ### REST API impact
