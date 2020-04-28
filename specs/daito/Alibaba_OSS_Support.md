@@ -1,9 +1,9 @@
 # Integration of Alibaba Cloud as a backend in OpenSDS/Multi-cloud
 **Author(s)**:  [Click2Cloud Technology Services India Pvt. Ltd.](https://github.com/Click2Cloud)
-### Summary
-Using this feature, user will be able to do object management mechanism and migration for Alibaba Cloud in multi-cloud .
+### Summary 
+In Gelato project of SODA foundation, currently it supports to perform object operations, lifecycle management and object migration on various cloud vendors like AWS, Azure, GCP, IBM, Huawei, YIG and Ceph. So adding Alibaba as a backend will allow user to perform object management, object lifecycle management (in-cloud & cross-cloud) and migration for Alibaba Cloud using Gelato(multi-cloud) Project for Alibaba OSS Service.
 ### Motivation
-In existing OpenSDS Gelato project, we don't have any option using which user can manage object management mechanism and migration for Alibaba Cloud. So we adding  alibaba as backend for Object management and migration.
+In existing OpenSDS Gelato project, we don't have any option using which user can manage object management mechanism and migration for Alibaba's OSS object service. This is design spec for adding Alibaba as a backend for Object management and migration.
 ### Goals
 
 * Add support of Alibaba OSS service in OpenSDS Gelato Project.
@@ -22,22 +22,29 @@ By adding Alibaba OSS as adapter  in OpenSDS will help users to perform all buck
 * Download Object from Alibaba OSS (GET Object)
 * Support for Multi-part Upload
 * Delete Object from Alibaba OSS
-* Lifecycle management by Alibaba OSS (Standard, IA, Archive)
+* In-cloud lifecycle management on Alibaba OSS (Standard, IA, Archive)
+* Cross-cloud lifecycle management with Gelato supported backends( i.e. AWS, Azure & Huawei)
 
 | | Tier_1 | Tier_99 | Tier_999 |
 |---------------|---------------|---------------|---------------|
-| Alibaba OSS | STANDARD | IA | Archive |
+| AWS S3 | STANDARD | STANDARD_IA | GLACIER |
+| Azure Blob | HOT | COOL | ARCHIVE |
+| HW OBS | STANDARD | WARM | COLD |
+| GCP | Multi-Regional | - | - |
+| Ceph S3 | STANDARD | - | - |
+| Fusion Storage Object | STANDARD | - | - |
+| Alibaba OSS | Standard | IA | Archive |
 
-* Manage Access control directly from OpenSDS application.
+In Alibaba OSS, `Standard` , `IA` and `Archive` storage classes are equivalent to `Tier_1` , `Tier_99` and `Tier_999` storage classes of AWS respectively.
 * Also, user will be able to migrate its bucket from any OpenSDS supported public cloud or local storage to Alibaba cloud and vice-versa.
 
 ### REST API impact
 * ##### Register Backend
 
-Here, user can use ***alibaba-oss*** as ***type*** while registering backend
+Here, user can use ***alibaba-oss*** as ***type*** while registering backend while performing operation using APIs
 
 
-****POST****: http://127.0.0.1:8089/v1/adminTenantId/backends
+****POST****: http://127.0.0.1:8089/tenantId/backends
 
 
 ***Request Body***
@@ -70,7 +77,7 @@ Status Code: 200 ok
 }
 ```
 * ##### Create Bucket
-****PUT****:http://127.0.0.1:8089/v1/s3/bucketName
+****PUT****:http://127.0.0.1:8090/bucketName
 
 ***Request Body***
 ```cassandraql
@@ -100,7 +107,7 @@ Status Code: 500 Internal Server Error
 </Error>
 ```
 * ##### Delete Bucket
-****DELETE****:http://127.0.0.1:8089/v1/s3/bucketName
+****DELETE****:http://127.0.0.1:8090/bucketName
 
 ***Response Body***
 * ****succeed****
@@ -123,7 +130,7 @@ Status Code: 404 Not found
 </Error>
 ```
 * ##### Upload Object
-****PUT****:http://127.0.0.1:8089/v1/s3/bucketName/ObjectName
+****PUT****:http://127.0.0.1:8090/bucketName/ObjectName
 
 ***Response Body***
 * ****succeed****
@@ -144,7 +151,7 @@ Status Code: 404 Not found
 </Error>
 ```
 * ##### Download Object
-****GET****:http://127.0.0.1:8089/v1/s3/bucketName/ObjectName
+****GET****:http://127.0.0.1:8090/bucketName/ObjectName
 
 ***Response Body***
 * ****succeed****
@@ -156,7 +163,7 @@ Status Code: 200 ok
 Status Code: 404 Not found
 
 * ##### Delete Object
-****DELETE****:http://127.0.0.1:8089/v1/s3/bucketName/ObjectName
+****DELETE****:http://127.0.0.1:8090/bucketName/ObjectName
 
 ***Response Body***
 * ****succeed****
@@ -178,7 +185,7 @@ Status Code: 404 Not found
 ```
 
 * ##### Create LifeCycle
-****PUT****: http://127.0.0.1:8089/v1/s3/bucketName/?lifecycle
+****PUT****: http://127.0.0.1:8090/bucketName/?lifecycle
 
 ***Request Body***
 ```cassandraql
@@ -220,7 +227,7 @@ Status Code: 404 Not Found
 ```
 
 * ##### Delete LifeCycle
-****DELETE****: http://127.0.0.1:8089/v1/s3/bucketName/?lifecycle
+****DELETE****: http://127.0.0.1:8090/bucketName/?lifecycle
 
 ***Response Body***
 * ****succeed****
@@ -243,7 +250,7 @@ Status Code: 404 Not Found
 </Error>
 ```
 * ##### Create Plan
-****POST****:http://127.0.0.1:8089/v1/adminTenantId/plans
+****POST****:http://127.0.0.1:8089/tenantId/plans
 
 ***Request Body***
 ```cassandraql
@@ -297,7 +304,7 @@ duplicate name:awstoibm
 ```
 
 * ##### Run Plan
-****POST****: http://127.0.0.1:8089/v1/adminTenantId/plans/5e4be32eed90fd0001a70987/run
+****POST****: http://127.0.0.1:8089/tenantId/plans/5e4be32eed90fd0001a70987/run
 
 * ****succeed****
 
