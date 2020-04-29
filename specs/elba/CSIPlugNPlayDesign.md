@@ -1,6 +1,6 @@
 # CSI Plug & Play Requirements & Design
 
-Author(s): [Sushantha](https://github.com/sushanthakumar), [Sanil Kumar](https://github.com/skdwriting),
+Author(s): [Sushantha](https://github.com/sushanthakumar), [Sanil Kumar](https://github.com/skdwriting), [Kiran Mova](https://github.com/kmova)
 
 March 2020, Initial Version and Analysis
 
