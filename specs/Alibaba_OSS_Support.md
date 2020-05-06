@@ -89,7 +89,7 @@ Status Code: 200 ok
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 * ****Failed****
 
@@ -112,7 +112,7 @@ Status Code: 500 Internal Server Error
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 * ****Failed****
 
@@ -135,7 +135,7 @@ Status Code: 404 Not found
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 * ****Failed****
 
@@ -156,7 +156,7 @@ Status Code: 404 Not found
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 * ****Failed****
 
@@ -168,7 +168,7 @@ Status Code: 404 Not found
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 * ****Failed****
 
@@ -208,7 +208,7 @@ Status Code: 404 Not found
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 * ****Failed****
 
@@ -232,7 +232,7 @@ Status Code: 404 Not Found
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 * ****Failed****
 
@@ -272,7 +272,7 @@ Status Code: 404 Not Found
 ***Response Body***
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 ```cassandraql
 
@@ -308,7 +308,7 @@ duplicate name:awstoibm
 
 * ****succeed****
 
-Status Code: 200 ok
+Status Code: 200 OK
 
 ***Response Body***
 ```cassandraql
