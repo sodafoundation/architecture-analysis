@@ -3,12 +3,11 @@
 
 ## Goals
 
-This document provides the requirement, use case, design and implementation guidelines for supporting File Storage support in SODA core project, multi-cloud (Gelato).
+This document provides the requirement, use case, design and implementation guidelines for supporting File Storage support in SODA core project: multi-cloud (Gelato).
 
 It will discuss different aspects and considerations for supporting File Storage support for different cloud providers.
 
-With SODA V1 release, it should be deliver Cloud File Share or Filestore management support for:
-
+With SODA V1 release, it should deliver Cloud File Share or Filestore management support for:
 1.  AWS EFS
 2.  Azure File Share
 3.  Google Cloud Filestore
@@ -22,20 +21,24 @@ Multi-cloud File Storage service will provide
 ## Motivation and background
 SODA Foundation multi-cloud (Gelato) project provides policy based data mobility across public, private and Hybrid clouds. This mobility is currently limited to Object Storage only.
 
-The purpose is to provide a unified Data framework acros core and cloud. Currently SODA Core projects already provide the native FileShare support for on-premise clusters. This support of Cloud FileShare/Storage will extend this support to Cloud.
+The purpose is to provide a unified Data framework acros core and cloud. Currently SODA Core projects already provide the native Fileshare support for on-premise clusters. This support of Cloud Fileshare/Storage will extend this support to Cloud.
 
 The purpose is to narrow the gap between on-premise and Cloud File Storage access.
 The proposal here is to broaden the scope to File Storage for multi-cloud. Different Cloud vendors provide File storage services. Filesystem based storage is important for the applications of instances.
 
 File storage commonly referred to as Network Fileshare is the centralized repository for files. It is very useful for sharing the contents across multiple servers. Fileshares can be accessed by instances into the Cloud as well as the on-premise instances and across AZs and Regions.
-These File storage provides services which fits into the services multicloud provides.
 
-    **Availability**: The File share snapshots provide the feature to create backup and recover as and when required.
-    **Data Lifecycle Management**: File shares provides the lifecycle for the shares created. Infrequently accessed shares can be moved to low cost storage. (This capability depends upon the service by Cloud providers)
+These File storage provides services which fits into the services multicloud provides.
+   **Availability**: The File share snapshots provide the feature to create backup and recover as and when required.
+   
+   **Data Lifecycle Management**: File shares provide the lifecycle better storage and cost management. Infrequently accessed shares can be moved to low cost storage. (This capability depends upon the service by Cloud providers)
     Example: For AWS: There are two storage Classes 1) Standard 2) EFS IA
-    **Scalability**: Cloud FileShare/File Storage can scale to PBs without affecting the underlying applications
-    **Security**: The File Storage provided by the vendors provide data security for both Data at Rest as well Data in-transit
-    **Extensibility**: The server data can be shared across Cloud as well as on-premises
+
+   **Scalability**: Cloud FileShare/File Storage can scale to PBs without affecting the underlying applications
+
+   **Security**: The File Storage provided by the vendors provide data security for both Data at Rest as well Data in-transit
+   
+   **Extensibility**: The server data can be shared across Cloud as well as on-premises
     
 ## Non-Goals
 1.  Creating network and security for mounting the File Shares across VPC/Region/Cloud-premise
@@ -48,17 +51,17 @@ These File storage provides services which fits into the services multicloud pro
 TBD
 
 ## Use case View
-    **Migration**: Migrate on-premise File or File-Share based applications to cloud. Simply mount the Cloud FileShare to your on-premise server and copy data.
+   **Migration**: Migrate on-premise File or File-Share based applications to cloud. Simply mount the Cloud FileShare to your on-premise server and copy data.
 
-    **LTR (Long Term Retention)**: Data Deluge, ever changing business requirements and different compliance regulations demands LTR. With Cloud Vendor File Share backups or moving on-premises data to Cloud can help for Long term retention
+   **LTR (Long Term Retention)**: Data Deluge, ever changing business requirements and different compliance regulations demands LTR. With Cloud Vendor File Share backups or moving on-premises data to Cloud can help for Long term retention
 
-    **Cloudburst**: Copy on-premises data to Cloud FileShare, analyze the data and get back the report on-premise. Add to it the FileShare scalability, performance, throughput and low TCO
+   **Cloudburst**: Copy on-premises data to Cloud FileShare, analyze the data and get back the report on-premise. Additional benefit to it is the FileShare scalability, performance, throughput and low TCO
     
-    **LiftNShift**:  Fileshares are commonly used storage on-premise. While migrating to Cloud this can be simply a lift and shift using Cloud services like AWS Manage Fileshares or Azure File Service
+   **LiftNShift**:  Fileshares are commonly used storage on-premise. While migrating to Cloud this can be simply a lift and shift using Cloud services like AWS Manage Fileshares or Azure File Service
     
-    **User Local Data Space**: Fileshares can be used as the private space for users. They can use File storage for accessing the data from any Cloud instance
+   **User Local Data Space**: Fileshares can be used as the private space for users. They can use File storage for accessing the data from any Cloud instance inside the region
    
-    **Lifecycle policy**:  Life Cycle for File shares to move the infrequently accessed shares to low cost storage. Similar to S3
+   **Lifecycle policy**:  Life Cycle for File shares to move the infrequently accessed shares to low cost storage. (Similar to object storage lifecycle management)
     
 ## Requirements
 1.  File Storage support for multi cloud
@@ -66,10 +69,10 @@ TBD
  
 ### Input Requirements
 
-High level requirement is to add Block and File storage for Cloud Data Management. Already Object storage is supported for in multi-cloud for Data Migration and Lifecycle policies
+High level requirement is to add File storage for Cloud Data Management. Already Object storage is supported for in multi-cloud for Data Migration and Lifecycle policies
 
 ### Feature Requirements
-Add File Storage Management in SODA multi-cloud/Gelato
+Add File Storage Management in SODA multi-cloud/Gelato.
 
 #### Requirement Analysis
 File Storage Management: Though Object storage solves the provisioning management issues presented by the storage expansion and data growth needs as well as the need for resiliency, File storage provides easy integration. Object Storage provides the Web based storage service where one needs to use the RESTFull API calls. Whereas one can access FileShares using the familiar Operating System calls which makes it an easy integration for existing services.
@@ -94,13 +97,12 @@ Here is the High level Architecture for multi cloud File storage support
 
  ![Arch FileService Multicloud](resources/ArchFileServiceMulticloud.png)
 
-
-https://docs.google.com/drawings/u/0/d/s5JpaaGRJ7AgtfAbdIklgCQ/image?w=624&h=318&rev=1&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
+ ![Arch_FileService_Multicloud](https://docs.google.com/drawings/u/0/d/s5JpaaGRJ7AgtfAbdIklgCQ/image?w=624&h=318&rev=1&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
 
 
 ### Module Architecture
  
-
+![Module Arch FileShare](resources/MulticloudFileModuleArch.png)
 ![Module Arch FileShare](https://docs.google.com/drawings/u/0/d/ssIgFtkTHPwfxS5oZIDpGJQ/image?w=574&h=334&rev=32&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
 
   
@@ -118,7 +120,7 @@ https://docs.google.com/drawings/u/0/d/s5JpaaGRJ7AgtfAbdIklgCQ/image?w=624&h=318
 ##### AWS EFS Go-SDK:
 [https://docs.aws.amazon.com/sdk-for-go/api/service/efs/](https://docs.aws.amazon.com/sdk-for-go/api/service/efs/)
 
-##### GCP Cloud FilestorageREST API
+##### GCP Cloud Filestorage REST API
 [https://cloud.google.com/filestore/docs/reference/rest](https://cloud.google.com/filestore/docs/reference/rest)
 
 ##### Azure FileShare API
@@ -288,9 +290,12 @@ New  containerized File Service added
 ## Sequence Diagrams
 
 #### Backend Registration:
+```
 /<tenant_id>/backends [POST]
+```
 
 Request:
+```
 {
     "type": "aws-block",
     "name": "aks-aws",
@@ -298,8 +303,9 @@ Request:
     "access": "XXXXXXXXXXXXXXXXXXX",
     "security": "XXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
-
+```
 Response:
+```
 {
     "id": "5ece62ab8f17eb0001e1bc4d",
     "tenantId": "94b280022d0c4401bcf3b0ea85870519",
@@ -310,15 +316,18 @@ Response:
     "access": "XXXXXXXXXXXXXXXXXXXXXXXX",
     "security": "XXXXXXXXXXXXXXXXXXXXXXXXXXX"
 }
-
+```
 ![](https://lh4.googleusercontent.com/bnHSB2cHi93PKGMgVNuHWrbrPK-aM2499n5UaLOe6N1a90MxawWcvloSOz6YaTFIQzQ80N9AGpsiHj4v9d61xwzujYS_TD0NePgMk3-XpQc3L-MCmQ7BC9JBxl1MginCVbxXMN09)
-
+![Sequence Backend Registration](resources/BackendRegistration.png)
   
 
 #### Fileshare API:
+```
 /v1/<tenant_id/backend/<backend_id>/shares [GET]
+```
 
 ![](https://lh5.googleusercontent.com/IEupPA2vy72VDmZjjXfPwc14gvREkFB4Fj_sniW1P0idP1o8gB9EfAcf5aw_a8LnJWX8LvtGgb8hn8ZGAwzAw4UIFuE1MguKZgwk6hFPmia5hK-NRvsCYjvZ0ECAEKsTf37FbOtw)
+![Sequence File list](resources/MultiCloudServiceflow.png)
 
 
 ## Notes
