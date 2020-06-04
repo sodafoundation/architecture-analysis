@@ -91,9 +91,8 @@ Gelato/SODA multi-cloud project should provide the flexibility and unified ease 
 
 ## Architecture Analysis
 Here is the High level Architecture for multi cloud File storage support
- 
 
-![ArchFileServiceMulticloud](specs/multicloud/resources/ArchFileServiceMulticloud.png)
+ ![Arch FileService Multicloud](resources/ArchFileServiceMulticloud.png)
 
 
 https://docs.google.com/drawings/u/0/d/s5JpaaGRJ7AgtfAbdIklgCQ/image?w=624&h=318&rev=1&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
@@ -102,7 +101,7 @@ https://docs.google.com/drawings/u/0/d/s5JpaaGRJ7AgtfAbdIklgCQ/image?w=624&h=318
 ### Module Architecture
  
 
-![ModuleArchFileShare](https://docs.google.com/drawings/u/0/d/ssIgFtkTHPwfxS5oZIDpGJQ/image?w=574&h=334&rev=32&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
+![Module Arch FileShare](https://docs.google.com/drawings/u/0/d/ssIgFtkTHPwfxS5oZIDpGJQ/image?w=574&h=334&rev=32&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
 
   
 ### High Level Module architecture
