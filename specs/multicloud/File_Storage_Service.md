@@ -29,6 +29,7 @@ The proposal here is to broaden the scope to File Storage for multi-cloud. Diffe
 File storage commonly referred to as Network Fileshare is the centralized repository for files. It is very useful for sharing the contents across multiple servers. Fileshares can be accessed by instances into the Cloud as well as the on-premise instances and across AZs and Regions.
 
 These File storage provides services which fits into the services multicloud provides.
+   
    **Availability**: The File share snapshots provide the feature to create backup and recover as and when required.
    
    **Data Lifecycle Management**: File shares provide the lifecycle better storage and cost management. Infrequently accessed shares can be moved to low cost storage. (This capability depends upon the service by Cloud providers)
