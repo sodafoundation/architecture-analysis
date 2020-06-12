@@ -194,7 +194,7 @@ TBD
 #### List all shares
    
 ```
-[GET] /v1/<tenantId/backend/<backend_id>/shares
+[GET] /v1/<tenantId/backend/<backend_id>/file/shares
 ```
 ##### Request
 ```
@@ -216,7 +216,7 @@ TBD
 
 #### Get details of a share
 ```
-[GET] /v1/<tenantId/backend/<backend_id>/shares/<shareId>
+[GET] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
 ```
 ##### Request
 ```
@@ -234,7 +234,7 @@ TBD
 ```
 #### Create a File share
 ```
-[POST] /v1/<tenantId/backend/<backend_id>/shares
+[POST] /v1/<tenantId/backend/<backend_id>/file/shares
 ```
 ##### Request
 ```
@@ -254,7 +254,7 @@ TBD
 ```
 #### Modify/Update a File share
 ```
-[PUT] /v1/<tenantId/backend/<backend_id>/shares/<shareId>
+[PUT] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
 ```
 ##### Request:
 ```
@@ -273,7 +273,7 @@ TBD
 ```
 #### Delete a File Share
 ```
-[DELETE] /v1/<tenantId/backend/<backend_id>/shares/<shareId>
+[DELETE] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
 ```
 ##### Request
 ```
