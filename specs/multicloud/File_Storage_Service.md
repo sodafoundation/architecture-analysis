@@ -187,7 +187,9 @@ FileShare Service is available through any client which can use the Cloud File S
 7.  Get/List FileShare
    
 ### Data Model
-TBD
+Comparision for parameters/attributes across different cloud vendors. This is as per the APIs/Interface provided by the cloud
+![Comparision](resources/MulticloudParameterComp.png)
+
 
 ### API spec
 
