@@ -98,13 +98,13 @@ Here is the High level Architecture for multi cloud File storage support
 
  ![Arch FileService Multicloud](resources/ArchFileServiceMulticloud.png)
 
- ![Arch_FileService_Multicloud](https://docs.google.com/drawings/u/0/d/s5JpaaGRJ7AgtfAbdIklgCQ/image?w=624&h=318&rev=1&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
+
 
 
 ### Module Architecture
  
 ![Module Arch FileShare](resources/MulticloudFileModuleArch.png)
-![Module Arch FileShare](https://docs.google.com/drawings/u/0/d/ssIgFtkTHPwfxS5oZIDpGJQ/image?w=574&h=334&rev=32&ac=1&parent=1l5iG4EcsUh0GnXeqnUOc1r3I_Molg8tqD4vDV-G-SwU)
+
 
   
 ### High Level Module architecture
@@ -196,7 +196,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 #### List all shares
    
 ```
-[GET] /v1/<tenantId/backend/<backend_id>/shares
+[GET] /v1/<tenantId/backend/<backend_id>/file/shares
 ```
 ##### Request
 ```
@@ -218,7 +218,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 
 #### Get details of a share
 ```
-[GET] /v1/<tenantId/backend/<backend_id>/shares/<shareId>
+[GET] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
 ```
 ##### Request
 ```
@@ -236,7 +236,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 ```
 #### Create a File share
 ```
-[POST] /v1/<tenantId/backend/<backend_id>/shares
+[POST] /v1/<tenantId/backend/<backend_id>/file/shares
 ```
 ##### Request
 ```
@@ -256,7 +256,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 ```
 #### Modify/Update a File share
 ```
-[PUT] /v1/<tenantId/backend/<backend_id>/shares/<shareId>
+[PUT] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
 ```
 ##### Request:
 ```
@@ -275,7 +275,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 ```
 #### Delete a File Share
 ```
-[DELETE] /v1/<tenantId/backend/<backend_id>/shares/<shareId>
+[DELETE] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
 ```
 ##### Request
 ```
