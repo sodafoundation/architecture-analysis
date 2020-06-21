@@ -196,7 +196,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 #### List all shares
    
 ```
-[GET] /v1/<tenantId/backend/<backend_id>/file/shares
+[GET] /v1/<tenantId/file/shares
 ```
 ##### Request
 ```
@@ -218,7 +218,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 
 #### Get details of a share
 ```
-[GET] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
+[GET] /v1/<tenantId/file/shares/<shareId>
 ```
 ##### Request
 ```
@@ -236,7 +236,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 ```
 #### Create a File share
 ```
-[POST] /v1/<tenantId/backend/<backend_id>/file/shares
+[POST] /v1/<tenantId/file/shares
 ```
 ##### Request
 ```
@@ -256,7 +256,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 ```
 #### Modify/Update a File share
 ```
-[PUT] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
+[PUT] /v1/<tenantId/file/shares/<shareId>
 ```
 ##### Request:
 ```
@@ -275,7 +275,7 @@ Comparision for parameters/attributes across different cloud vendors. This is as
 ```
 #### Delete a File Share
 ```
-[DELETE] /v1/<tenantId/backend/<backend_id>/file/shares/<shareId>
+[DELETE] /v1/<tenantId/file/shares/<shareId>
 ```
 ##### Request
 ```
@@ -326,7 +326,7 @@ Response:
 
 #### Fileshare API:
 ```
-/v1/<tenant_id/backend/<backend_id>/shares [GET]
+/v1/<tenant_id/file/shares [GET]
 ```
 
 ![](https://lh5.googleusercontent.com/IEupPA2vy72VDmZjjXfPwc14gvREkFB4Fj_sniW1P0idP1o8gB9EfAcf5aw_a8LnJWX8LvtGgb8hn8ZGAwzAw4UIFuE1MguKZgwk6hFPmia5hK-NRvsCYjvZ0ECAEKsTf37FbOtw)
