@@ -1,4 +1,4 @@
-# SODA Architecture and Projects
+# SODA Framework and Projects
 
 [SODA Foundation] hosts many projects to build a unified open data framework to solve the data and storage challenges in the industry.
 This document provides the overall SODA Framework Architecture and all the projects part of the core framework.
