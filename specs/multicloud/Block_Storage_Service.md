@@ -228,7 +228,6 @@ Get volumes for a backend:
 }
 ```
 Create a volume in AWS
-```
 [POST] http://127.0.0.1:8089/v1/94b280022d0c4401bcf3b0ea85870519/volumes
 ``` 
 Request
@@ -242,7 +241,6 @@ Request
 }
 
 ```
-```
 Response:
 {
  "name": "aksvol9",
@@ -253,27 +251,6 @@ Response:
  "availabilityZone": "ap-south-1a",
  "createdAt": "2020-06-23 21:22:57 +0000 UTC"
 }
-```
-```
-Create a Block device
-[POST] /v1/<tenantId>/volumes
-Request:
-Response:
-```
-
-``` 
-List all volumes
-[GET] /v1/<tenantId>/volumes
-```
-
-```
-Get details of a volume
-[GET] /v1/<tenantId>/volumes/<volume-id>
-```
-
-```
-Get volumes of a specific Cloud backend
-[GET] /v1/<tenantId>/volumes?backendId=<backendId>
 ```
 
 
