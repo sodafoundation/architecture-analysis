@@ -104,6 +104,156 @@ Block Device Service is available through any client which can use the Cloud Blo
 2.  SODA REST APIs
 
 ### APIs
+Get volumes for a backend:
+``` 
+[GET] http://127.0.0.1:8089/v1/94b280022d0c4401bcf3b0ea85870519/volumes?backendId=5ef26d79c5d1b20001308f66
+{
+ "volumes": [
+  {
+   "size": 8589934592,
+   "type": "gp2",
+   "state": "in-use",
+   "volumeId": "vol-0b1191d991f2bac39",
+   "availabilityZone": "ap-south-1b",
+   "createdAt": "2020-06-07 18:55:24.995 +0000 UTC"
+  },
+  {
+   "size": 1073741824,
+   "type": "gp2",
+   "state": "available",
+   "volumeId": "vol-08645c4985913749b",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 15:17:54.645 +0000 UTC"
+  },
+  {
+   "name": "aksvol1",
+   "size": 1073741824,
+   "type": "gp2",
+   "state": "available",
+   "volumeId": "vol-0526b378cf6dce574",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 17:15:11.876 +0000 UTC"
+  },
+  {
+   "name": "aksvol2",
+   "size": 1073741824,
+   "type": "gp2",
+   "state": "available",
+   "volumeId": "vol-05d10356c6e008090",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 18:43:08.308 +0000 UTC"
+  },
+  {
+   "name": "aksvol3",
+   "size": 1073741824,
+   "type": "gp2",
+   "state": "available",
+   "volumeId": "vol-0d6e695a04a988711",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 18:53:07.982 +0000 UTC"
+  },
+  {
+   "name": "aksvol4",
+   "size": 1073741824,
+   "type": "gp2",
+   "state": "available",
+   "volumeId": "vol-053075656150acc49",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 18:54:04.868 +0000 UTC"
+  },
+  {
+   "name": "aksvol5",
+   "size": 536870912000,
+   "type": "sc1",
+   "state": "available",
+   "volumeId": "vol-0ca0ec01c9df43d6a",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 19:16:36.395 +0000 UTC"
+  },
+  {
+   "name": "aksvol6",
+   "size": 536870912000,
+   "type": "sc1",
+   "state": "available",
+   "volumeId": "vol-0c23d3de79169dfdd",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 20:33:53.237 +0000 UTC"
+  },
+  {
+   "name": "aksvol6",
+   "size": 536870912000,
+   "type": "sc1",
+   "state": "available",
+   "volumeId": "vol-0138920bf8f577701",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 20:33:52.848 +0000 UTC"
+  },
+  {
+   "name": "aksvol7",
+   "size": 536870912000,
+   "type": "sc1",
+   "state": "available",
+   "volumeId": "vol-0f032816fad07911d",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 20:55:25.905 +0000 UTC"
+  },
+  {
+   "name": "aksvol8",
+   "size": 5368709120,
+   "type": "io1",
+   "state": "available",
+   "volumeId": "vol-0f2a279b5f863f07e",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 21:00:53.662 +0000 UTC"
+  },
+  {
+   "name": "aksvol9",
+   "size": 5368709120,
+   "type": "gp2",
+   "state": "available",
+   "volumeId": "vol-0baf8208853c00bc8",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 21:01:18.965 +0000 UTC"
+  },
+  {
+   "name": "aksvol9",
+   "size": 536870912000,
+   "type": "sc1",
+   "state": "available",
+   "volumeId": "vol-0c60636e633b1a965",
+   "availabilityZone": "ap-south-1a",
+   "createdAt": "2020-06-23 21:01:32.531 +0000 UTC"
+  }
+ ]
+}
+```
+Create a volume in AWS
+```
+[POST] http://127.0.0.1:8089/v1/94b280022d0c4401bcf3b0ea85870519/volumes
+``` 
+Request
+{
+    "name": "aksvol9", 
+    "availabilityZone": "ap-south-1a",
+    "size": 500,
+    "type": "sc1",
+    "backendId": "5ef26d79c5d1b20001308f66",
+    "iops": 200
+}
+
+```
+```
+Response:
+{
+ "name": "aksvol9",
+ "size": 536870912000,
+ "type": "sc1",
+ "state": "creating",
+ "volumeId": "vol-0373a261b5193db39",
+ "availabilityZone": "ap-south-1a",
+ "createdAt": "2020-06-23 21:22:57 +0000 UTC"
+}
+```
 ```
 Create a Block device
 [POST] /v1/<tenantId>/volumes
