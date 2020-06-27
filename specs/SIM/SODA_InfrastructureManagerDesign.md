@@ -146,7 +146,7 @@ def dispatch_alert_model(self, alert_model):
 ### Storage
 | Attribute        | Data Type   | Unit  | Enumerated Value | Description                              | Version |
 |------------------|-------------|-------|------------------|------------------------------------------|---------|
-| id               | uuid(36)    |       |                  | Indicates the Dolphin system resource ID. |         |
+| id               | uuid(36)    |       |                  | Indicates the delfin system resource ID. |         |
 | name             | string(255) |       |                  | Device Name                              |         |
 | description      | string(255) |       |                  | Device Description                       |         |
 | status           | enum(255)   |       |                  | Device Status                            |         |
@@ -168,7 +168,7 @@ def dispatch_alert_model(self, alert_model):
 ### Storage Pool
 | Attribute              | Data Type   | Unit  | Enumerated Value | Description                              | Version |
 |------------------------|-------------|-------|------------------|------------------------------------------|---------|
-| id                     | uuid(36)    |       |                  | Indicates the Dolphin system resource ID. |         |
+| id                     | uuid(36)    |       |                  | Indicates the delfin system resource ID. |         |
 | name                   | string(255) |       |                  | Name                                     |         |
 | description            | string(255) |       |                  | Description                              |         |
 | status                 | enum        |       |                  | Status                                   |         |
@@ -183,14 +183,14 @@ def dispatch_alert_model(self, alert_model):
 | used_capacity          | integer     | Bytes |                  | Used Capacity                            |         |
 | free_capacity          | integer     | Bytes |                  | Available Capacity                       |         |
 | native_storage_pool_id | string(255) |       |                  | Specifies the storage pool ID on the device. |         |
-| storage_id             | uuid(36)    |       |                  | Storage:id in the Dolphin system         |         |
+| storage_id             | uuid(36)    |       |                  | Storage:id in the delfin system         |         |
 
 
 ### Volume
 
 | Attribute              | Data Type   | Unit  | Enumerated Value | Description                              | Version |
 |------------------------|-------------|-------|------------------|------------------------------------------|---------|
-| id                     | uuid(36)    |       |                  | Indicates the Dolphin system resource ID. |         |
+| id                     | uuid(36)    |       |                  | Indicates the delfin system resource ID. |         |
 | name                   | string(255) |       |                  | Name                                     |         |
 | description            | string(255) |       |                  | Description                              |         |
 | status                 | enum        |       |                  | Status                                   |         |
@@ -208,7 +208,7 @@ def dispatch_alert_model(self, alert_model):
 | deduplicated           | boolean     |       |                  | Whether to support compression           |         |
 | native_volume_id       | string(255) |       |                  | LUN ID on the device                     |         |
 | native_storage_pool_id | string(255) |       |                  | Specifies the ID of the owning storage pool on the device. |         |
-| storage_id             | uuid(36)    |       |                  | Storage:id in the Dolphin system         |         |
+| storage_id             | uuid(36)    |       |                  | Storage:id in the delfin system         |         |
 
 
 ### Alert model
