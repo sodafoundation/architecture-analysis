@@ -6,7 +6,7 @@ This document provides the overall SODA Framework Architecture and all the proje
 ## Architecture and Project Details
 Please refer the SODA Architecture & Projects document [here](https://github.com/sodafoundation/design-specs/blob/master/SODAArchitectureAndProjects.pdf) 
 
+Each project source code is maintained under github.com/sodafoundation/<project-name>. The respective project repository has a ReadMe to provide a brief description on the project.
+  
 *Notes: Any comments or suggestions, kindly raise as in issue in this repository*
 
-
-*FIXME : All the content in md later*
