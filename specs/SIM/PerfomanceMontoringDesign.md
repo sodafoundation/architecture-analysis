@@ -94,10 +94,8 @@ delfin metric data model is in align with [Prometheus data model](https://promet
 | Propperty | DataType | Description           | Example               |
 |-----------|----------|-----------------------|-----------------------|
 | name      | string   | Name of the indicator | average_read_requests |
-|labels|map|Any parameters required to distuinquish this indicator uniquely |storage_id = delfin id of the storage, resource_type = volume, id = delfin id of this resource, native_volume_id = id of this volume in back_end, native_storage_pool_id = associated storage_pool id in backend,  type= RAW, unit = IO/s, value_type = COUNTER
-|
+|labels|map|Any parameters required to distuinquish this indicator uniquely |storage_id = delfin id of the storage, resource_type = volume, id = delfin id of this resource, native_volume_id = id of this volume in back_end, native_storage_pool_id = associated storage_pool id in backend,  type= RAW, unit = IO/s, value_type = COUNTER|
 | value     | float | value of this indicator      | 1094.28     |
-
 | timestamp | int   | epoch time of this indicator | 1594635195  |
 
 
