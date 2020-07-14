@@ -35,8 +35,7 @@ Get basic storage information, hardware information, logical resources informati
 #### Requirement Analysis
 Analyzed Open Source monitoring solution.
 
-1.	Stor2rrd : [Analysis](https://drive.google.com/open?id=1yJn6wcji24NvObbrxvfSVzmo6--QGSI_v5P8n4Kcc8M),
-    [code analysis ](https://drive.google.com/open?id=1FC_QEadAMb2ZPBKo-FYxQ2cGRraUV72z)
+1.	 [Stor2rrd](https://www.stor2rrd.com/) is an available free solution with an rrd tool to persist metrics.
 
 #### List of Requirements
 ##### Functional Requirements
