@@ -115,5 +115,10 @@ delfin metric data model is in align with [Prometheus data model](https://promet
 |value_type|COUNTER, RATE, GUAGE,|
 |unit|IOPS,MB/s,%,ms,KB,
 
+## Performance Collection Flow
 
 
+![](./Resources/PerformanceCollectionFlow.png)
+
+## Performance Metric Query Flow
+![](./Resources/PerformanceQueryFlow.png)
