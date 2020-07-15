@@ -10,7 +10,7 @@ This design does not cover the deployment model or the way in which this module 
 
 ## Assumptions and Constraints
 * SNMP also supports informs which are similar to traps but need acknowledgement from the manager to ensure guaranteed delivery. This design does not consider the support for SNMP informs.
-* SNMP v2c/v3 configuration need to be done at device side also which will be taken care by the Administrator
+* SNMP v2c/v3 configuration need to be done at device side also which will be taken care by Administrator
 
 ## Requirement Analysis
 ### Input Requirements
@@ -165,24 +165,30 @@ NA
 |              | Output: Success/Failure |
 
 ### Alert API model
+
 ![](Alert_APIs.png)
 
 Swagger Reference (https://github.com/sodafoundation/delfin/blob/master/openapi-spec/swagger.yaml)
 
 ### Data Model
 * AlertSourceInfo: All the information about the alert source device which will be stored in DB
+
 ![](Alert_Source_Data_Model.png)
 
 * AlertModel: Soda alert model which will be pushed to export manager after complete processing of trap 
 
 ### Sequence Diagrams
 * Configuring alert source
+
 ![](Config_Alert_Source.png)
 
 * Processing incoming traps
+
 ![](Trap_Processing.png)
 
 * Clearing alert
+
 ![](Clear_Alert.png)
+
 
 
