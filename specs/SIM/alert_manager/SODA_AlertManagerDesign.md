@@ -10,7 +10,7 @@ This design does not cover the deployment model or the way in which this module 
 
 ## Assumptions and Constraints
 * SNMP also supports informs which are similar to traps but need acknowledgement from the manager to ensure guaranteed delivery. This design does not consider the support for SNMP informs.
-* SNMP v2c/v3 configuration need to be done at device side also which will be taken care by Administrator
+* SNMP v2c/v3 configuration need to be done at device side also which will be taken care by the Administrator
 
 ## Requirement Analysis
 ### Input Requirements
