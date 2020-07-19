@@ -14,28 +14,30 @@ This design does not cover the deployment model or the way in which this module 
 
 ## Requirement Analysis
 ### Input Requirements
-| Id    | Description|
-|-----------------|---------------------------|
-| AlertMngr.IR.001        | Send alarms received from registered devices to third party managers |
-| AlertMngr.IR.002     | Clear alarm specified by manager |
-| AlertMngr.IR.003     | Manage alert source configuration |
+Send alarms received from registered devices to third party managers
+
+Clear alarm from backend as specified by manager
+
+Manage alert source configuration
+
+Query alarms from backend as specified by manager
 
 ### Feature Requirements
 #### Functional Requirements
-##### AlertMngr.Int.001 Support loading and parsing of trap MIB files
+##### Support listener for traps
 |  |  |
 |-----------------|---------------------------|
-| Brief Description    | Loading and parsing of trap MIB files from predefined mib files path |
+| Brief Description    | Initialization and start of trap listener |
 | Precondition       | None |
 | Input     | Trigger for Module startup  |
-| Key Processings     | Load all the MIB files from a predefined path and parse |
-|                     | Handle dependency of MIb on other MIBs |
-|                     | Keep the parsed trap info for later processing |
-| Output    | All the MIBs for defining traps are loaded/Parsed  |
+| Key Processings     | Initialize the parameters needed to start the listener |
+|                     | Open listen socket at speficied address and port |
+|                     | Continously listen for incoming traps |
+| Output    | Trap listener is up and running for any incoming traps  |
 | Priority     | High |
 | Remarks     | None |
 
-##### AlertMngr.Int.002 Process incoming SNMP traps
+##### Process incoming SNMP traps
 |  |  |
 |-----------------|---------------------------|
 | Brief Description    | Processing SNMP V2c/V3 traps received from devices |
@@ -49,7 +51,7 @@ This design does not cover the deployment model or the way in which this module 
 | Priority     | High |
 | Remarks     | By default, trap receiver is up and listening for traps |
 
-##### AlertMngr.Int.003 Clear specified alarm
+##### Clear specified alarm
 |  |  |
 |-----------------|---------------------------|
 | Brief Description    | Clearing particular alarm specified by user  |
@@ -62,7 +64,7 @@ This design does not cover the deployment model or the way in which this module 
 | Priority     | High |
 | Remarks     | None |
 
-##### AlertMngr.Int.004 Add alert source configuration
+##### Add alert source configuration
 |  |  |
 |-----------------|---------------------------|
 | Brief Description    | Configuring alert source for SNMP V2c/V3 user for processing traps |
@@ -70,12 +72,13 @@ This design does not cover the deployment model or the way in which this module 
 | Input     | Alert source configuration from admin  |
 | Key Processings     | Validate input alert source wrt its version |
 |                     | Add alert source details to DB |
+|                     | Validate configuration by connecting to backend using snmp get operation |
 |                     | Update trap receiver with alert source config |
 | Output    | Input alert source is saved to database and trap receiver is updated accordingly to handle traps |
 | Priority     | High |
 | Remarks     | None|
 
-##### AlertMngr.Int.005 List alert source configuration
+##### List alert source configuration
 |  |  |
 |-----------------|---------------------------|
 | Brief Description    | Listing all configured alert sources |
@@ -87,7 +90,7 @@ This design does not cover the deployment model or the way in which this module 
 | Priority     | High |
 | Remarks     | None|
 
-##### AlertMngr.Int.006 Delete alert source configuration
+##### Delete alert source configuration
 |  |  |
 |-----------------|---------------------------|
 | Brief Description    | Deleting already configured alert source |
@@ -100,12 +103,12 @@ This design does not cover the deployment model or the way in which this module 
 | Priority     | High |
 | Remarks     | None|
 
-##### AlertMngr.Int.007 Update alert source configuration
+##### Update alert source configuration
 |  |  |
 |-----------------|---------------------------|
 | Brief Description    | Updating existing alert source configuration |
 | Precondition       | Module is up |
-| Input     | Update Alert source configuration requestfrom admin  |
+| Input     | Update Alert source configuration request from admin  |
 | Key Processings     | Validate input alert source wrt its version |
 |                     | Update alert source details to DB |
 |                     | Update trap receiver with alert source config |
@@ -113,12 +116,44 @@ This design does not cover the deployment model or the way in which this module 
 | Priority     | High |
 | Remarks     | None|
 
+##### Query alarms from specified backend
+|  |  |
+|-----------------|---------------------------|
+| Brief Description    | Querying of alarms from the specified backend  |
+| Precondition       | Module is up |
+| Input     | Details of backend whose alarms need to be queried  |
+| Key Processings     | API request received by user |
+|                     | Validate request |
+|                     | Trigger the query interface of backend and collect all current alarms |
+|                     | Convert the collected alarms to SODA Alert model |
+|                     | Provide the list of alarms as response |
+| Output    | List of alarms queried from backend |
+| Priority     | High |
+| Remarks     | None |
+
+##### Synchronize alarms from specified backend
+|  |  |
+|-----------------|---------------------------|
+| Brief Description    | Synchronizing alarms from the specified backend to exporters |
+| Precondition       | Module is up |
+| Input     | Details of backend whose alarms need to be synchronized  |
+| Key Processings     | API request received by user |
+|                     | Validate request |
+|                     | Trigger the query interface of backend and collect all current alarms |
+|                     | Convert the collected alarms to SODA Alert model |
+|                     | Push alarm list to exporter for sending out |
+| Output    | List of alarms pushed to exporter |
+| Priority     | High |
+| Remarks     | None |
 
 #### Non Functional Requirements
 NA
 
 ## Architecture Analysis
-### High Level Module View
+### SODA Infrastructure Manager: High Level View
+[Refer here](https://github.com/sodafoundation/architecture-analysis/blob/master/arch-design/delfin/resources/Architecture.jpg)
+
+
 ### High Level Module Architecture
 ![](Alert_Manager_Submodules.png)
 
@@ -135,38 +170,36 @@ NA
 #### Interfaces consumed by Alert Manager
 |  Provider | Interfaces |
 |-----------------|---------------------------|
-| Export Manager   | Name: PushAlertModel |
+| Export Manager   | Name: DispatchToExportManager |
 |                  | Description: To push soda alert module to third party |
 |                  | Input: soda alert model |
 |                  | Output: Success/Failure |
-| Driver Manager   | Name: FillAlertModel |
+| Driver Manager   | Name: ParseAlert |
 |                  | Description: To process trap data and convert to soda alert model |
-|                  | Input: trap data |
+|                  | Input: backend info and trap data |
 |                  | Output: Soda alert model |
-| Driver Manager   | Name: HandleDeviceTrapConfig |
-|                  | Description: To configure the parameters to send trap at device side |
-|                  | Input: trap config para |
+| Driver Manager   | Name: ListAlerts |
+|                  | Description: To get all alerts from given backend |
+|                  | Input: backend info |
 |                  | Output: Success/Failure |
 | Driver Manager   | Name: ClearAlert |
 |                  | Description: To clear the alert for the input sequence number from device side |
-|                  | Input: alert sequence number |
+|                  | Input: backend info and alert sequence number |
 |                  | Output: Success/Failure |
 
-#### Interfaces exposed by Alert Manger
+#### Interfaces exposed by Alert Manager
 |  Consumer | Interfaces |
 |-----------------|---------------------------|
-| API server   | Name: HandleAlertConfig |
-|              | Description: To process alert source configuration |
+| Task manager | Name: SyncSnmpConfig |
+|              | Description: To process alert source configuration and update snmp trap listener |
 |              | Input: alert source configuration |
 |              | Output: Success/Failure |
-| API server   | Name: HandleClearAlert |
-|              | Description: To process clear alert |
-|              | Input: clear alert related data |
+| Task manager | Name: CheckSnmpConfig |
+|              | Description: To check if the snmp configuration is valid to connect to backend at any point of time |
+|              | Input: alert source configuration |
 |              | Output: Success/Failure |
 
 ### Alert API model
-
-![](Alert_APIs.png)
 
 Swagger Reference (https://github.com/sodafoundation/delfin/blob/master/openapi-spec/swagger.yaml)
 
@@ -175,7 +208,51 @@ Swagger Reference (https://github.com/sodafoundation/delfin/blob/master/openapi-
 
 ![](Alert_Source_Data_Model.png)
 
-* AlertModel: Soda alert model which will be pushed to export manager after complete processing of trap 
+* AlertModel: Soda alert model which will be pushed to export manager after complete processing of trap
+
+| Attribute      | Data Type    | Enumerated Value                         |Description                              |
+|----------------|--------------|------------------------------------------|------------------------------------------|
+| storage_id     | String(255)  |                                          | Unique identification for the storage backend                 |
+| storage_name   | String(255)  |                                          | Name of the storage backend                   |
+| vendor         | String(255)  |                                          | Manufacturer of the storage backend                    |
+| model          | String(255)  |                                          | Model of the storage backend                 |
+| serial_number  | String(255)  |                                          | Serial number of the storage backend                   |
+| alert_id       | String(255)  |                                          | Unique identification for a given alert type                  |
+| alert_name     | String(255)  |                                          | Unique name for a given alert type       |
+| severity       | Enum(String) |                                          | Severity of the alert                    |
+|                |              | Fatal                                    |                                          |
+|                |              | Critical                                 |                                          |
+|                |              | Major                                    |                                          |
+|                |              | Minor                                    |                                         |
+|                |              | Warning                                  |                                         |
+|                |              | Informational                            |                                         |
+|                |              | NotSpecified                             |                                         |
+| category       | Enum(String) |                                          | Category of alert generated              |
+|                |              | Fault                                    |                  |                                          |
+|                |              | Event                                    |                  |                                          |
+|                |              | Recovery                                 |                  |                                          |
+|                |              | NotSpecified                             |                  |                                          |
+| type           | Enum(String) |                                          | Type of the alert generated              |
+|                |              | CommunicationsAlarm                      |                                          |
+|                |              | EquipmentAlarm                           |                                          |
+|                |              | ProcessingErrorAlarm                     |                                          |
+|                |              | QualityOfServiceAlarm                    |                                         |
+|                |              | EnvironmentalAlarm                       |                                        |
+|                |              | IntegrityViolation                       |                                          |
+|                |              | OperationalViolation                     |                                          |
+|                |              | PhysicalViolation                        |                                          |
+|                |              | SecurityServiceOrMechanismViolation      |                                          |
+|                |              | TimeDomainViolation                      |                                         |
+|                |              | NotSpecified                             |                                        |
+| sequence_number| String(255)  |                                          | Sequence number for the alert            |
+| occur_time     | long         |                                          | Time at which alert is generated from device in epoch format |
+| description    | String(255)  |                                          | Possible cause description or other details about the alert               |
+| recovery_advice| String(255)  |                                          | Some suggestion for handling the given alert|
+| resource_type  | Enum(String) |                                          | Resource type of device/source generating alert                        |
+|                |              | Network                                  |                                          |
+|                |              | Server                                   |                                          |
+|                |              | Storage                                  |                                          |
+| location       | String(255)  |                                          | Detailed info about the tracing the alerting device such as slot, rack, component, parts etc |
 
 ### Sequence Diagrams
 * Configuring alert source
@@ -189,6 +266,12 @@ Swagger Reference (https://github.com/sodafoundation/delfin/blob/master/openapi-
 * Clearing alert
 
 ![](Clear_Alert.png)
+
+
+### Deployment
+* Alert manager runs as a seperate process and interacts with api and task manager processes.
+* Alert manager can be deployed in multiple nodes as seperate processes
+
 
 
 
