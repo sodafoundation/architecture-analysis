@@ -93,13 +93,13 @@ You may refer the high level architecture design [here](https://github.com/sodaf
 
 
 ### Module Architecture
-This is a Retrieval management module and responsible for retrieving(discovering) the resources(storage, volumes and pools) information from the registered backends. The already discovered resources can also be Synchronized whenever required and also on a periodic basis through API calls.
+This is a Retrieval management module and responsible for retrieving(discovering) the resources(like storage, volumes and pools) information from the registered backends. The already discovered resources can be Synchronized whenever required and also on a periodic basis through API calls.
 
-The api to Synchronize the resources: /v1/storages/sync
+The api to Synchronize the resources is: /v1/storages/sync
 
 The above API will Synchronize all the resources of all registered backends in the system.
 
-The Retrieval management module contains three major components, Redis, TaskManager and RabbitMq as shown in the diagram below. The Resource Manager and Driver Manager are part of the whole project delfin which are shortly described below (For more details high level architecture can be referred from the above link).
+The Retrieval management module contains three major components, Redis, TaskManager and RabbitMq as shown in the diagram below. The Resource Manager and Driver Manager are part of the whole project delfin which are shortly described below (For more details high level architecture can be referred from the [link](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)).
 
 ![Resource Synchronization](RetreivalManager2.png)
 
@@ -111,7 +111,7 @@ The Retrieval management module contains three major components, Redis, TaskMana
 
 ##### RabbitMq:
 * RabbitMQ is used as a message broker in this project. The tasks are
-  pushed to the queue of RabbitMQ, and later it published those tasks to connected consumer nodes.
+  pushed to the queue of RabbitMQ, and later it publishes those tasks to connected consumer nodes.
 
 
 ##### Resource Manager:
