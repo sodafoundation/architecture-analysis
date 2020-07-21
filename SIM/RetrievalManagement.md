@@ -1,8 +1,8 @@
-# Retrieval Management Requirements and design
+# Task Manager Requirements and design
 
 
 
-**Author(s)**: [Pravin Ranjan](https://github.com/pravinranjan10)
+**Author(s)**: [Pravin Ranjan](https://github.com/pravinranjan10), [Liu Yu](https://github.com/ThisIsClark), [Xu Lin](https://github.com/wisererik)
 
 Major Version Updates
 
@@ -44,6 +44,9 @@ There are few major requirements for this module:
 2. Collect Pool  information
 3. Collect LUN(Volume) information
 4. Collect device information
+5. Task scheduling
+6. Task synchronization
+7. Performance statistics collection
 
 
 #### List of Requirements
