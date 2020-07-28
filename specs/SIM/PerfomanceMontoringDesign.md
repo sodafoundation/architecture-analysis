@@ -3,13 +3,57 @@
 
 ## Requirement analysis
 
-1. User wants to get device (storage) performance information
-2. User wants to get other resource (storage-pool,volume,controller,port,disk, etc )performance information.
-3. User wants to get performance information for a range , or historic performance:  example :  (real-time, user-defined time segment, and latest 4Hours/12Hours/1Day/1Week/1Month/1Year performance information).
-4. User wants to configure collection intervals for each resource 
-5. User wants to trigger performance collection  of particular storage.
-6. Usee wants to export real time collection data to third party systems.
+1. User wants to register a device for perfomance collection
+2. User wants to specify object and metrics which he would like to poll
+3. User wants to get device (storage) performance information
+4. User wants to get other resource (storage-pool,volume,controller,port,disk, etc )performance information.
+5. User wants to get performance information for a range , or historic performance:  example :  (real-time, user-defined time segment, and latest 4Hours/12Hours/1Day/1Week/1Month/1Year performance information).
+6. User wants to configure collection intervals for each resource 
+7. User wants to trigger performance collection  of particular storage.
+8. Usee wants to export real time collection data to third party systems.
 
+## delfin Metric model
+delfin can internally use [Prometheus](https://prometheus.io/) to persist metric data. delfin should also give option for third parties to export collected metrics to other platforms.
+delfin metric data model is in align with [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) to support time series data persistence .
+### data model
+
+| Propperty | DataType | Description           | 
+|-----------|----------|-----------------------|-----------------------|
+| name      | string   | Name of the indicator | 
+|labels|map|Any parameters required to distuinquish this indicator uniquely |
+| value     | float | value of this indicator      | 
+| timestamp | int   | epoch time of this indicator | 
+### example metric
+```
+name = read_throuhput
+labels = {
+			'storage_id': '0000123456789',
+			'resource_type': 'port',
+			'id': '12c2d52f-01bc-41f5-b73f-7abf6f38a340',
+			'native_port_id': 'FF1:001',
+			'native_controller_id': ' 'CTRL1',
+			'type': 'RAW'
+			'unit': 'IOPS'
+			'value_type': 'GAUGE'
+	}
+value = 1094.28
+timestamp = 1594635195
+```
+### Labels model
+| | |
+|-|-|
+|**Resource**|**Required labels**|
+|Array| **storage_id** = <storage_id> **resource_type** = array **id** = < delfin id of this resource> |
+|Storage-Pool| **storage_id** = <storage_id> **resource_type** = storage_pool **id** = < delfin id of this resource> **native_storage_pool_id** = < associated storage_pool id in backend > **type**=enum **unit** = enum **value_type** = enum|
+|Volume|**storage_id** = <storage_id> **resource_type** = volume **id** = < delfin id of this resource> **native_volume_id** = < id of this pool  in back_end> **native_storage_pool_id** = < associated storage_pool id in backend > **type**=enum **unit** = enum **value_type** = enum|
+
+#### enums
+| | |
+|-|-|
+|**Propperty**|**enum**|
+|type|RAW,DERIVED,AGGREGATED|
+|value_type|COUNTER, RATE, GUAGE,|
+|unit|IOPS,MB/s,%,ms,KB,
 ## Metrics mapping table
 delfin metrics are unified metrics which are either  mapped to or derived from other platforms metrics . below table is report of analysis of different platforms
 ### Storage
@@ -2641,33 +2685,7 @@ delfin metrics are unified metrics which are either  mapped to or derived from o
 ### Volume
 <to do>
 
-## delfin Metric model
-delfin can internally use [Prometheus](https://prometheus.io/) to persist metric data. delfin should also give option for third parties to export collected metrics to other platforms.
-delfin metric data model is in align with [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) to support time series data persistence .
-### data model
-| Propperty | DataType | Description           | Example               |
-|-----------|----------|-----------------------|-----------------------|
-| name      | string   | Name of the indicator | average_read_requests |
-|labels|map|Any parameters required to distuinquish this indicator uniquely |storage_id = delfin id of the storage, resource_type = volume, id = delfin id of this resource, native_volume_id = id of this volume in back_end, native_storage_pool_id = associated storage_pool id in backend,  type= RAW, unit = IO/s, value_type = COUNTER|
-| value     | float | value of this indicator      | 1094.28     |
-| timestamp | int   | epoch time of this indicator | 1594635195  |
 
-
-### Labels model
-| | |
-|-|-|
-|Resource|Required labels|
-|Array| storage_id = <storage_id> resource_type = array id = <delfin id of this resource> |
-|Storage-Pool| storage_id = <storage_id> resource_type = storage_pool id = <delfin id of this resource> native_storage_pool_id = <associated storage_pool id in backend > type=enum unit = enum value_type = enum|
-|Volume|storage_id = <storage_id> resource_type = volume id = <delfin id of this resource> native_volume_id = <id of this pool  in back_end> native_storage_pool_id = <associated storage_pool id in backend > type=enum unit = enum value_type = enum|
-
-#### enums
-| | |
-|-|-|
-|**Propperty**|**enum**|
-|type|RAW,DERIVED,AGGREGATED|
-|value_type|COUNTER, RATE, GUAGE,|
-|unit|IOPS,MB/s,%,ms,KB,
 
 ## Performance Collection Flow
 
