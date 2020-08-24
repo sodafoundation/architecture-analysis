@@ -52,7 +52,7 @@ Administration of heterogeneous platforms is a challenge to storage admins. Vend
 ### Assumptions and Constraints
 
 [//]:# (What are the assumptions/constraints known)
-
+NA
 ### Requirement Analysis
 One single pane of glass for managing heterogeneous storage devices, switch and host . A standard user interface to manage devices from different vendors and a single source to collect monitoring and alert information from heterogeneous platforms.
 
@@ -82,10 +82,10 @@ One single pane of glass for managing heterogeneous storage devices, switch and 
 ### Input Requirements
 
 [//]:# (What are the input requirements for this feature \(can give links to the high level requirements/architecture documents, tasks, analysis etc\) )
-* User should be able to register a storage device
+* User must be able to register a storage device
   
 ### Feature Requirements
-* Discovery of Storages (auto-discovery or discovery based on Vendor / model selection)
+* Discovery of Storage (auto-discovery or discovery based on Vendor / model selection)
 * Overall Capacity dashboard ( aggregated capacity details of all discovered platforms)
 * Overall Alert Dashboard (For September release)
 * Overall Performance Dashboard (For September release)
@@ -246,6 +246,6 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNDI2NTI5OTMyLC0xNzMzNzU3NTk3LDE4OD
+eyJoaXN0b3J5IjpbMjUwMzUzODE0LC0xNzMzNzU3NTk3LDE4OD
 YxMTA1MTQsLTIwODA3MjIxNTddfQ==
 -->
