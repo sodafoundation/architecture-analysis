@@ -74,9 +74,10 @@ One single pane of glass for managing heterogeneous storage devices, switch and 
 * Health status of all the registered devices
 * List storage arrays / devices by performance risk
 * Display detailed performance information of selected resource (array / pool / volume / disk / controller / port) by metric. 
-* 
+* Comparison of performance metrics across selected resource.
 #### Alerts Dashboard
 ---
+* Alarms r
 ### Input Requirements
 
 [//]:# (What are the input requirements for this feature \(can give links to the high level requirements/architecture documents, tasks, analysis etc\) )
@@ -244,6 +245,6 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNjU2ODIwNjcwLDE4ODYxMTA1MTQsLTIwOD
+eyJoaXN0b3J5IjpbLTY0ODkxMTAzLDE4ODYxMTA1MTQsLTIwOD
 A3MjIxNTddfQ==
 -->
