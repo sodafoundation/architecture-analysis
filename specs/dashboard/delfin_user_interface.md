@@ -77,7 +77,8 @@ One single pane of glass for managing heterogeneous storage devices, switch and 
 * Comparison of performance metrics across selected resource.
 #### Alerts Dashboard
 ---
-* Alarms r
+* List and notify about alarms raised across the devices and resources.
+
 ### Input Requirements
 
 [//]:# (What are the input requirements for this feature \(can give links to the high level requirements/architecture documents, tasks, analysis etc\) )
@@ -245,6 +246,6 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTY0ODkxMTAzLDE4ODYxMTA1MTQsLTIwOD
-A3MjIxNTddfQ==
+eyJoaXN0b3J5IjpbLTE3MzM3NTc1OTcsMTg4NjExMDUxNCwtMj
+A4MDcyMjE1N119
 -->
