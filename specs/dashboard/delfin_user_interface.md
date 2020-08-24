@@ -58,7 +58,8 @@ One single pane of glass for managing heterogeneous storage devices, switch and 
 
 #### Storage Summary
 ---
-* 
+* Capacity Usage Summary
+* Performance Summary
 #### Capacity Dashboard
 ---
 #### Performance Dashboard
@@ -232,5 +233,6 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTg4NjExMDUxNCwtMjA4MDcyMjE1N119
+eyJoaXN0b3J5IjpbNTE4NDIyNzM5LDE4ODYxMTA1MTQsLTIwOD
+A3MjIxNTddfQ==
 -->
