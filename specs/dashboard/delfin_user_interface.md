@@ -54,6 +54,7 @@ Administration of heterogeneous platforms is a challenge to storage admins. Vend
 [//]:# (What are the assumptions/constraints known)
 
 ### Requirement Analysis
+One single pane of glass for managing heterogeneous storage devices, switch and host . A standard user interface to manage devices from different vendors and a single source to collect monitoring and alert information from heterogeneous platforms.
 
 #### Storage Summary
 ---
@@ -231,5 +232,5 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMTEyNzY3Mzc0MywtMjA4MDcyMjE1N119
+eyJoaXN0b3J5IjpbMTg4NjExMDUxNCwtMjA4MDcyMjE1N119
 -->
