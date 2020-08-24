@@ -127,7 +127,7 @@ Other Non Functional Requirements (Scalability, HA etc…)
 ### Module Architecture
 
 [//]:# (Module Architecture details go here)
-
+* Overall Angular architecture
 ### High Level Module View
 
 [//]:# (Give the overall system architecture and provide the positioning of Module in that. Give the external interfaces, brief description etc…)
@@ -255,6 +255,6 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjE0MTg1MDA4OSwtMTczMzc1NzU5NywxOD
-g2MTEwNTE0LC0yMDgwNzIyMTU3XX0=
+eyJoaXN0b3J5IjpbLTg2MDU1MTA1NywyMTQxODUwMDg5LC0xNz
+MzNzU3NTk3LDE4ODYxMTA1MTQsLTIwODA3MjIxNTddfQ==
 -->
