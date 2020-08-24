@@ -25,6 +25,12 @@ Major Version Updates
 * List the requirements for the Delfin User Interface
 * Design the Storage Summary Dashboard
 	* Array Details
+		* Storage Pools
+		* Volumes
+		* Controllers
+		* Ports
+		* Disks
+	* 
 * Design  the Capacity Dashboard
 * Design  the Performance Summary Dashboard
 * Design  the Alerts notification and Dashboard
@@ -213,5 +219,5 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbMjA1MjU2NDk4NCwtMjA4MDcyMjE1N119
+eyJoaXN0b3J5IjpbLTUyMjYwODQ2MCwtMjA4MDcyMjE1N119
 -->
