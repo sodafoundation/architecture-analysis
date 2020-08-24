@@ -106,15 +106,11 @@ Analysed various tools like Stor2RRD, SolarWinds
 -   Registering a storage device
 -   Removing a storage device
 -   Get registered storage device list
--   Updating storage device access information
 -   Get storage details
 -   Querying storage device details
 -   Querying other resource Information like (LUN,Pool,Disk, etc)
 -   Querying performance metrics of resources and services
--   Trigger all registered device collection
--   Trigger a particular device collection
 -   Register alert source to receive alerts
--   Receive alert and forward to clients
 -   Clear alert
 -   Configure resources
 ##### Non Functional Requirements
@@ -259,6 +255,6 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTE1NzMxMDAxMDUsLTE3MzM3NTc1OTcsMT
-g4NjExMDUxNCwtMjA4MDcyMjE1N119
+eyJoaXN0b3J5IjpbMjE0MTg1MDA4OSwtMTczMzc1NzU5NywxOD
+g2MTEwNTE0LC0yMDgwNzIyMTU3XX0=
 -->
