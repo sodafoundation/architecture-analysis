@@ -63,7 +63,12 @@ One single pane of glass for managing heterogeneous storage devices, switch and 
 * Performance Summary
 #### Capacity Dashboard
 ---
-* Overall devices reg
+* Overall devices registered
+* Overall Usable Capacity of registered devices
+* Overall raw Capacity of registered devices
+* Overall Capacity Usage of registered devices
+* Overall Capacity usage across locations (based on availability)
+* Overall Capacity Usage 
 #### Performance Dashboard
 ---
 #### Alerts Dashboard
@@ -235,6 +240,6 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbNTI5ODk2MTIxLDE4ODYxMTA1MTQsLTIwOD
+eyJoaXN0b3J5IjpbMzIzNTcwMTU2LDE4ODYxMTA1MTQsLTIwOD
 A3MjIxNTddfQ==
 -->
