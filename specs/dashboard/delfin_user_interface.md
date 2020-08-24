@@ -42,7 +42,7 @@ Major Version Updates
 ## Motivation and background
 
 [//]:# (Describe why this feature? What is the background to develop this etc.)
-The Delfin project aims to build an open source infrastructure management platform for heterogeneous storage environments. Although the command line and APIs provide the user with non graphical interfaces, a graphical user interface will drastically improve the experience of using the above APIs. The USP of the 
+Administration of heterogeneous platforms is a challenge to storage admins. Vendor supplied management software is either vendor locked in or not open source. SODA foundation has vision to standardise and bring heterogeneous device management using a single platform. Although the command line and APIs provide the user with non graphical interfaces, a graphical user interface will drastically improve the experience of using the above APIs and make the job efficient.
 
 ### Non-Goals
 
@@ -52,6 +52,8 @@ The Delfin project aims to build an open source infrastructure management platfo
 ### Assumptions and Constraints
 
 [//]:# (What are the assumptions/constraints known)
+
+ - List item
 
   
 ### Requirement Analysis
@@ -223,6 +225,5 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTEwMTEzNjQwMjYsLTIwODA3MjIxNTddfQ
-==
+eyJoaXN0b3J5IjpbLTI1NDg0ODA0OSwtMjA4MDcyMjE1N119
 -->
