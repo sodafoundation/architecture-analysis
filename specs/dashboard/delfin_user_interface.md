@@ -23,10 +23,11 @@ Major Version Updates
 
 ## Goals
 * List the requirements for the Delfin User Interface
-* Design for the Storage Summary Dashboard
-* Design for the Capacity Dashboard
-* Design for the Performance Summary Dashboard
-* Design for the Alerts notification and Dashboard
+* Design the Storage Summary Dashboard
+	* Array Details
+* Design  the Capacity Dashboard
+* Design  the Performance Summary Dashboard
+* Design  the Alerts notification and Dashboard
 
 ## Motivation and background
 
@@ -212,5 +213,5 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTIwODA3MjIxNTddfQ==
+eyJoaXN0b3J5IjpbMjA1MjU2NDk4NCwtMjA4MDcyMjE1N119
 -->
