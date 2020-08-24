@@ -52,9 +52,13 @@ Administration of heterogeneous platforms is a challenge to storage admins. Vend
 ### Assumptions and Constraints
 
 [//]:# (What are the assumptions/constraints known)
- * The user
-### Requirement Analysis
 
+### Requirement Analysis
+#### Storage Summary
+
+#### Capacity Dashboard
+#### Performance Dashboard
+#### Alerts Dashboard
 ### Input Requirements
 
 [//]:# (What are the input requirements for this feature \(can give links to the high level requirements/architecture documents, tasks, analysis etc\) )
@@ -222,5 +226,5 @@ Other Non Functional Requirements (Scalability, HA etc…)
 [//]:# (All raw inputs or discussion points or etc can be added here)
 
 <!--stackedit_data:
-eyJoaXN0b3J5IjpbLTM2OTkyMTcsLTIwODA3MjIxNTddfQ==
+eyJoaXN0b3J5IjpbNDc1MTM1MjEsLTIwODA3MjIxNTddfQ==
 -->
