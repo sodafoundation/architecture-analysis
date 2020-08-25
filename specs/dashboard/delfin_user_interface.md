@@ -24,18 +24,7 @@ Major Version Updates
 ## Goals
 * List the requirements for the Delfin User Interface
 * Design the Storage Summary Dashboard
-	* Array Details
-		* Resources
-			* Storage Pools
-			* Volumes
-			* Controllers
-			* Ports
-			* Disks
-		* Array Capacity Details
-		* Array Performance
-		* Alerts
 * Design  the Capacity Dashboard
-	* 
 * Design  the Performance Summary Dashboard
 * Design  the Alerts notification and Dashboard
 
@@ -59,6 +48,16 @@ One single pane of glass for managing heterogeneous storage devices, switch and 
 #### Storage Summary
 ---
 * Fetch and display Storage devices by Vendor / Model
+* Array Details
+	* Resources
+		* Storage Pools
+		* Volumes
+		* Controllers
+		* Ports
+		* Disks
+	* Array Capacity Details
+	* Array Performance
+	* Alerts
 * Capacity Usage Summary
 * Performance Summary
 #### Capacity Dashboard
@@ -96,7 +95,9 @@ One single pane of glass for managing heterogeneous storage devices, switch and 
 #### Requirement Analysis
 
 [//]:# (Analysis go here)
-Analysed various tools like Stor2RRD, SolarWinds
+Analysed tools like: 
+* [SolarWinds](http://www.solarwinds.com/network-performance-monitor/registration?program=607&campaign=70150000001Y1rw&CMPSource=DEMO_NPM)
+* [Stor2RRD](https://demo.stor2rrd.com/)
 #### List of Requirements
 
 [//]:# (Give all the requirements identified for the modules, in different categories)
@@ -113,11 +114,13 @@ Analysed various tools like Stor2RRD, SolarWinds
 -   Register alert source to receive alerts
 -   Clear alert
 -   Configure resources
+
 ##### Non Functional Requirements
 
 Performance Requirements
 
 Security Requirements
+
 
 Other Non Functional Requirements (Scalability, HA etc…)
 
@@ -127,7 +130,9 @@ Other Non Functional Requirements (Scalability, HA etc…)
 ### Module Architecture
 
 [//]:# (Module Architecture details go here)
-* Overall Angular architecture
+
+![Angular App Architecture](resources/angular-app-architecture.png)
+
 ### High Level Module View
 
 [//]:# (Give the overall system architecture and provide the positioning of Module in that. Give the external interfaces, brief description etc…)
@@ -142,11 +147,36 @@ Other Non Functional Requirements (Scalability, HA etc…)
 
 [//]:# (Provide your module architecture with key external interfaces and internal blocks….)
 
+![High Level Module Architecture](resources/delfin-module-architecture.png)
+
   
 
 ## Detailed Design
 [//]:# (All the detailed design aspects go here)
 
+### Register Storage Device
+
+![Register Storage](resources/register-device.png)
+
+### Storage Summary
+
+![Figure 1 - Storage Summary](resources/delfin-prototype-storage-summary-1.png)
+
+![Figure 2 - Storage Summary](resources/delfin-prototype-storage-summary-2.png)
+
+![Figure 3 - Storage Summary](resources/delfin-prototype-storage-summary-3.png)
+
+### Capacity Dashboard
+
+![Figure 4 - Capacity Dashboard](resources/delfin-prototype-capacity-dashboard-1.png)
+
+![Figure 5 - Capacity Dashboard](resources/delfin-prototype-capacity-dashboard-2.png)
+
+### Storage Array Details
+![Figure 6 - Array Details](resources/delfin-prototype-array-details-1.png)
+![Figure 7 - Array Details](resources/delfin-prototype-array-details-2.png)
+![Figure 8 - Array Details](resources/delfin-prototype-array-details-3.png)
+![Figure 9 - Array Details](resources/delfin-prototype-array-details-4.png)
 ### Use case View
 
 [//]:# (Provide system context and typical use cases to determine the scope and boundaries for the module.)
@@ -253,8 +283,3 @@ Other Non Functional Requirements (Scalability, HA etc…)
 ## Scratchpad
 
 [//]:# (All raw inputs or discussion points or etc can be added here)
-
-<!--stackedit_data:
-eyJoaXN0b3J5IjpbLTg2MDU1MTA1NywyMTQxODUwMDg5LC0xNz
-MzNzU3NTk3LDE4ODYxMTA1MTQsLTIwODA3MjIxNTddfQ==
--->
