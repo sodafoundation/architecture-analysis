@@ -14,13 +14,13 @@ SODA Dock provides the platform for different storage drivers to connect to it a
 SODA Dock already supports NetApp ONTAP SAN Driver for Block devices. This design spec is to support NetApp NAS Fileshare driver in SODA. The idea is to support Fileshare management for NetApp NAS devices.
 
 ## Use case
-[] As a Server admin, I want to use the NFS client of ESXi to mount a designated NFS volume from a NetApp NAS Server, create a NFS Datastores and use to store and boot virtual machines in the same way that one uses for VMFS Datastores. The NFS volumes on the NAS server are created by the Storage administrators and exported from the NFS server of the NetApp filer.
+* As a Server admin, I want to use the NFS client of ESXi to mount a designated NFS volume from a NetApp NAS Server, create a NFS Datastores and use to store and boot virtual machines in the same way that one uses for VMFS Datastores. The NFS volumes on the NAS server are created by the Storage administrators and exported from the NFS server of the NetApp filer.
 
-[] As a storage admin, I want to get a unified storage management platform from where I can manage different Storage arrays in the datacenter. These array can be pure SAN device, NAS device or a Unified storage device. 
+* As a storage admin, I want to get a unified storage management platform from where I can manage different Storage arrays in the datacenter. These array can be pure SAN device, NAS device or a Unified storage device. 
 
-[] As a storage admin, I should be able to create a NetApp NAS volume for File storage, mount it, apply appropriate export policies and share the export location. This export location can be used by the server admins to mount it on the host through the Client and use it as File storage
+* As a storage admin, I should be able to create a NetApp NAS volume for File storage, mount it, apply appropriate export policies and share the export location. This export location can be used by the server admins to mount it on the host through the Client and use it as File storage
 
-[] As a service provider (SSP), I want to manage the storage provisioning from a NetApp Filer for different clients. Each client physical storage is segregated by the Virtual Storage Container called SVM. These SVMs have separate access credentials and endpoints defined. As a SSP, i should be able to manage different clients from a single pane of SODA Dock. Also these SVMs can have their own QoS defined.
+*  As a service provider (SSP), I want to manage the storage provisioning from a NetApp Filer for different clients. Each client physical storage is segregated by the Virtual Storage Container called SVM. These SVMs have separate access credentials and endpoints defined. As a SSP, I should be able to manage different clients from a single pane of SODA Dock. Also these SVMs can have their own QoS defined.
 
 ## Requirement
 * SODA Dock should support NetApp Fileshare driver to support
@@ -37,15 +37,15 @@ SODA Dock already supports NetApp ONTAP SAN Driver for Block devices. This desig
 * NetApp ONTAP supports multiple data access protocols like CIFS and NFS for creating export/shares which can be mounted/mapped to be used as File storage
 
 ## Non Goals
-[] No Qtree support for G Release
-[] Currently SODA will support only NFS protocol
-[] This desing spec is only for the SODA dock to support NetApp Fileshare. Integrating these Fileshares with Nortbound compute platforms like expanding SODA NGC plugin to support NFS datastore too is not the scope of this proposal
-[] multi-tenant deployment and registration of SVM per tenant
+* No Qtree support for G Release
+* Currently SODA will support only NFS protocol
+* This design spec is only for the SODA dock to support NetApp Fileshare. Integrating these Fileshares with Northbound compute platforms like expanding SODA NGC plugin to support NFS datastore too, is not the scope of this proposal
+* multi-tenant deployment and registration of SVM per tenant
 
 ## Interface Model
 * Provide the Fileshare operations and Management through any Client like SODA Dashboard or SODA CLI 'osdsctl'
 * SODA API interface for Fileshare opertions and Management
-
+  SODA Dock support for NetApp Fileshare will support all File Share APIs. For more Info, check [https://raw.githubusercontent.com/sodafoundation/api/master/openapi-spec/swagger.yaml](https://raw.githubusercontent.com/sodafoundation/api/master/openapi-spec/swagger.yaml)
 ## Feature Details
 SODA Dock works off the "Storage Pool" of the storage provider. These pools are used to create the logical storages for provisioning. For NetApp, *Aggregates* are the storage providers. 
 
