@@ -4,25 +4,33 @@
 ## Requirement analysis
 
 1. User wants to register a device for perfomance collection
-2. User wants to specify object and metrics which he would like to poll
+2. User wants to specify object type  which he would like to poll
 3. User wants to get device (storage) performance information
 4. User wants to get other resource (storage-pool,volume,controller,port,disk, etc )performance information.
 5. User wants to get performance information for a range , or historic performance:  example :  (real-time, user-defined time segment, and latest 4Hours/12Hours/1Day/1Week/1Month/1Year performance information).
 6. User wants to configure collection intervals for each resource 
 7. User wants to trigger performance collection  of particular storage.
-8. Usee wants to export real time collection data to third party systems.
+8. User wants to export real time collection data to third party systems.
+9. User wants query performance metrics through delfin APIs
 
+## Architecture
+overall architecture spec of delfin is vailable  [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)
+Scope of architecture discussion in this design doc is scoped to performance metrics collection.
+### Architecture considerations
+* Provide a default monitoring system
+* Extendibility support to exisitng monitoring system to use delfin ### Performance collection architecture
+<to do>
 ## delfin Metric model
 delfin can internally use [Prometheus](https://prometheus.io/) to persist metric data. delfin should also give option for third parties to export collected metrics to other platforms.
 delfin metric data model is in align with [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) to support time series data persistence .
 ### data model
 
-| Propperty | DataType | Description           | 
-|-----------|----------|-----------------------|-----------------------|
-| name      | string   | Name of the indicator | 
-|labels|map|Any parameters required to distuinquish this indicator uniquely |
-| value     | float | value of this indicator      | 
-| timestamp | int   | epoch time of this indicator | 
+| Property  | datatype  | Description                                                     |
+|------------|-----------|-----------------------------------------------------------------|
+| name       | string    |  Name of the indicator                                          |
+| labels     | map<>     | Any parameters required to distinguish this indicator uniquely |
+| value      | float     | value of this indicator                                         |
+| timestamp  | int       | epoch time of this indicator                                    |
 ### example metric
 ```
 name = read_throuhput
@@ -54,6 +62,53 @@ timestamp = 1594635195
 |type|RAW,DERIVED,AGGREGATED|
 |value_type|COUNTER, RATE, GUAGE,|
 |unit|IOPS,MB/s,%,ms,KB,
+## Scheduler configuration example
+```
+{
+  "performance_schedule": {
+    "storage_id": "4b6f216f-93d2-4c8e-895d-c0fcbecd1958",
+    "array_polling": {
+      	"array_perf_collection": true,
+      	"interval": 900,
+     	 "history_performance": true
+    	},
+    "pool_polling": {
+      	"pool_perf_collection": true,
+      	"interval": 0,
+      	"history_performance": false
+    },
+    "volume_polling": {
+      	"volume_perf_collection": false,
+     	 "interval": 0,
+      	"history_performance": false
+    	}
+    }
+}
+
+```
+## Driver interfaces
+```
+collection_spec = { 
+'interval':900,
+'is_historic':True,
+'storage_id': '12c2d52f-01bc-41f5-b73f-7abf6f38a2a6'
+}
+
+```
+```
+keys = ['response_time', 'throughtput', 'bandwidth', 'read_throughtput', 'write_throughtput', 'read_bandwidth', 'write_bandwidth']
+```
+```
+@abc.abstractmethod
+def get_storage_perf_metrics(self, context, collection_spec, keys):
+    """Get storage device performance metrics  
+    Return array of metrics metrics[]"""
+    pass
+
+```
+
+
+
 ## Metrics mapping table
 delfin metrics are unified metrics which are either  mapped to or derived from other platforms metrics . below table is report of analysis of different platforms
 ### Storage
