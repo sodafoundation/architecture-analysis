@@ -18,8 +18,11 @@ overall architecture spec of delfin is vailable  [here](https://github.com/sodaf
 Scope of architecture discussion in this design doc is scoped to performance metrics collection.
 ### Architecture considerations
 * Provide a default monitoring system
-* Extendibility support to exisitng monitoring system to use delfin ### Performance collection architecture
-<to do>
+* Extendibility support to exisitng monitoring system to use delfin 
+### Performance collection architecture
+
+TBD
+
 ## delfin Metric model
 delfin can internally use [Prometheus](https://prometheus.io/) to persist metric data. delfin should also give option for third parties to export collected metrics to other platforms.
 delfin metric data model is in align with [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) to support time series data persistence .
@@ -88,8 +91,8 @@ timestamp = 1594635195
 ```
 ## Driver interfaces
 ```
-collection_spec = { 
-'interval':900,
+collection_spec = {
+'interval':900,
 'is_historic':True,
 'storage_id': '12c2d52f-01bc-41f5-b73f-7abf6f38a2a6'
 }
@@ -99,10 +102,10 @@ collection_spec = {
 keys = ['response_time', 'throughtput', 'bandwidth', 'read_throughtput', 'write_throughtput', 'read_bandwidth', 'write_bandwidth']
 ```
 ```
-@abc.abstractmethod
+@abc.abstractmethod
 def get_storage_perf_metrics(self, context, collection_spec, keys):
-    """Get storage device performance metrics  
-    Return array of metrics metrics[]"""
+    """Get storage device performance metrics  
+   Return array of metrics metrics[]"""
     pass
 
 ```
