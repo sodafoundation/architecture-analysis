@@ -17,8 +17,8 @@
 overall architecture spec of delfin is vailable  [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)
 Scope of architecture discussion in this design doc is scoped to performance metrics collection.
 ### Architecture considerations
-* Provide a default monitoring system
-* Extendibility support to exisitng monitoring system to use delfin 
+1.  Delfin as complete monitoring system with prometheus as the core  DB
+2.  Provision to Extend users existing monitoring system  with delfin as a platform  to collect metrics . 
 ### Performance collection architecture
 
 TBD
@@ -31,9 +31,9 @@ delfin metric data model is in align with [Prometheus data model](https://promet
 | Property  | datatype  | Description                                                     |
 |------------|-----------|-----------------------------------------------------------------|
 | name       | string    |  Name of the indicator                                          |
-| labels     | map<>     | Any parameters required to distinguish this indicator uniquely |
-| value      | float     | value of this indicator                                         |
-| timestamp  | int       | epoch time of this indicator                                    |
+| labels     | dict { }   | Any parameters required to distinguish this indicator uniquely as key value map|
+| values      | dict {}     | time_stamp as key and metric value as value as a key value map                                         |
+
 ### example metric
 ```
 name = read_throuhput
@@ -47,8 +47,11 @@ labels = {
 			'unit': 'IOPS'
 			'value_type': 'GAUGE'
 	}
-value = 1094.28
-timestamp = 1594635195
+values = {
+    1594635195: 1094.28,
+    1594636195: 1234.54
+}
+
 ```
 ### Labels model
 | | |
