@@ -4,28 +4,53 @@
 ## Requirement analysis
 
 1. User wants to register a device for perfomance collection
-2. User wants to specify object type  which he would like to poll
+2. User wants to specify a resource  type and interval which he would like to poll
 3. User wants to get device (storage) performance information
 4. User wants to get other resource (storage-pool,volume,controller,port,disk, etc )performance information.
 5. User wants to get performance information for a range , or historic performance:  example :  (real-time, user-defined time segment, and latest 4Hours/12Hours/1Day/1Week/1Month/1Year performance information).
-6. User wants to configure collection intervals for each resource 
-7. User wants to trigger performance collection  of particular storage.
-8. User wants to export real time collection data to third party systems.
-9. User wants query performance metrics through delfin APIs
+6. User wants to trigger performance collection  of particular storage.
+7. User wants to export real time collection data to existing monitoring system.
+8. User wants query performance metrics through delfin APIs
 
 ## Architecture
-overall architecture spec of delfin is vailable  [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)
-Scope of architecture discussion in this design doc is scoped to performance metrics collection.
+Overall architecture spec of delfin is vailable  [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md).
+Scope of architecture discussion in this design doc is limited to performance metrics collection and the modules involved for the same.
+
+### Delfin REST interface
+Performance configuration API:- This is the external REST interface to configure backends for performance collection in Delfin.
+Performance Query API :- This is the external interface to query the collected metrics. 
+
+### Resource Manager
+Act as the API server for all REST requests .
+### Scheduler
+Delfins internal task scheduler. Scheduler create tasks based on the task configuration set by user.
+
+### Task Manager
+Recieves tasks from configured message bus, get  required parameter for the tasks from resource DB and invokes driver API for the tasks. Driver response will be verfied and push to exporter interface.
+
+### Exporter interface 
+Interface to connect Exporters. 
+### Prometheus Exporter
+A default exporter available with delfin.This exporter convert delfin metric model to prometheus metric model . Exporter provides a target endpoint for Prometheus. Exporter persist the delfin collected metrics till prometheus scrape from this target.This exporter will be configured in prometheus to scrape. If user prefer monitoring system other than prometheus, exporter for the same platform has to be integrated with delfin.
+### Prometheus Query adapter
+A default prometheus query adapter available with delfin. This module genearate PromQL and adapt the prometheus model to delfin metric model.
+### Driver manager 
+Act as interface between backend drivers and task manager. Provides a common interface for task manager to call driver fucntions.
+
 ### Architecture considerations
-1.  Delfin as complete monitoring system with prometheus as the core  DB
-2.  Provision to Extend users existing monitoring system  with delfin as a platform  to collect metrics . 
-### Performance collection architecture
+Based on the requirement, user can choose any of the below architecture for deployment of delfin for performance monitoring.
 
-TBD
+####  1. Delfin as complete monitoring system with prometheus as the core  DB
 
-## delfin Metric model
-delfin can internally use [Prometheus](https://prometheus.io/) to persist metric data. delfin should also give option for third parties to export collected metrics to other platforms.
-delfin metric data model is in align with [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) to support time series data persistence .
+![](./Resources/delfin_architecture_with_prometheus.jpg)
+
+####  2. Delfin as a heterogeneous metrics collection framework for existing monitoring platforms. 
+![](Resources/delfin_architecture_with_thirdPraty.jpg)
+
+
+## Delfin metric model persistence 
+Delfin by defualt  use [Prometheus](https://prometheus.io/) to persist metric data unless user configured a thridparty TSDB. In case user use DB other than prometheus, an exorter for the same has to be integrated with delfin .
+delfin metric data model is inspired from [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) to support time series data persistence .
 ### data model
 
 | Property  | datatype  | Description                                                     |
@@ -115,8 +140,8 @@ def get_storage_perf_metrics(self, context, collection_spec, keys):
 
 
 
-## Metrics mapping table
-delfin metrics are unified metrics which are either  mapped to or derived from other platforms metrics . below table is report of analysis of different platforms
+## Delfin unified Metrics and mapping with some backends
+delfin metrics are unified metrics which are either  mapped to or derived from other platforms metrics . below table is a report from  analysis of different platforms
 ### Storage
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 
