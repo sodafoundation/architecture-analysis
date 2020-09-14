@@ -40,7 +40,7 @@ Act as interface between backend drivers and task manager. Provides a common int
 ### Architecture considerations
 Based on the requirement, user can choose any of the below architecture for deployment of delfin for performance monitoring.
 
-####  1. Delfin as complete monitoring system with Prometheus as the core  DB
+####  1. Delfin as complete monitoring system 
 
 ![](./Resources/delfin_architecture_with_prometheus.jpg)
 
