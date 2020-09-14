@@ -93,30 +93,11 @@ values = {
 |type|RAW,DERIVED,AGGREGATED|
 |value_type|COUNTER, RATE, GUAGE,|
 |unit|IOPS,MB/s,%,ms,KB,
-## Scheduler configuration example
-```
-{
-  "performance_schedule": {
-    "storage_id": "4b6f216f-93d2-4c8e-895d-c0fcbecd1958",
-    "array_polling": {
-      	"array_perf_collection": true,
-      	"interval": 900,
-     	 "history_performance": true
-    	},
-    "pool_polling": {
-      	"pool_perf_collection": true,
-      	"interval": 0,
-      	"history_performance": false
-    },
-    "volume_polling": {
-      	"volume_perf_collection": false,
-     	 "interval": 0,
-      	"history_performance": false
-    	}
-    }
-}
+## REST interface for configuring performance collection 
+![](./Resources/PUT.PNG)
+![](./Resources/PUT_1.PNG)
+![](./Resources/PUT_2.PNG)
 
-```
 ## Driver interfaces
 ```
 collection_spec = {
