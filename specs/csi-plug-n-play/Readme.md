@@ -38,13 +38,25 @@ parameters:
    - soda-csi-provisioner updates the SODA API server with the volume provisioning request and gather the required intelligence from SODA about the current provisioning.
    - soda-csi-provisioner will forward the request to CSI driver in the same pod to do the actual provisioing.
    
-   
+ 
  ### Highlights
   - A simple design which let's user to patch the existing Third party CSI drivers deployment whithout any changes to actual CSI driver containers provided by TP vendors.
   - All the side car containers which will be used by TP CSI drivers will be provided by SODA.
   - Robust and easy to maintain design which can be used by heterogeneous csi storage providers with minimal changes to side cars.
   - Easy to upgrade along with TP CSI driver.
   - Easy to maintain the side car code as the code-base will be used from kubernetes-csi org and the SODA features will be added to it as a plugin, so it's easy to upgrade side-car as k8s csi spec evolves.
+ 
  ### Known Challenges
   - How to determine the plugin capabilities when heterogeneous drivers are there with different capabilities.
+  - There is technical challenges to interact with soda-api-server to get the profile details as well as update the PV/PVC object status in soda etcd. Current sodafoundation/api doesn't supports to use the Client as it is in csi-porvisioner because of log initilaization issue as well as auth and connection issues because soda-api server runs as a process and the cert files needs to be mounted in exisiting deployment which will be mostly handled by third party providers.
+ 
+ ### How different it is from existing soda-csi-plugin.
+ The existing soda-csi plugin uses driver routers to interact with heterogeneous backends thus adding the extra hop and management layer between k8s api server and actual storage backend.
+ ![](./images/Deisgn-Option-1.png)
+ 
+ However in the new plug-n-play mechanism the intelligence to choose the backend sits inside the provisioner so the extra hop is removed.
+ 
+ 
+ ***Note*** : The new plug-n-play mechanism is the experimenting effort which we are doing to finalize the best design for unified csi plugin for soda. Both the design options will be available and after a through review  one of the design will be finalized, till then we can expect refactoring in the proposed design.
+ 
   
