@@ -20,7 +20,7 @@ apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
   name: csi-soda-example--block
-provisioner: csi-soda-block                 # This is the provisioner provided by SODA
+provisioner: csi-soda                 # This is the provisioner provided by SODA
 parameters:
   attachMode: rw
   profile: XXXXXXXXXXXXXXXXXXXXXXXXXXXX     # This profile will help to use the hetrogeneous storage backend in a similar way
