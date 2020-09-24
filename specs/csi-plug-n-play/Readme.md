@@ -4,59 +4,68 @@ This plugin facilitates the provisioning of the Storage using heterogeneous CSI 
 
 
 ## Goals
-Make a single CSI Plug-N-Play mechanism which helps to:
- - Provision and manage the Storage of heterogeneous Storage providers.
- - Third party CSI drivers should be used directly from Vendors so that SODA/Users need not worry about it's maintenance.
- - Use Soda Profile ID to determine which storage vendor drivers need to be used to provision the storage.
- - Experience all the features set of SODA.
+Provide a plug and play option for standard CSI drivers to SODA On prem data platform
+
+### Motivation and background
+
+ - All the available CSI drivers for Storage backends can be supported with SODA quickly. (Large storage backend support quickly)
+ - Easy management of CSI backends for the user from Kubernetes (Single CSI plugin from SODA can manage huge number of drivers)
+ - All the SODA platform features will be available for all those backends (migration, telemetry and all)
+ - CSI Drivers are mostly supported by the vendors directly , hence easy production ready solutions for kubernetes on SODA platform
+
  
  
- ## Proposed Architecture
+ ## CSI Flow with current architecture
+ -  SODA CSI Plugin runs along with k8s sidecar containers
+ -  Profile info is the one helps to determine the desire backend
+ -  SODA CSI Plugin converts CSI calls to SODA API calls  
+ -  All the storage resources provisioned are visible at SODA ecosystem through API Server
+
+ ![](./images/CSI-Origina-Flow.png) 
  
- The goal is to make the SODA CSI plugin which can help to use the ThirdParty Storage CSI drivers in SODA way and get all the advantages of SODA frameworks.  
- This will help the users to use heterogeneous storage backends using a unified way provided by SODA.
- ~~~
-apiVersion: storage.k8s.io/v1
-kind: StorageClass
-metadata:
-  name: csi-soda-example--block
-provisioner: csi-soda                 # This is the provisioner provided by SODA
-parameters:
-  attachMode: rw
-  profile: XXXXXXXXXXXXXXXXXXXXXXXXXXXX     # This profile will help to use the hetrogeneous storage backend in a similar way
- ~~~
  
- ### Deployment View
- ![](./images/Soda-CSI-Plugin-typical-design.png)
+ ## CSI PlugNPlay
+ There are many third party CSI plugins available with many providers such as NetAPP, IBM etc..
+ If there can be a way to plugin them directly to SODA ecosystem and configure them use dynamically, northbound management platforms can be benefited
+ Most of these CSI drivers are supported by the vendor. Hence, automatically SODA will have vendor supported backends available.
  
- ### Call Flows  
- ![](./images/Soda-CSI-Plugin-CallFLow.png)  
- 
-  A typical call flow for SODA CSI Plug-N-Play mechanism will be:
-   - Once the PVC Object is created by user then soda-csi-provisioner will get a request to provision the Storage.
-   - soda-csi-provisioner will interact with SODA API's to get the profile details and other parameters to determine if the required driver is same as the current driver in a pod.
-   - soda-csi-provisioner updates the SODA API server with the volume provisioning request and gather the required intelligence from SODA about the current provisioning.
-   - soda-csi-provisioner will forward the request to CSI driver in the same pod to do the actual provisioing.
-   
- 
- ### Highlights
-  - A simple design which let's user to patch the existing Third party CSI drivers deployment whithout any changes to actual CSI driver containers provided by TP vendors.
-  - All the side car containers which will be used by TP CSI drivers will be provided by SODA.
-  - Robust and easy to maintain design which can be used by heterogeneous csi storage providers with minimal changes to side cars.
-  - Easy to upgrade along with TP CSI driver.
-  - Easy to maintain the side car code as the code-base will be used from kubernetes-csi org and the SODA features will be added to it as a plugin, so it's easy to upgrade side-car as k8s csi spec evolves.
- 
- ### Known Challenges
-  - How to determine the plugin capabilities when heterogeneous drivers are there with different capabilities.
-  - There is technical challenges to interact with soda-api-server to get the profile details as well as update the PV/PVC object status in soda etcd. Current sodafoundation/api doesn't supports to use the Client as it is in csi-porvisioner because of log initilaization issue as well as auth and connection issues because soda-api server runs as a process and the cert files needs to be mounted in exisiting deployment which will be mostly handled by third party providers.
- 
- ### How different it is from existing soda-csi-plugin.
- The existing soda-csi plugin uses driver routers to interact with heterogeneous backends thus adding the extra hop and management layer between k8s api server and actual storage backend.
  ![](./images/Deisgn-Option-1.png)
+
+ ### Volume provisioning flow with PlugNPlay
+![](./images/VolumeProvisioningwith-1.png)
  
- However in the new plug-n-play mechanism the intelligence to choose the backend sits inside the provisioner so the extra hop is removed.
+ - Soda CSI Plugin is updated to pass the csi volume create request as it is to the SODA API, 
+ - Soda API is updated to process the create volume request and update the csi volume request parameters to etcd
+ - Soda provisioner is anew component which watches etcd for any csi volume create requests and then triggers the third party csi driver grpc calls   
+
+ ### Deployment Steps
+  - Deploy kubernetes cluster along with soda components, Refer : https://github.com/sodafoundation/api/wiki/OpenSDS-Integration-with-Kubernetes-CSI
  
- 
- ***Note*** : The new plug-n-play mechanism is the experimenting effort which we are doing to finalize the best design for unified csi plugin for soda. Both the design options will be available and after a through review  one of the design will be finalized, till then we can expect refactoring in the proposed design.
- 
+  - Deploy soda provisioner  
   
+ ``` 
+ git clone https://github.com/sushanthakumar/soda-provisoner
+ cd soda-provisioner
+ go build -ldflags '-w -s' build/soda-provisioner cmd
+ cd build
+ ./soda-provisioner
+      
+```               
+  - Deploy csi lvm plugin, Refer : https://github.com/wavezhang/k8s-csi-lvm
+ 
+  -  Volume creation steps
+  ```go
+# Change the workplace
+ cd /opt/opensds-sushi-linux-amd64
+
+# Create example nginx application
+         kubectl create -f csi/examples/kubernetes/nginx.yaml
+
+# Check for the volume create 
+kubectl get pv
+kubectl get pvc
+
+```
+
+  
+ ***Note***:  Parallely we are also exploring and experimenting an alternate design for CSI PlugNPlay, more details related to this design can be founded [here](./alternate-design/Readme.md). 
