@@ -196,16 +196,20 @@ As SODA supports the CSI interface which can help to connect to heterogeneous st
 
 High Level Design with CSI Compatible Edge platform (Example : Kube Edge)
 
-Data Deployment View at Edge
+#### Data Deployment View at Edge
+
 ![DataDeployment](./resources/dataatedge-deply01.png)
 
-SODA High Level Architecture
+#### SODA High Level Architecture
+
 ![SODAArchitecture](./resources/soda-arch.png)
 
-KubeEdge High Level Architecture
+#### KubeEdge High Level Architecture
+
 ![KubeEdgeArchitecture](./resources/kubeedge_arch.png)
 
-SODA & Kube Edge Integration Architecture
+#### SODA & Kube Edge Integration Architecture
+
 ![SODAKubeEdgeIntegArchitecture](./resources/soda-kubeedge02.png)
 
 
