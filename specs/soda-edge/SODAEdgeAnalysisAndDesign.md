@@ -212,6 +212,10 @@ High Level Design with CSI Compatible Edge platform (Example : Kube Edge)
 
 ![SODAKubeEdgeIntegArchitecture](./resources/soda-kubeedge02.png)
 
+##### KubeEdge and SODA CSI Integration
+
+![SODAKubeEdgeIntegArchitecture](./resources/soda-kubeedge01.png)
+
 
 
 ## Scratchpad
