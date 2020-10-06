@@ -383,7 +383,9 @@ This is the list of proposal for API
 
     “accessCapability” : "[]string"read/write
 
-    “accessTo” : "string"   //“The IP's”
+    “accessTo” : "string"   //“The IP”
+ 
+    "status"   : "string"   //track acl status
 ```
 ##### 12.	DELETE /v1beta/{tenantId}/file/acls/{aclId}
 * DELETE access control list for file share.
