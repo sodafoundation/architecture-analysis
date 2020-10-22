@@ -6,7 +6,7 @@
 
 Major Version Updates
 
-Date 13/07/2020 : Version : Description  : Author
+Date 22/10/2020 : Version : Description  : Author
 
 
 
@@ -43,10 +43,11 @@ There are few major requirements for this module:
 1. Develop framework for task manager
 2. Collect Pool  information
 3. Collect LUN(Volume) information
-4. Collect device information
+4. Collect Device information
 5. Task scheduling
 6. Task synchronization
-7. Performance statistics collection
+7. Performance metrics collection
+8. Push the metrics data to exporters
 
 
 #### List of Requirements
@@ -61,24 +62,28 @@ The detailed requirements are given below.
 * Support for the configuration file/Policy setup
 * Publish the task on Bus
 * Retrieval Manager should be able to read the Task from Bus
-* Clear task from scheduling(suppose, task is scheduled and   
-  somebody unregisters the device. Then how to handle)
+* Clear task from scheduling
+* Update the Performance metrics configurations for storage
 
-##### Collect Pool  information
-* Collect Pool information of a device
+##### Collect Pool  Information
+* Collect pool information of a device
 * Store the pool information to DB
 * Forward the pool information to exporter
 
-##### Collect Volume  information
+##### Collect Volume  Information
 * Collect volume information of a device
 * Store the volume information to DB
 * Forward the volume information to exporter
 
-##### Collect device information
+##### Collect device Information
 * Collect device information
 * Store the device information to DB
 * Forward the device information to exporter
 
+##### Collect performance metrics data
+* Collect performance metrics data for storage arrays
+* Collect performance metrics data for storage pools
+* Collect performance metrics data for storage volumes
 
 
 ##### Non Functional Requirements
@@ -92,25 +97,36 @@ The detailed requirements are given below.
 
 ## Architecture Analysis
 ### High level Architecture
-You may refer the high level architecture design [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)
+The high level architecture design can be referred from [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)
 
 
 ### Module Architecture
-This is a Retrieval management module and responsible for retrieving(discovering) the resources(like storage, volumes and pools) information from the registered backends. The already discovered resources can be Synchronized whenever required and also on a periodic basis through API calls.
+This is a Retrieval management module which performs two subtasks:
 
-The api to Synchronize the resources is: /v1/storages/sync
+#### 1. Registration and retrieving resource information:
+The 1st task of this module is to support registration of the storage devices. Once the storage device is registered, retrieve the information of resources(like storage, volumes and pools) and store into the database. This module also supports periodic and on-demand(manual API call) synchronization of resources of the registered storages.
+Below is the list of API which are used for registration and synchronization:
 
-The above API will Synchronize all the resources of all registered backends in the system.
+  ###### Registration: POST /v1/storages
 
-The Retrieval management module contains three major components, Redis, TaskManager and RabbitMq as shown in the diagram below. The Resource Manager and Driver Manager are part of the whole project delfin which are shortly described below (For more details high level architecture can be referred from the [link](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)).
+  ###### Synchronization: POST /v1/storages/sync
 
-![Resource Synchronization](RetreivalManager2.png)
+#### 2. Performance collection:
+The 2nd task of this module is to collect performance metrics data of storages and push to exporters periodically based on configuration time. To enable the performance collection of a storage, metrics-configuration file needs to be updated.
+For example, to enable and collect array performance of a storage, metrics-config should be: {
+  "array_polling": {"perf_collection": true, "interval": 900, "is_historic": true }}). A user can update the metrics-config by below API:
+
+  ###### PUT /v1/storages/{storage_id}/metrics-config
+
+
+The other major components of the Retrieval management module are Redis, TaskManager and RabbitMq as shown in the diagram below. The Resource Manager and Driver Manager are part of the whole project delfin which also are shortly described below (For more details high level architecture can be referred from the [link](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md)).
+
+![Resource Synchronization](task_manager1.png)
 
 ##### Redis:
 * Redis is a in-memory data structure store, used as a database, cache
   and message broker.
-* In this project, redis is used to store the lock and status
-  variables so that other nodes of a cluster can access these variables in a distributed environment.
+* In this project, redis is used to store the lock variables so that other nodes of a cluster can access these variables in a distributed environment.
 
 ##### RabbitMq:
 * RabbitMQ is used as a message broker in this project. The tasks are
@@ -131,13 +147,15 @@ The Retrieval management module contains three major components, Redis, TaskMana
   Manager make a procedural call to RPC methods(i.e sync_storage_resource()). Later, it cast the task to RabbitMq message bus.
 * Manager: It is tasks consumer part of the task manager. It receive the
   tasks from RabbitMq and make a procedural call to appropriate methods based on received input tasks.
-* Tasks: It contains the implementation code for retrieving the
-  resources information and updating the DB. To get the latest information from storage backends, it calls driver manager methods, and later updates the DB with collected information.
+* Resource Tasks: It contains the implementation code for   
+  retrieving the resources information and updating the DB. To get the latest information from storage backends, it calls driver manager methods, and later updates the DB with collected information.
+* Performance Tasks: It contains the implementation code for
+  performance metrics collection and push to exporters.
 
 
 ##### Delfin Driver manager:
 * This layer contains driver’s code. Drivers are lightweight processes
-  that configure and collect data from various sources including storage, switch , host etc.
+  that configure and collect data from various sources including storage, switch, host etc.
 * Each driver’s connected to a single storage backend and performs
   specific tasks(storage, volumes, pools collection) on that backend. Driver manager’s responsibility is to take input from the task manager and select specific drivers based on input parameters. Once the task is performed, return the response with collected information.
 * Task manager to driver manager is a procedural call. And from driver
@@ -161,33 +179,39 @@ The interface for storage/volume/pool collections:
 ###### DB Storage Interface
 1. db.storage_get(context, storage_id)
 
-2. db.storage_update(context, storage_id, storage)
+2. db.storage_create(context, values)
 
-3. db.storage_delete(context, storage_id)
+3. db.storage_update(context, storage_id, storage)
+
+4. db.storage_delete(context, storage_id)
 
 ###### DB Pool Interface
-4. db.storage_pool_get_all(context, filters={"storage_id": storage_id})
+5. db.storage_pool_get_all(context, filters={"storage_id": storage_id})
 
-5. db.storage_pools_delete(context, delete_id_list)
+6. db.storage_pools_delete(context, delete_id_list)
 
-6. db.storage_pools_update(context, update_list)
+7. db.storage_pools_update(context, update_list)
 
-7. db.storage_pools_create(context, add_list)
+8. db.storage_pools_create(context, add_list)
 
 ###### DB Volume Interface
-8. db.storage_volume_get_all(context, filters={"storage_id": storage_id})
+9. db.storage_volume_get_all(context, filters={"storage_id": storage_id})
 
-9. db.storage_volumes_delete(context, delete_id_list)
+10. db.storage_volumes_delete(context, delete_id_list)
 
-10. db.storage_volumes_update(context, update_list)
+11. db.storage_volumes_update(context, update_list)
 
-11. db.storage_volumes_create(context, add_list)
+12. db.storage_volumes_create(context, add_list)
 
 ###### DB AccessInfo Interface
-12. db.access_info_delete(context, storage_id)
+13. db.access_info_delete(context, storage_id)
 
 ###### DB Alertsource Interfaces
-13. db.alert_source_delete(context, storage_id)
+14. db.alert_source_delete(context, storage_id)
+
+
+##### Exporter Interface
+15.  perf_exporter.dispatch(context, array_metrics)
 
 
 ### Data View
