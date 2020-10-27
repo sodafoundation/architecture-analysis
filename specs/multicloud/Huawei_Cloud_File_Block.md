@@ -3,12 +3,14 @@
 Author(s): [Ashit Kumar](https://github.com/kumarashit), [Himanshu Varshney](https://github.com/himanshuvar)
 
 ## Introduction
-SODA Foundation multi-cloud (Gelato) project provides policy based data mobility across multi-clouds. It supports public and Hybrid clouds. Gelato supports different types of storages like Object, File and Block. The supported cloud vendors are AWS, Azure, GCP, Huawei, IBM, Ceph, YIG-Ceph and Alibaba
+SODA Foundation multi-cloud (Gelato) project provides policy based data mobility across multi-clouds. It supports public and Hybrid clouds. Gelato supports different types of storages like Object, File and Block. The supported cloud vendors are AWS, Azure, GCP, Huawei, IBM, Ceph, YIG-Ceph and Alibaba.
+
 Currently it provides solution for Object Migration, Policy Based Lifecycle Management of Objects in-cloud as well as Cross-cloud. It also provided File and Block Management operations.
 
 
 ## Motivation and Background
 As of now, the supportability matrix for Vendors and Features stands as:
+
 ![multicloud matrix](resources/multicloudMatrix.png)
 
 To create an unified mulitcloud management solution, there is need to support different cloud vendors for different services.
@@ -905,11 +907,14 @@ Response:
 {}
 ```
 
-## Dependencies:
+## Dependencies
+
 The support for Huawei cloud SFS and EVS will use the GOLANG SDK provided. Here is the reference:
-SFS:
+
+### SFS
 [https://github.com/huaweicloud/golangsdk](https://github.com/huaweicloud/golangsdk)
-EVS
+
+### EVS
 [https://github.com/huaweicloud/huaweicloud-sdk-go-v3](https://github.com/huaweicloud/huaweicloud-sdk-go-v3)
 
 ## Dashboard changes: 
