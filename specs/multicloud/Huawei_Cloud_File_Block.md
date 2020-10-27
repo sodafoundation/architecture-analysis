@@ -922,7 +922,10 @@ SODA Dashboard need to be updated to accomodate the new Vendor, Huawei Cloud, in
 
 ## References:
 [https://github.com/sodafoundation/design-specs/blob/master/specs/multicloud/Block_Storage_Service.md](https://github.com/sodafoundation/design-specs/blob/master/specs/multicloud/Block_Storage_Service.md)
+
 [https://github.com/sodafoundation/design-specs/blob/master/specs/multicloud/File_Storage_Service.md](https://github.com/sodafoundation/design-specs/blob/master/specs/multicloud/File_Storage_Service.md)
+
 [https://support.huaweicloud.com/en-us/productdesc-evs/en-us_topic_0014580741.html](https://support.huaweicloud.com/en-us/productdesc-evs/en-us_topic_0014580741.html)
+
 [https://support.huaweicloud.com/intl/en-us/api-sfs/sfs_02_0002.html](https://support.huaweicloud.com/intl/en-us/api-sfs/sfs_02_0002.html)
 
