@@ -1,4 +1,4 @@
-# OpenSDS Design Specs
+# SODA Architecture, Design and Technology Analysis
 
 [![Releases](https://img.shields.io/github/release/sodafoundation/design-specs/all.svg?style=flat-square)](https://github.com/sodafoundation/design-specs/releases)
 [![LICENSE](https://img.shields.io/github/license/sodafoundation/design-specs.svg?style=flat-square)](https://github.com/sodafoundation/design-specs/blob/master/LICENSE)
@@ -7,10 +7,7 @@
 
 ## Introduction
 
-design-specs repository provides all the architecture, design and analysis documents prepared during each release development window. It will give a very good understanding and background for each feature developed.
-
-Currently all the architecture, design and analysis at SODA Foundation level and for all SODA Core projects are covered.
-
+This project covers all the architecture, design and technology analysis at SODA Foundation level. Project level architecture design, and analysis documents can go here.
 This is maintained by SODA Foundation directly.
 
 ## Documentation
