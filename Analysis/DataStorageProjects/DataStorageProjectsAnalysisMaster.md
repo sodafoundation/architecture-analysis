@@ -22,6 +22,8 @@ Any clarification, please get in touch with @skdwriting / slack.sodafoundation.i
 ### Technical Analysis
 //Please provide your technical analysis in this section. It can cover (not limited to) primarily : Architecture, Key Features, Current Usages(product or use cases), inputs on scalaibility, performance numbers , any available feature comparison with other similar projects, analysis comments on overall project etc.
 
+**Link to the detailed analysis:** //give the link here
+
 *Suggest to give a basic analysis directly to this document and create a separate document for detailed analysis. Then give the link to detailed analysis document here. Please add to the same folder as this master document.*
 
 ### Recommendation for SODA
