@@ -112,7 +112,7 @@ pool:
 * The driver then connects to the LIF on the NetApp Filer SVM and discovers the pool details, i.e. the Aggregate (provided in the config file)
 * This discovered aggregate/pool form the base for storage provisioning through SODA from the NetApp filer
 
-![NetApp FileShare Driver Flow](NetAppNAS_SODA_Flow.png)
+![NetApp FileShare Driver Flow](resources/NetAppNAS_SODA_Flow.png)
 
 ### Implementation details
 * SODA uses NetApp provided Trident Storage Driver to do backend operations

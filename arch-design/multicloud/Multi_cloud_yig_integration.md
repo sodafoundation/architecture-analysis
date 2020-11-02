@@ -97,7 +97,7 @@ N/A
 
 #### For this approach here is the high-level architecture:
 
-![gelato-multicloud-yig](gelato-multicloud-yig.png?raw=true "Gelato Multicloud with YIG")
+![gelato-multicloud-yig](resources/gelato-multicloud-yig.png?raw=true "Gelato Multicloud with YIG")
 
 
 #### Expanding the YIG S3:

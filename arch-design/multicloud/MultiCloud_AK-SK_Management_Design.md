@@ -40,7 +40,7 @@ In-transit request is prevented from tempering, some of the request elements are
 
 The Multi-Cloud AK/SK Management design is shown in the following diagram:
 
-![Multi-Cloud AK-SK Management Diagram](multicloud_ak-sk_management.PNG?raw=true "Multi-Cloud AK-SK Management Diagram")
+![Multi-Cloud AK-SK Management Diagram](resources/multicloud_ak-sk_management.PNG?raw=true "Multi-Cloud AK-SK Management Diagram")
 
 Following are the steps for authenticating requests to Multi-Cloud API:
 
@@ -67,9 +67,9 @@ When API handler receives the request, it performs the same steps to calculate t
 
 Following is the illustration for the signature calculation and validation process.
 
-![Multi-Cloud Signature Calculation Diagram](multicloud_signature_calculation.PNG?raw=true "Multi-Cloud Signature Calculation Diagram")
+![Multi-Cloud Signature Calculation Diagram](resources/multicloud_signature_calculation.PNG?raw=true "Multi-Cloud Signature Calculation Diagram")
 
-![Multi-Cloud Signature Validation Diagram](multicloud_signature_validation.PNG?raw=true "Multi-Cloud Signature Validation Diagram")
+![Multi-Cloud Signature Validation Diagram](resources/multicloud_signature_validation.PNG?raw=true "Multi-Cloud Signature Validation Diagram")
 
 ### API Impact on Current Implementation
 #### S3 Interface

@@ -34,13 +34,13 @@ Probable workflows that can be included from openSDS
 
 ## 2.VRO Architecture
 
-![](vro_architecture.png)
+![](resources/vro_architecture.png)
 
 [VMware VRO Architecture](https://docs.vmware.com/en/vRealize-Orchestrator/7.5/com.vmware.vrealize.orchestrator-install-config.doc/GUIDEF1E6F31-D414-4A9B-9CF5-4919FA22DEB8.html)
 
 ##  3.OpenSDS VRO Plugin Design
 
-![](Plugin_design.png)
+![](resources/Plugin_design.png)
 
 #### Workflow package
 Workflow  Packages can contain workflows, actions, policies, configurations, and resources. This is separate package which can be imported and use in VRO client.

@@ -24,7 +24,7 @@ Some customers have multiple OpenStack deployments.  It is hard to manage them s
 
 This diagram shows how OpenSDS can manage Cinder in multiple OpenStack deployments using cinder volume driver.  Note that this picture does not include Cinder Compatible API Adapter for simplification.
 
-![Multi-OpenStack Use Case 1](multi_openstack_usecase_1.png?raw=true "Multi-OpenStack Use Case 1")
+![Multi-OpenStack Use Case 1](resources/multi_openstack_usecase_1.png?raw=true "Multi-OpenStack Use Case 1")
 
 * Admin: OpenSDS will provide APIs to register storage backends.  There will be a storage backend type associated with each storage backend.  Cinder backend from an OpenStack deployment can be registered as a storage backend of type Cinder.
 
@@ -45,7 +45,7 @@ This diagram shows how OpenSDS can manage Cinder in multiple OpenStack deploymen
 
 This diagram show how OpenStack can use volumes created using native OpenSDS drivers.
 
-![Multi-OpenStack Use Case 2](multi_openstack_usecase_2.png?raw=true "Multi-OpenStack Use Case 2")
+![Multi-OpenStack Use Case 2](resources/multi_openstack_usecase_2.png?raw=true "Multi-OpenStack Use Case 2")
 
 * Native volumes created using native driver such as LVM or Ceph is not part of Cinder.  This volume can be attached to a Nova VM using Cinder Compatible API adapter.
 

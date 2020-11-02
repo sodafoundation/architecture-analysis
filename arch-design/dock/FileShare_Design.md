@@ -42,10 +42,10 @@ Data that would otherwise be duplicated on each client can be kept in a single l
 7. Dock discovers the requested driver and pass the values to the southbound driver.
 8. Southbound drivers such as native nfs, ocenstor, manila performs the requested operations.  
 
-![FileShare Architecture Diagram](FileShare_Design.png?raw=true "File_Share_Design")
+![FileShare Architecture Diagram](resources/FileShare_Design.png?raw=true "File_Share_Design")
 
 #### Flow diagram:
-![FileShare Architecture Diagram](FileShare_Flow_diagram.png?raw=true "File_Share_Design")
+![FileShare Architecture Diagram](resources/FileShare_Flow_diagram.png?raw=true "File_Share_Design")
 
 ### REST API impact
 

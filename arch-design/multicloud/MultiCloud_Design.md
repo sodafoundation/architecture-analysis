@@ -42,7 +42,7 @@ Multi-cloud data engine provides policy-based data mobility across public and pr
 
 The multi-cloud data engine design is shown in the following diagram:
 
-![Multi-Cloud Architecture Diagram](multicloud_architecture.png?raw=true "Multi-Cloud Architecture Diagram")
+![Multi-Cloud Architecture Diagram](resources/multicloud_architecture.png?raw=true "Multi-Cloud Architecture Diagram")
 
 Multi-cloud data engine includes the following components:
 
@@ -75,7 +75,7 @@ Plan Manager: A plan contains 2 connectors and 0 or 1 policy.  The 2 connectors 
 
 Job Manager: Job will be created after a plan starts to be executed based on the schedule.  It tracks the status of a job.
 
-![Multi-Cloud Dataflow Diagram](multicloud_dataflow.png?raw=true "Multi-Cloud Dataflow Diagram")
+![Multi-Cloud Dataflow Diagram](resources/multicloud_dataflow.png?raw=true "Multi-Cloud Dataflow Diagram")
 
 * API Handler receives a request and authenticates via Keystone.  It passes the request to the corresponding Dataflow Manager.
 * Dataflow Manager receives a request from the API.  It processes the request, searches DB for metadata, saves metadata to DB, and returns a response.
@@ -197,7 +197,7 @@ Dataflow service supports the following interfaces:
 
 ### Backend Service
 
-![Multi-Cloud Backend Diagram](multicloud_backend.png?raw=true "Multi-Cloud Backend Diagram")
+![Multi-Cloud Backend Diagram](resources/multicloud_backend.png?raw=true "Multi-Cloud Backend Diagram")
 
 * API Handler receives a request and starts authentication with Keystone.  It sends the request to the Backend Manager.
 * The Backend Manager receives a request to create, update, delete, get a backend.
@@ -233,7 +233,7 @@ Backend service supports the following interfaces.
 
 ### S3 API Service
 
-![Multi-Cloud S3 Service Diagram](multicloud_s3.png?raw=true "Multi-Cloud S3 Service Diagram")
+![Multi-Cloud S3 Service Diagram](resources/multicloud_s3.png?raw=true "Multi-Cloud S3 Service Diagram")
 
 * API Handles receives a request and authenticates it. It processes the request and sends it to S3 controller.
 * S3 controller handles S3 API requests. It processes a request on a bucket, updates metatdata, and returns results.  It also processes a request on an object by finding the location from the LocationMapper, obtaining the backend physical location where the object resides, and selecting the appropriate BackendAdapter to handle the request.

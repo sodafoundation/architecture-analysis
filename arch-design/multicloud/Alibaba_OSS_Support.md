@@ -9,7 +9,7 @@ In existing OpenSDS Gelato project, we don't have any option using which user ca
 * Add support of Alibaba OSS service in OpenSDS Gelato Project.
 
 ### Design Details
-![picture](Alibaba_backend.png)
+![picture](resources/Alibaba_backend.png)
 
                     Figure: Architecture of Integration of Alibaba Cloud in OpenSDS/Multi-cloud
 

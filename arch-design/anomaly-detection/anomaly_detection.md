@@ -30,7 +30,7 @@ Analysis will be done using open source tools.
 
 The following diagram shows the architecture of the Anomaly Detection design and its relationship with the Telemetry project.
 
-![Anomaly Detection Architecture Diagram](anomaly_detection_architecture.png?raw=true "Anomaly Detection Architecture Diagram")
+![Anomaly Detection Architecture Diagram](resources/anomaly_detection_architecture.png?raw=true "Anomaly Detection Architecture Diagram")
 
 As shown above, there are several components in the Anomaly Detect project:
 
