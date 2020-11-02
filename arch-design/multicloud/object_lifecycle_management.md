@@ -85,7 +85,7 @@ Only support to set lifecycle management rules on bucket, all rules will be sche
 - If cloud vendors add some new features to lifecycle management or versioning, there is a risk that we can’t achieve the same goal like those new features by ourselves.
 
 ## Framework
-![lifecycle_framework diagram](lifecycle_framework.png?raw=true "lifecycle_framework diagram")
+![lifecycle_framework diagram](resources/lifecycle_framework.png?raw=true "lifecycle_framework diagram")
 
 ## Constraint
 ### common constraint
@@ -516,7 +516,7 @@ LifecycleActionRequest have the following parameters:
 
 The below sequence diagram shows the work flow of lifecycle scheduler module:
 
-![lifecycle_scheduler diagram](scheduler.PNG?raw=true "lifecycle_scheduler diagram")
+![lifecycle_scheduler diagram](resources/scheduler.PNG?raw=true "lifecycle_scheduler diagram")
 
 ### Datamover module
 1. Add a LifecycleDriver which is responsible for handling the LifecycleActionRequest.

@@ -27,7 +27,7 @@ In containerized environment, users may not need the full-blown orchestration ca
 
 The Thin OpenSDS design is illustrated in the following diagram.
 
-![Thin_OpenSDS Architecture Diagram](thin_opensds.png?raw=true "Thin OpenSDS Architecture Diagram")
+![Thin_OpenSDS Architecture Diagram](resources/thin_opensds.png?raw=true "Thin OpenSDS Architecture Diagram")
 
 This design is dependent upon [API Framework Refactoring](https://github.com/opensds/design-specs/blob/master/specs/capri/API_Framework_Refactoring.md) which has already been implemented in Capri.
 

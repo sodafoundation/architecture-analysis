@@ -20,7 +20,7 @@ Protocol C is the most popular one.
 ### Replication Methods
 DRBD has the following replication methods:
 * 3 way replication with stacking, while stacking was mainly used in DRBD8, as it did not allow multiple (>2) peers. In DRBD9 stacking is becoming more and more uncommon, as it supports multiple peers natively.
-![DRBD Diagram](drbd_stacking_diagram.png?raw=true "DRBD Diagram")
+![DRBD Diagram](resources/drbd_stacking_diagram.png?raw=true "DRBD Diagram")
 * Long distance with DRBD proxy
     * DRBD proxy is needed for long distance async replication and it requires a license.
     * Synchronous mode is the most used one.
@@ -118,7 +118,7 @@ We want to support replication with or without using a replication group (DRBD h
 * What are the steps without using a replication group
 * What are the steps using a replication group
 
-![Host-based Replication Diagram](host_based_replication.png?raw=true "Hosted-based Replication Diagram")
+![Host-based Replication Diagram](resources/host_based_replication.png?raw=true "Hosted-based Replication Diagram")
 
 ### Host-based Volume Level Replication Workflow
 

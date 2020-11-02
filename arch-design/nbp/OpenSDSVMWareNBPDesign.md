@@ -35,7 +35,7 @@ None.
 
 ## High Level Architecture
 
-![](media/OpenSDS-VMWareNBP-Architecture-01.png)
+![](resources/OpenSDS-VMWareNBP-Architecture-01.png)
 
 vSphere Client: This is VMWare vSphere Client which gets all the client plugins get registered to. After the registration, the client gets the additional API capabilities through each of the registered plugins.
 
@@ -45,7 +45,7 @@ OpenSDS VMWare NBP: This serves as the north bound plugin for VMware in OpenSDS.
 
 
 ## Design
-![](media/OpenSDS-VMWareNBP-Architecture-02.png)
+![](resources/OpenSDS-VMWareNBP-Architecture-02.png)
 
 * Plugin Manager : as described above 
 * Plugin: Each plugin provides the specific VMWare plugin features through the VmWare SDK APIs on the north and backend APIs on the south.
