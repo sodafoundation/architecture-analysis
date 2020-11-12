@@ -1,4 +1,4 @@
-# All technical analysis, competitor analysis, project analysis etc go here.
+# All the uncategorized / general technical analysis go here.
 
 ## Basic Layout Suggestion for your Analysis:
  - Topic Introduction
@@ -6,5 +6,3 @@
  - Purpose
  - Technical Analysis
  - Recommendation/Suggestions
-
-**Feel free to propose subfolders as needed**
