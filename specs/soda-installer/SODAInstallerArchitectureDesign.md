@@ -1,6 +1,6 @@
 # SODA Installer Architecture Design
 
-Author(s): [Sanil Kumar](https://github.com/skdwriting)
+Author(s): [Sanil Kumar](https://github.com/skdwriting) ; <please add here>
 
 ## Introduction
 SODA Installer is a project for the overall SODA Installer of every SODA release. Each SODA Release will integrate multiple SODA Projects to provide integrated use cases and features for the users of SODA Releases. Hence, SODA Installer will be the master installer through which the complete setup of SODA Release happens. It needs to work with individual project installers, provide guidelines for individual project installers, and streamline and enhance the overall installation experience of SODA Release.
