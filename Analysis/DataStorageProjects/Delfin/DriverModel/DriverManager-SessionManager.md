@@ -21,6 +21,14 @@ In current [Delfin architecture](https://github.com/sodafoundation/architecture-
 
 ![DriverManager](CurrentDM.jpg)
 
+#### Intermodule interaction diagram
+
+![Intermodule](DriverManager_arch.png)
+
+#### Sequence diagram
+
+![SEQ](DriverManager_seq.png)
+
 ## Issues
 
 #### 1. Lots of connections to the backend opened and cached. (For 3 node deployment 3x3=9)
