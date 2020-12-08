@@ -1,71 +1,90 @@
 # SODA Installer Architecture Design
 
-Author(s): [Sanil Kumar](https://github.com/skdwriting) ; //please add here
+Author(s): [Sanil Kumar](https://github.com/skdwriting) ; [Noel McLoughlin](https://github/noelmcloughlin) ;//please add here
 
 ## Introduction
-SODA Installer is a project for the overall SODA Installer of every SODA release. Each SODA Release will integrate multiple SODA Projects to provide integrated use cases and features for the users of SODA Releases. Hence, SODA Installer will be the master installer through which the complete setup of SODA Release happens. It needs to work with individual project installers, provide guidelines for individual project installers, and streamline and enhance the overall installation experience of SODA Release.
 
-## Motivation and background
-Currently, SODA installer based on ansible is directly using ansible-playbook with limited options like install and clean. Many other supported installation methods are not really maintained and managed, like salt etc.
+SODA Foundation (SF) is an open source project that aims to foster an ecosystem of open source data management and storage software for data autonomy. GAIA-X, a project to develop common requirements for a European data infrastructure, has complmentary goals. Linux Foundation (LF), a sustainable open source ecosystem, hosts some of the world's most important open source projects, including Linux and SODA. The Cloud Native Computing Foundation (CNCF) hosts critical components of the global technology infrastructure. Both SODA and CNCF are LF member projects.[1-4]
 
-All the installation methods from soda foundation for soda releases and its documentations are scattered.
+SODA Installer is the overall Installer project. Each Release integrates multiple member projects to provide integrated use cases and features for the users of the Releases. Hence, SODA Installer will be the master installer for SODA Foundation.  The current SODA installer leverages Ansible, Bash, Helm and YAML models. There is some unit test (UT), continious integration (CI), and continious deployment (CD) coverage.[5]
 
-In this improvement proposal, trying to make a simple and unified install interface for SODA Releases considering all the install methods supported.
+## Motivation & background
+Currently, the SODA installer based on Ansible playbooks with limited options like install and clean. Other installation methods (Salt and Helm) are not clearly supported or maintained. All installation methods and documentation are scattered.  Three type of software package must be handled-
 
-Also post installation management facilities can be provided through the same tools.
+  1. SODA member projects deliver "installers" as scripts/ansible, with no shared model.
+  2. CNCF projects deliver "releases" as tarballs, with no common model exposed for installers.
+  3. Other projects deliver "packages" (i.e. docker, vagrant, image, yum, zypper, apt, ansible, salt, tarball).
+
+In this improvement proposal, we propose a simple and unified install interface for SODA Releases.
 
 ## Goals
 
--   Enhance and simplify the installation for SODA Release
--   Improve the user experience
--   Consolidate all the installation documentations and methods supported in SODA for SODA Release
--  Manage all the dependencies, prerequisites etc
--   Post installation system monitoring/logs etc.
-- Provide configuration options
-- Seamless end to end installation of SODA Release
-- Tools and methods to debug
-- Instal fail recovery, restart, optimized downloads
-- Upgrade, Rollback and so on.
-
-This architecture design can consider all different options for installer:
-- GUI based
-- Commandline based
-- Different types of installations (Autoinstall, quick install, dev install etc)
-- Different ways/tools (ansible, helm, or any such better options)
-
+- Make SODA release adoption simple.
+- Improved user experience.
+- Consolidate all installation methods and documentation across member projects.
+- Deliver seamless end to end installation of member project, and SODA releases.
+- Tools and method to troubleshoot installation.
+- Upgrade and Rollback with Data Protection.
+- Commandline, and possibly Graphical User, interface.
+- Different types of installations (developer, end user).
+- Effective and coherent technology (ansible, helm, or any such better options).
+- Model-Driven installation and upgrade (software/configuration).
 
 ### Non-Goals
 
--   Project Level installation and its configuration (Each component installation to be handled by the specific installer of the project or components)
-- This architecture design will give the guidelines
-    
+- Project level installation and its configuration (scale up).
+- Component level installation and its configuration (scale down).
 
 ### Assumptions and Constraints
 
-- Each SODA Project to follow SODA Installer guidelines from this document. Otherwise, certain features of this installer may not work as needed.
-- The implementation can be in phased manner. Each phase needs to provide valuable e2e features of SODA installer
-
+- Each SODA Project should follow guidelines provided by this document, to satisfy features of the SODA installer.
+- The implementation can be phased, evolving valuable features for end-to-end SODA installation.
 
 ### Requirement Analysis
 
 ### Input Requirements (need to refine more)
 
--   Single command-line interface for soda release installation
-    
--   Reasonable control on the installation configurations
-    
--   Installation log
-    
--   History information for last 5 installations on the same system
-    
--   precheck, post-install check supported
-    
--   Post installation management/monitoring (Minimum features)
-    
+Some core requirements are:
+
+-   Model Driven Deployment - SODA and Deployment model.
+-   Single command-line interface (install, management, development).
+-   Reasonable control on the installation configurations (good defaults, sitedata, reference deployment).
+-   Installation log.
+-   History information for last n installations on the same system
+-   Post installation management and monitoring (minimal feature).
+
+A survey of open github issues reveals technical debt.
+
+- Need example use cases (Referenece Deployments) [@rajat-soda] [#404]
+- SODA orchestrator? Upgrade paths [@noelmcloughlin] [#400 ]
+- Cleanup installation [@anvithks, @joseph-v ] [#399, #278]
+- Ubuntu 20.04 / CentOS / SystemD [@osiveteam, @kumarashit, @kumarashit ] [#353, #261, #381]
+- Comprehensive CI/CD for installer [@kumarashit, @kumarashit ] [#345, #396 ]
+- Installation with single command with good defaults [@rajat-soda] [#388][#403]
+- Installer UI [@osiveteam] [#386]
+- Idempotence Installer [@NajmudheenCT, @joseph-v , @Shruthi-1MN ] [#401, #369, #277]
+- Cloud Native Installer [@joseph-v, @sushanthakumar, @PravinRanjan10 ] [#361, #328, #323]
+- Validate Released Artifacts [@kumarashit ] [#352]
+- Pre-install check and configure [@kumarashit ] [#350]
+- CNCF components configuration (no hardcoding) [@himanshuvar, @joseph-v, @Shruthi-1MN ] [#376, #327, #375, #382]
+- CNCF component installers [@PravinRanjan10, @thatsdone ][#326, #270 ]
+- SODA configuration [@kumarashit, @sushanthakumar, @NajmudheenCT ] [#318. #306, #301]
+- SODA Upgrade/Reinstall, no data loss [@joseph-v ] [#279]
+- YIG installer [#276]
+
 
 ### Feature Requirements
 
 #### Requirement Analysis
+
+The command line installer shoud provide the following functions:
+
+- Install SODA
+- Install SODA [componentA,]
+- Upgrade SODA
+- Clean SODA
+2. SODA manage
+3. SODA clean
 
 Provide the input requirements in cli
 
@@ -74,41 +93,61 @@ Provide the input requirements in cli
 ##### Functional Requirements
 
 -   Support installation of all or specific projects
-    
+
 -   Support uninstallation of all or specific projects
-    
+
 -   Start and stop services
-    
+
 -   Provide logging
-    
+
 -   Provide configuration
-    
+
 -   Each installation methods can be integrated
-    
+
 -   Separate clean (delete runtime files) and purge (delete install downloaded files etc = full clean without any trace!)
-    
+
 -   Trace installation (last 5 installation information for the same system)
-    
+
 -   Start / Stop services
-    
+
 -   Upgrade? (currently not considered below) -- TBD
-    
+
 -   Custom install path? (currently not considered below) - TBD
-    
+
 -   Pre / post-install checks
-    
+
 -   Support post install logs
-    
+
 -   Support post install management (basic)
-    
+
 
 ##### Non Functional Requirements
 
+Address the Technical Debt (ref: https://github.com/sodafoundation/installer/issues/408)
+
+- Example Use cases (Referenece Deployments) [@rajat-soda] [#404]
+- Single Command Install for SODA with default configs [@rajat-soda] [#403]
+- SODA orchestrator (soda upgrade paths) [@noelmcloughlin] [#400 ]
+- Cleanup installation [@anvithks, @joseph-v ] [#399, #278]
+- Ubuntu 20.04 / CentOS / SystemD [@osiveteam, @kumarashit, @kumarashit ] [#353, #261, #381]
+- CI/CD for installer [@kumarashit, @kumarashit ] [#345, #396 ]
+- SODA Installation with Single Command using defaults [@rajat-soda] [#388]
+- SODA Installer UI [@osiveteam] [#386]
+- SODA Idempotence Installer [@NajmudheenCT, @joseph-v , @Shruthi-1MN ] [#401, #369, #277]
+- SODA (?) Cloud Native Installer [@joseph-v, @sushanthakumar, @PravinRanjan10 ] [#361, #328, #323]
+- SODA Validate Released Artifacts [@kumarashit ] [#352]
+- SODA Pre-install check and configure [@kumarashit ] [#350]
+- CNCF compoents configuration (no hardcoding) [@himanshuvar, @joseph-v, @Shruthi-1MN ] [#376, #327, #375, #382]
+- CNCF component installers [@PravinRanjan10, @thatsdone ][#326, #270 ]
+- SODA configuration [@kumarashit, @sushanthakumar, @NajmudheenCT ] [#318. #306, #301]
+- SODA Upgrade/Reinstall, no data loss [@joseph-v ] [#279]
+- YIG installer [@276]
+
 Performance Requirements
 
--   Installation time < All selected Project installation time + 30 seconds
+- Installation time < All selected Project installation time + 30 seconds
 - Optimized downloads
-    
+
 
 Security Requirements
 
@@ -117,14 +156,16 @@ NA
 Other Non-Functional Requirements (Scalability, HA etc…)
 
 -   Easy to add new project installation support
-    
+
 -   Easy to add new installation methods
 - Upgrade
 - rollback
 - fail recovery
 - restart recovery
 - Incremental installation
-    
+
+Reuse
+
 
 ## Architecture Analysis
 ### Ovearll Architecture
@@ -154,17 +195,17 @@ Other Non-Functional Requirements (Scalability, HA etc…)
 Provides a wrapper install cli which inturn calls the specific project installation hooks/scripts. The various specific install steps need to be supported by each project installation are:
 
 -   precheck: Project installation dependency check-precheck : Checks the depependency readiness for the installation based on the configuration file
-    
+
 -   install: Checks the prerequisite and install all the packages of the project (based on the project configuration file)
-    
+
 -   uninstall: Uninstall all the packages of the projects ( based on the project configuration file)
-    
+
 -   clean: Uninstall and clean up the files created for all the installation and run time of the components. (db, other run time files etc)
-    
+
 -   purge: clean and delete all the downloaded files and install setup files. Caution!!
-    
+
 -   chkinstall: Checks the last installation and provides a summary of project installations
-    
+
 -   Info format guidelines:
 -   Installation Time: < date and time - long string>
 -   Project Name:
@@ -180,10 +221,10 @@ Provides a wrapper install cli which inturn calls the specific project installat
 -   Example:
     -   services-stop docker: stops docker service
     -   start: Start all services or start specific service
-    
+
 -   Example:
     -   services-start docker: starts docker service
-    
+
 
 ## Detailed Design
 
@@ -212,7 +253,7 @@ As above
 	- Overall SODA Version
 	- Only project version (compatible) ?
 - Incremental installation
-   
+
 #### Usecase context model
 
 NA
@@ -288,13 +329,13 @@ Use any of the supported installation method. --help will get the list of suppor
 -purge: clean and delete all the downloaded files and install setup files. Caution!!
 
 -chkinstall: Checks the last installation and provides a summary of last installation on the system
- 
+
 -c <config-file>
 
 Non default config file input
 
 Default : Current folder/configure_sodainst.cfg
- 
+
 
 -l <log-file> [Default: Current folder/log_sodainstall.log OR path from the config-file]
 
@@ -372,20 +413,26 @@ NA
 
 ## Scratchpad
 
-Some useful references:
+References:
 
-**Team Osive Inputs:** 
-- https://openitems.soda.osive.com/  
-- https://www.figma.com/file/BdqdGjZYTunmSG2mUUPdRH/Figma-Admin-Dashboard-UI-Kit-Community?node-id=0%3A1  
-this is a very simple UI we wanted guidance on this Design approach  
+1. Soda Foundation, https://sodafoundation.io
+2. Gaia-X, https://www.data-infrastructure.eu
+3. Linux Foundation, https://www.linuxfoundation.org
+4. CNCF Landscape, https://landscape.cncf.io
+5. Soda Installer, https://github.com/sodafoundation/installer
+5. Filesystem Hierarchy Standard, https://refspecs.linuxfoundation.org/FHS_3.0/fhs-3.0.pdf
+6. Saltstack Formulas, https://github.com/saltstack-formulas
+7. Ansible Galaxy, https://galaxy.ansible.com
+8. YAML 1.2, https://yaml.org
+9. PEP 584: Add Union Operators To dict, https://www.python.org/dev/peps/pep-0584
+10. Kustomize, https://kustomize.io
+11. Cuelang, https://cuelang.org
+12. Team Osive Inputs: https://openitems.soda.osive.com
+13. Team Osive UI design: https://www.figma.com/file/BdqdGjZYTunmSG2mUUPdRH/Figma-Admin-Dashboard-UI-Kit-Community?node-id=0%3A1
+14. Data Infrastructure EU: https://www.data-infrastructure.eu/#id1854484
+15. Salter: https://github.com/saltstack-formulas/salter#saltstack-formulas-namespace
 
-**From https://github.com/noelmcloughlin** 
-- https://www.data-infrastructure.eu/  
-- https://www.data-infrastructure.eu/#id1854484  
-- I have a kubernetes deployer in travis CI: https://travis-ci.com/github/saltstack-formulas/kubernetes-formula/builds/190837333  
-- This is Developer Experience project I maintain: https://github.com/saltstack-formulas/salter#saltstack-formulas-namespace
-
-**From SODA:**  
-https://docs.sodafoundation.io/soda-gettingstarted/quickstart/  
+**From SODA:**
+https://docs.sodafoundation.io/soda-gettingstarted/quickstart/
 
 
