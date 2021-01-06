@@ -11,8 +11,7 @@ Please update the sections for which you have the data. Kindly do not remove any
 # Module Name Requirements & Design
 
   
-
-**Author(s)**: [Jane Doe](https://github.com/jane-doe)
+**Author(s)**: [Name](link to github id)
 
 Major Version Updates
 
