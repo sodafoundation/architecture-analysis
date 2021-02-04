@@ -67,9 +67,12 @@ Other Non Functional Requirements (Scalability, HA etc…)
   
 ## Architecture Analysis
 
+### System Architecture
+//Overall Architecture details go here
+
 ### Module Architecture
 
-//Module Architecture details go here
+//Module Architecture details go here (each modules as applicable)
 
 ### High Level Module View
 
