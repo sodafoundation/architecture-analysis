@@ -69,14 +69,11 @@ Other Non Functional Requirements (Scalability, HA etc…)
 
 ### System Architecture
 //Overall Architecture details go here
+//Give the overall system architecture and provide the positioning of Module in that. Give the external interfaces, brief description etc…
 
 ### Module Architecture
 
 //Module Architecture details go here (each modules as applicable)
-
-### High Level Module View
-
-//Give the overall system architecture and provide the positioning of Module in that. Give the external interfaces, brief description etc…
 
 ### Architecture Tenets
 
