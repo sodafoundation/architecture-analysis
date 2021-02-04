@@ -61,9 +61,9 @@ Once the buckets are created, users should perform all the operations supported 
 
 
 
-#### Bucket Create API of various cloud vendors:
+#### API's(Create/Delete) to support bucket management:
 
-To support bucket creation, below is the list of API's with detailed description about parameters for various cloud vendors are below:
+To support bucket managament, below is the list of API's with detailed description about parameters for various cloud vendors are below:
 
 
 #### AWS
