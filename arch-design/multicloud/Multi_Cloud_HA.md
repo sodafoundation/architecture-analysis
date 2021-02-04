@@ -33,7 +33,7 @@ Scale up / down as per the need of data movement.
 
 
 
-![Multi Cloud HA Design](resources/multicloud_ha.png)
+![Multi Cloud HA Design](resources/multicloud_ha.PNG)
                                        Figure - 1
 
 Here is the High Level Architecture for providing HA for SODA Multi Cloud services.  
