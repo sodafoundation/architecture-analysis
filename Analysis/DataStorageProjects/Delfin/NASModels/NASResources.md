@@ -32,9 +32,19 @@ Following are the resource models derived from analyzing some the leading storag
 
 ### NAS Resource Model implementation diagram
 
-![NAS Resource Model Diagram](NASResourceModel.jpg)
+![NAS Resource Model Diagram](NASResources.png)
 
 ### Filesystem
+
+Filesystem impose structure on the address spaces of one or more storage devices. It supports local filesystem access, data sharing, remote file access, distributed file access etc.
+
+The Filesystem provides flexible support for both traditional and transactional usecases.
+
+- Scalability
+- Storage Efficiency
+- Availability and Recoverablity
+- Performance
+- Virtualization
 
 Attributes | Type | Description
 -- | -- | --
@@ -46,14 +56,30 @@ total_capacity | long | Total capacity in bytes of the Filesystem
 used_capacity | long | Used capacity in bytes of the Filesystem
 free_capacity | long | Free capacity in bytes of the Filesystem
 status | enum | Running status of the Filesystem (normal, offline, unknown)
-type | string | Filesystem type (thick, thin)
+worm | bool | WORM supported (True, False)
+allocation_type | string | Allocation type (thick, thin)
 deduplication | bool | Filesystem deduplication (true, false)
 compression | bool | Filesystem compression (true, false)
 security_mode | string | Security Mode of Filesystem (mixed, native, windows, unix)
-nfs_exports | long | Number of NFS exports
-cifs_exports | long | Number of CIFS exports
 
 ### Qtree
+
+Qtree is similar to a directory under root Filesystem of a storage device.
+
+Unlike directory, Qtree provides support for following features
+
+- Hard and Soft limits on space and number of files.
+- Security mode for accesses that can be Unix, NT, mixed etc.
+- Oplocks on CIFS, which helps clients optimize access
+
+Also depending on vendors,
+
+- Snapshot copies cannot be enabled or disabled for individual qtrees
+- Qtrees do not support space reservations or space guarantees
+
+Qtree also support,
+
+- Access control, using export policies
 
 Attributes | Type | Description/enum
 -- | -- | --
@@ -61,24 +87,56 @@ id | string | UUID of the Qtree
 name | string | Name of the Qtree
 storage_id | string | Delfin id of the associated storage
 native_qtree_id | string | Original Qtree id in the device
-filesystem_id | string | Delfin id of the parent filesystem
+native_filesystem_id | string | Original id of the parent filesystem
 quota_id | string | Delfin id of the quota applied to Qtree
 path | string | Path of the Qtree
-used_capacity | long | Capacity used
-nfs_exports | long | Number of NFS exports
-cifs_exports | long | Number of CIFS exports
 security_mode | string | Security Mode of Qtree (mixed, native, windows, unix)
 state | string | State of Qtree (normal, soft_limit, hard_limit, abnormal)
 
 ### Quota
+
+Quota is limit applied to types like Qtrees, Users and User Groups
 
 Attributes | Type | Description
 -- | -- | --
 id | string | UUID of the quota
 native_qtree_id | string | Original Quota id in the device
 storage_id | string | Delfin id of the associated storage
-type | string | Quota type (Qtree, Volume, User, Group)
+type | string | Quota type (Qtree, User, Group)
 capacity_hard_limit | long | Hard limit for the space
 capacity_soft_limit | long | Soft limit for the space
 file_hard_limit | long | Hard limit on the number of files
 file_soft_limit | long | Soft limit on the number of files
+file_count | long | Total number of files
+used_capacity | long | Used total capacity
+
+### Share
+
+Share is used for sharing files using one of the protocols below
+
+#### Types of Shares
+##### CIFSShare
+
+File share protocol used to access NAS storage in Windows environment. Multiple CIFS Shares can be created for a Filesystem or Qtree to be accessed by different users and clients. It allows multiple access rules and supports authorized access
+
+##### NFSShare
+
+File share protocol used in Unix or Unix like OS environment. Multiple NFS Shares can be created for a Filesystem or Qtree to be access by different users and clients
+
+##### FTPShare
+
+The Filesystem or Qtree is accessed using FTP. Multiple FTP share access modes can be created for a Filesystem.
+
+
+Attributes | Type | Description
+-- | -- | --
+id | string | UUID of the Share
+name | string | Name of the Share
+storage_id | string | Delfin id of the associated storage
+native_filesystem_id | string | Original id of the parent filesystem
+qtree_id | string | Delfin id of the associated Qtree
+native_share_id | string | Original Share id in the device
+type | string | Share type (CIFS, NFS, FTP, UNKNOWN)
+offline_mode | string | Offline cache mode (Manual, documents, programs, none)
+oplock | bool | Oplock (true, false)
+path | string | Path of the share in the Filesystem
