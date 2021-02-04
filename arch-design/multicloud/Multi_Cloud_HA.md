@@ -33,7 +33,9 @@ Scale up / down as per the need of data movement.
 
 
 
-![Multi Cloud HA Design](resources/multicloud_ha.png)Figure - 1
+![Multi Cloud HA Design](resources/multicloud_ha.png)
+
+                                       Figure - 1
 
 Here is the High Level Architecture for providing HA for SODA Multi Cloud services.  
 
@@ -43,7 +45,7 @@ With this in mind, the SODA node can serve as the  Container Orchestrator (K8s /
 This is a generic architecture giving flexibility to the customer to choose any of the orchestration tools as required. For the PoC K8s is the tool of choice, however it can be replaced with the customer’s choice (after necessary tests are conducted). 
 
 *Though, this architecture would still not be fully HA , as there is still a single point of failure with the SODA Node not being fully HA. 
-To be fully HA, the  Master node should be clustered in a multi-master configuration, however due to resource restrictions , it is proposed to go with the Architecture depicted in Figure - 2. 
+To be fully HA, the  Master node should be clustered in a multi-master configuration, however due to resource restrictions , it is proposed to go with the Architecture depicted in Figure - 1. 
 
 ## Development and Deployment Context : 
 
