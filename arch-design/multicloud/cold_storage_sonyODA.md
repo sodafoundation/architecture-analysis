@@ -1,6 +1,6 @@
 # Cold Storage Support using SONY ODA (Optical Disk Archive)
 
-**Author(s)**: [Ashit Kumar]([https://github.com/kumarashit](https://github.com/kumarashit), [Archana Pathak](https://github.com/Click2cloud-Archana), [Saurabh Gupta](https://github.com/Click2Cloud-SGupta)
+**Author(s)**: [Ashit Kumar](https://github.com/kumarashit), [Archana Pathak](https://github.com/Click2cloud-Archana), [Saurabh Gupta](https://github.com/Click2Cloud-SGupta)
 
 Major Version Updates
 Date : 02/02/2021 Version : 1.0.0 Description : Ashit Kumar
@@ -164,11 +164,12 @@ No changes
 TBD
 
 ## Sequence Diagrams
-  
 **Archive**
+
 ![Move to Cold Storage](resources/objectarchival_seq.png)
 
 **Restore**  
+
 ![Restore from Cold Storage](resources/retrieveobject_oda_seq.png)
 
 ## Design Alternatives and other notes
