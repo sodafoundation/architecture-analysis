@@ -194,7 +194,7 @@ To be updated
 | responseTime   | ms   | Average time taken for an IO operation in ms                       |
 | requests       | IOPS | Input/output operations per second                                 |
 | readThroughput | MB/s | Represents how much data read is successfully transferred in MB/s  |
-| writeThrouput  | MB/s | Represents how much data write is successfully transferred in MB/s |
+| writeThroughput  | MB/s | Represents how much data write is successfully transferred in MB/s |
 | readRequests   | IOPS | Read requests per second                                           |
 | writeRequests  | IOPS | Write requests per second                                          |
 | memoryUsage    | %    | Internal memory usage in %                                         |
@@ -310,4 +310,3 @@ NA
 
 
 ## Scratchpad
-
