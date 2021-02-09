@@ -176,8 +176,9 @@ To be updated
 
 ##### Metric lists
 ###### Metric Lists analysis summary
-* Considered EMC SRM, stor2rrd, OCI documents and solarwinds SRM dashboard   to derive support matrix of some common back ends (EMC vmax, EMC unity, ibm ds, ibm SVC, HP 3par)
+* Considered different available solutions to derive support matrix of some common back ends (EMC vmax, EMC unity, ibm ds, ibm SVC, HP 3par)
 * Some metrics can take common names in delfin
+* Wherever the native metric name is overridden to map delfin common name, driver should provide 'native_name' and 'native_description' in the labels.
 * Other metrics will follow platform metric naming
 * Delfin will have API to list supported metric for each resource at each driver
 * Metric name bandwidth is rarely used , most of the platforms consider data rate as throughput (MB/s) and IOPS as requests or iorate 
