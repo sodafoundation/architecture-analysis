@@ -1,4 +1,4 @@
-# Bucket management in soda-multicloud
+# Bucket management in SODA-multicloud
 
 
 **Author(s)**: [Pravin Ranjan](https://github.com/PravinRanjan10), [Vineela Pachchipulusu]()
@@ -8,7 +8,7 @@
 
 In the cloud world, every cloud vendor provides storage space to users. Generally in terms of bucket and folder. A user can store the data/objects in a specific bucket or folder.
 
-SODA multi-cloud(gelato) is a project which manages multiple cloud vendors from one place. And also interfaces to use cloud services. So it is important for soda to provide bucket management support for various cloud vendors. So that user can create and manage buckets from one place(soda multi-cloud).
+SODA multi-cloud(gelato) is a project which manages multiple cloud vendors from one place. And also interfaces to use cloud services. So it is important for SODA to provide bucket management support for various cloud vendors. So that user can create and manage buckets from one place(SODA multi-cloud).
 
 ## Goals
 The document provides the use case, design and implementation guidelines for supporting bucket management from SODA platform. It includes creation, deletion, object uploading, migration etc. in various cloud providers.
@@ -24,17 +24,20 @@ NA
 
 2. Delete bucket from various cloud providers. Ex: Aws, gcp, azure
 
-3. Upload objects in bucket
+3. List all the bucktes
 
-4. Set lifecycles rules on objects
+4. Upload objects in bucket
 
-5. Migrate objects from one location to different locations
+5. Download objects from bucket
 
+6. Delete object from bucket
+
+7. Create/set tier policy for creating bucket. Ex: Gold, silver etc.
 
 ##### Non Functional Requirements
 
 1. The system should be highly available. Multiple users can login to the system and create buckets, folders, upload objects etc.
-The design document for this can be referred from [here](https://github.com/sodafoundation/architecture-analysis/pull/96)
+The design document for this can be referred from [here](https://github.com/SODAfoundation/architecture-analysis/pull/96)
 
 2. The system should work with minimum latency.
 
@@ -43,15 +46,15 @@ The design document for this can be referred from [here](https://github.com/soda
 
 ## Architecture Analysis
 
-The overall multi cloud architecture can be referred from [here](https://github.com/sodafoundation/architecture-analysis/blob/master/arch-design/multicloud/MultiCloud_Design.md)
+The overall multi cloud architecture can be referred from [here](https://github.com/SODAfoundation/architecture-analysis/blob/master/arch-design/multicloud/MultiCloud_Design.md)
 
 ### Use case View
 
-For heterogeneous object management, bucket creation is important. Currently soda-multicloud supports creation of folders under cloud buckets as shown in Fig-1. So, soda-users must need to create cloud buckets manually and provide a name, AK/SK to soda for folder creation. As shown in fig-1, step-1 is manual which is performed by the user, whereas step-2,3,4,.. are supported by soda-multi-cloud.
+For heterogeneous object management, bucket creation is important. Currently SODA-multicloud supports creation of folders under cloud buckets as shown in Fig-1. So, SODA-users must need to create cloud buckets manually and provide a name, AK/SK to SODA for folder creation. As shown in fig-1, step-1 is manual which is performed by the user, whereas step-2,3,4,.. are supported by SODA-multi-cloud.
 
-To avoid manual intervention, step-1 should also be part of soda-multicloud as shown in Fig-2. This way users need not to do anything manually on the cloud vendors console.
+To avoid manual intervention, step-1 should also be part of SODA-multicloud as shown in Fig-2. This way users need not to do anything manually on the cloud vendors console.
 
-Once the buckets are created, users should perform all the operations supported by soda-multicloud. For example: Uploading objects, setting lifecycle rules, migration etc.  
+Once the buckets are created, users should perform all the operations supported by SODA-multicloud. For example: Uploading objects, setting lifecycle rules, migration etc.  
 
 
 ![](resources/multi-cloud-fig1.png)
@@ -60,10 +63,236 @@ Once the buckets are created, users should perform all the operations supported 
 ![](resources/multi-cloud-fig2.png)
 
 
+#### Sequence to Create buckets:
 
-#### API's(Create/Delete) to support bucket management:
+Step-1. Register Backend
 
-To support bucket managament, below is the list of API's with detailed description about parameters for various cloud vendors are below:
+  - Name
+  - Type: aws/azure/gcp etc
+  - Endpoint:
+  - Others headers(like AK/SK etc.)
+
+Step-2. Create Tier policy(configuration), May be the Admin Operation
+
+  - Gold:
+      - storageclass: tier_1(Aws:standard, GCP:hot, Azure:xyz)
+
+  - Silver:
+    - storageclass: tier_99(Aws:cold, GCP:xxx, Azure:xxx)
+
+  - Bronze:
+    - storageclass: tier_999(Aws:xxx, GCP:xxx, Azure:xxx)
+
+Step-3. Create bucket
+
+  - Name:
+  - Backend_name
+  - Tier-policy
+
+##### The Diagram to show bucket creation:
+
+Below diagram shows two things:
+
+1. Bucket can be created with Tier policy.
+
+2. The Tier policy of bucket will be taged in SODA-multicloud bucket. But there will be not tagging in actual cloud account.
+
+![](resources/multi-cloud-tier1.png)
+
+
+### SODA-API for Bucket management:
+
+#### Create Bucket:
+
+##### [PUT /HTTP/v1/bucket-name]()
+
+###### Request Body:
+
+`type`: string, Type of cloud vendors. Ex: Aws s3, Huawei OBS etc.
+
+`name`: string, Name of bucket. See the Naming convention below.
+
+`backend`: string, Name of registered backend by users.
+
+`policy`: string, Tier policy, Ex: Gold, Silver, Bronze
+
+
+###### Response:
+
+ReturnCode: integer, Ex:200
+
+Message: string, Ex: Successfully Created!
+
+#### Naming Convention:
+##### AWS:
+* Bucket names must be between 3 and 63 characters long.
+
+* Bucket names can consist only of lowercase letters, numbers, dots (.), and hyphens (-).
+
+* Bucket names must begin and end with a letter or number.
+
+* Bucket names must not be formatted as an IP address (for example, 192.168.5.4).
+
+* Bucket names can't begin with xn-- (for buckets created after February 2020).
+
+* Bucket names must be unique within a partition. A partition is a grouping of Regions. AWS currently has three partitions: aws (Standard Regions), aws-cn (China Regions), and aws-us-gov (AWS GovCloud [US] Regions).
+
+* Buckets used with Amazon S3 Transfer Acceleration can't have dots (.) in their names. For more information about transfer acceleration, see Amazon S3 Transfer Acceleration.
+
+
+##### Azure:
+* A container name must be a valid DNS name, conforming to the following naming rules:
+
+* Container names must start with a letter or number, and can contain only letters, numbers, and the dash (-) character.
+
+* Every dash (-) character must be immediately preceded and followed by a letter or number; consecutive dashes are not permitted in container names.
+
+* All letters in a container name must be lowercase.
+* Container names must be from 3 through 63 characters long.
+
+
+##### GCP:
+* Bucket names must contain only lowercase letters, numbers, dashes (-), underscores (*_)*, and dots (.). Spaces are not allowed
+
+* Names containing dots require verification.
+
+* Bucket names must start and end with a number or letter.
+
+* Bucket names must contain 3-63 characters. Names containing dots can contain up to 222 characters, but each dot-separated component can be no longer than 63 characters.
+* Bucket names cannot be represented as an IP address in dotted-decimal notation (for example, 192.168.5.4).
+
+* Bucket names cannot begin with the "goog" prefix.
+
+* Bucket names cannot contain "google" or close misspellings, such as "g00gle".
+
+
+
+#### Delete Bucket:
+##### [DELETE /HTTP/v1/bucket-name]()
+
+
+###### Request Body:
+
+`name`: string, Name of bucket. See the Naming convention below.
+
+###### Response:
+
+ReturnCode: Integer, Ex:204
+
+Message: string, Ex: Successfully Deleted!
+
+
+#### List Buckets:
+
+###### [GET /HTTP/v1/]()
+
+###### Request Body:
+
+NA
+
+###### Response Body:
+
+`id`:	string, The UUID of bucket.
+
+`displayname`:	string, The name of the bucket
+
+`creationdate`: string, The date of creation
+
+`locationconstraint`: string, The backend of logical bucket
+
+`tier`: string
+
+`owner`: string
+
+###### Response:
+
+ReturnCode: Integer, Ex:204
+
+#### List Objects of the bucket:
+
+###### [GET /HTTP/v1/bucket-name]()
+
+###### Request Body:
+
+`name`: string, The name of bucket
+
+###### Response Body:
+`delimiter`:	string, Delimiter is a character used to group keys
+
+`isTruncated`: boolean, Flag to indicate whether all of the results that satisfied the search criteria is returned
+
+`marker`:	string, Indicates where in the bucket listing begins.
+
+`name`:	string, Bucket Name
+
+`description`:	Metadata about each object returned
+
+`key`:	string, The name of the Object
+
+`lastModified`:	string, The date the Object was Last Modified
+
+`ETag`:	string, The entity tag is an MD5 hash of the object. ETag reflects only changes to the contents of an object, not its metadata.
+
+`size`:	integer, Size in bytes of the object
+
+`tier`: string
+
+`location`:	string, The backend of object
+
+###### Response:
+
+ReturnCode: Integer
+
+#### Upload objects to the bucket:
+
+###### [PUT /HTTP/v1/bucket-name/object]()
+
+###### Request Body:
+
+`bucketName`: string
+
+`object`: string
+
+###### Responses:
+`returnCode`: integer
+`message`: string
+
+
+#### Download objects from the bucket:
+
+###### [GET /HTTP/v1/bucket-name/object]()
+
+###### Request Body:
+
+`bucketName`: string
+
+`object`: string
+
+###### Responses:
+`returnCode`: integer
+`message`: string
+
+
+#### Delete objects from the bucket:
+
+###### [DELETE /HTTP/v1/bucket-name/object]()
+
+###### Request Body:
+
+`bucketName`: string
+
+`object`: string
+
+###### Responses:
+`returnCode`: integer
+`message`: string
+
+##################
+### References:
+
+#### List of different cloud API's
+
+List of different cloud vendors api, which can be referred during implementation of -multicloud API.
 
 
 #### AWS
@@ -367,3 +596,34 @@ Do not supply a request body with this method.
 Response:
 
 If successful, this method returns an empty response body.
+
+
+#### Scratch Pad:
+There are thoughts, what could be the Tier policy. Initially we have added just storageClass but other parameters can also be defined, like IOPS, latency etc.
+
+- Gold:
+    - storageclass: tier_1(Aws:standard, GCP:hot, Azure:xyz)
+    --------
+    - IOPS: 10GB
+    - latency: 5 ns
+    - Size: 20-400 Gbi
+    - AccessMode: ReadWriteMany
+    --------
+
+- Silver:
+  - storageclass: tier_99(Aws:cold, GCP:xxx, Azure:xxx)
+  ------
+
+  - IOPS: 5GB
+  - latency: 10 ns
+  - Size: 20-200 Gbi
+  - AccessMode: ReadOnlyMany
+  ------
+
+- Bronze:
+  - storageclass: tier_999(aws:xxx, GCP:xxx, Azure:xxx)
+  -------
+  - IOPS: 2GB
+  - latency: 15 ns
+  - Size: 20-100 Gbi
+  - AccessMode: ReadWriteOnce
