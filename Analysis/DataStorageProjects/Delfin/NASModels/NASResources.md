@@ -52,6 +52,7 @@ id | string | UUID of the Filesystem
 name | string | Name of the Filesystem
 storage_id | string | Delfin id of the associated storage
 native_filesystem_id | string | Original Filesystem id in the device
+native_pool_id | string | Original storage pool id in the device
 total_capacity | long | Total capacity in bytes of the Filesystem
 used_capacity | long | Used capacity in bytes of the Filesystem
 free_capacity | long | Free capacity in bytes of the Filesystem
@@ -140,3 +141,27 @@ type | string | Share type (CIFS, NFS, FTP, UNKNOWN)
 offline_mode | string | Offline cache mode (Manual, documents, programs, none)
 oplock | bool | Oplock (true, false)
 path | string | Path of the share in the Filesystem
+
+## Impact on Delfin API
+
+The addition of NAS resource that are modeled here, will have following impact on Delfin OpenAPI Specification
+
+Latest OpenAPI Specification for delfin may be obtained from [here](https://github.com/sodafoundation/delfin/blob/master/openapi-spec/swagger.yaml)
+
+### 1. Addition of new APIs
+
+New API | Description
+-- | --|
+GET /v1/filesystems | List filesystem details from all backends
+GET /v1/filesystems/{id} | List filesystem details of a specific filesystem id
+GET /v1/qtrees | List qtrees details from all backends
+GET /v1/qtrees/{id} | List qtrees details of a specific qtree id
+GET /v1/shares | List shares details from all backends
+GET /v1/shares/{id} | List shares details of a specific share id
+
+### 2. Extension of functionalities for existing APIs
+
+Updated API | Description
+-- | --|
+POST /v1/storages/sync | Sync functionality extended to support new NAS resources
+POST /v1/storages/{storage_id}/sync | Sync functionality extended to support new NAS resources
