@@ -99,6 +99,36 @@ TBD
 
 [https://docs.microsoft.com/en-in/azure/storage/blobs/storage-blob-storage-tiers?tabs=azure-portal](https://docs.microsoft.com/en-in/azure/storage/blobs/storage-blob-storage-tiers?tabs=azure-portal)
 
+###### Changes in SODA multi-cloud:
+Check the value of request header X-Amz-Storage-Class, set the Storage class in call to SetTier()
+
+```
+// If the Storage Class is defined from the API request Header, set it else define defaults
+       var storClass string
+
+       if storageClass != "" {
+               storClass = storageClass
+       } else {
+               if object.Tier == 0 {
+                       // default
+                       object.Tier = utils.Tier1
+               }
+               storClass, err = osdss3.GetNameFromTier(object.Tier, utils.OSTYPE_Azure)
+               if err != nil {
+                       log.Infof("translate tier[%d] to azure storage class failed", object.Tier)
+                       return result, ErrInternalError
+               }
+}
+....
+....
+_, err = blobURL.SetTier(ctx, azblob.AccessTierType(storClass), azblob.LeaseAccessConditions{})
+    if err != nil {
+        log.Errorf("set azure blob tier[%s] failed:%v\n", object.Tier, err)
+        return result, ErrPutToBackendFailed
+    }
+
+```
+
 #### Retrieval in Azure:
 Archive Storage currently supports 2 rehydrate priorities, High and Standard, that offers different retrieval latencies
 ![Retrieval in Azure](resources/RehydrateAzure.png)
@@ -111,7 +141,14 @@ Archive Storage currently supports 2 rehydrate priorities, High and Standard, th
 -   Standard priority: The rehydration request will be processed in the order it was received and may take up to 15 hours.
     
 -   High priority: The rehydration request will be prioritized over Standard requests and may finish in under 1 hour for objects under ten GB in size.
-    
+
+###### Changes in SODA multi-cloud
+SODA uses azure-storage-blob-go lib to connect to Azure object/blob service 
+This lib has been updated with version 0.10.x to support **rehydratePriority**
+So this lib version need to be updated in go mod
+
+This also, changes signature of SetTier(). This need to be updated
+  
 #### Archival in Google Cloud Storage: 
 ![Archival in GCS](resources/ArchivalGCS.png)
 
@@ -121,6 +158,52 @@ Unlike the "coldest" storage services offered by other Cloud providers, data is 
 
 [https://cloud.google.com/storage/docs/storage-classes#descriptions](https://cloud.google.com/storage/docs/storage-classes#descriptions)
 
+##### Changes required in SODA multi-cloud
+Currently SODA used webrtcn/s3client to connect to GCP object services. This will not help to update storage class. SODA need to use the cloud.google..com/go/storage lib.
+GCP support changing storage class of object within a bucket through rwriting the object. To retrive archived object, GCP supports just changing the storage class
+
+```
+import (
+        "context"
+        "fmt"
+        "io"
+        "time"
+
+        "cloud.google.com/go/storage"
+)
+
+// changeObjectStorageClass changes the storage class of a single object.
+func changeObjectStorageClass(w io.Writer, bucket, object string) error {
+        // bucket := "bucket-name"
+        // object := "object-name"
+        ctx := context.Background()
+        client, err := storage.NewClient(ctx)
+        if err != nil {
+                return fmt.Errorf("storage.NewClient: %v", err)
+        }
+        defer client.Close()
+
+        ctx, cancel := context.WithTimeout(ctx, time.Second*10)
+        defer cancel()
+
+        bkt := client.Bucket(bucket)
+        obj := bkt.Object(object)
+        // See the StorageClass documentation for other valid storage classes:
+        // https://cloud.google.com/storage/docs/storage-classes
+        newStorageClass := "COLDLINE"
+        // You can't change an object's storage class directly, the only way is
+        // to rewrite the object with the desired storage class.
+        copier := obj.CopierFrom(obj)
+        copier.StorageClass = newStorageClass
+        if _, err := copier.Run(ctx); err != nil {
+                return fmt.Errorf("copier.Run: %v", err)
+        }
+        fmt.Fprintf(w, "Object %v in bucket %v had its storage class set to %v\n", object, bucket, newStorageClass)
+        return nil
+}
+
+From GCP storage doc: https://cloud.google.com/storage/docs/changing-storage-classes#storage-change-object-storage-class-go
+```
 
 ### Sample Code
 
@@ -129,6 +212,7 @@ Azure: [https://github.com/Azure/azure-sdk-for-go/](https://github.com/Azure/azu
 AWS: [https://docs.aws.amazon.com/sdk-for-go/api/service/s3/#PutObjectInput](https://docs.aws.amazon.com/sdk-for-go/api/service/s3/#PutObjectInput)
 
 GCP: [https://cloud.google.com/storage/docs/json_api/v1/objects](https://cloud.google.com/storage/docs/json_api/v1/objects)
+
 Sample code for directly uploading into AWS Glacier Storage Class
 
 ```
