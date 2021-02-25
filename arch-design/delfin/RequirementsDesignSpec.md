@@ -2,7 +2,7 @@
 # Delfin (SODA Infrastructure Manager) Requirements & Design
 **Authors:** [Najmudheen CT](https://github.com/NajmudheenCT), [Sanil Kumar D](https://github.com/skdwriting), [Xulin](https://github.com/wisererik),  [Ashit Kumar](https://github.com/kumarashit)
 
-This documentation serves as the design spec for SODA Infrastructure Management project Delfin .Delfin is a basic solution for managing heterogeneous storage systems. It uses the standard API model to centrally manage heterogeneous storage systems from different vendors and can be used as a basic framework for other SRM platforms to collect and manage storage metadata. In addition, open southbound standards are provided to help developers quickly develop and access storage product
+This documentation serves as the design spec for SODA Infrastructure Management project Delfin. Delfin is a basic solution for managing heterogeneous storage systems. It uses the standard API model to centrally manage heterogeneous storage systems from different vendors and can be used as a basic framework for other SRM platforms to collect and manage storage metadata. In addition, open southbound standards are provided to help developers quickly develop and access storage product.
 ## Goal
 This document focuses on overall requirement analysis and design of heterogeneous storage monitoring requirements
 
@@ -29,15 +29,15 @@ Today’s IT infrastructure spans across multi vendor devices and technologies. 
 ### Feature Requirements
 **Storage Device Monitoring** 
 
-Registering a storage device for monitoring
+- Registering a storage device for monitoring
 
-Updating a storage device access information
+- Updating a storage device access information
 
-Removing a storage device from monitoring
+- Removing a storage device from monitoring
 
-Provide storage devices  attributes
+- Provide storage devices  attributes
 
-Synchronize storage devices  information periodically and on user request
+- Synchronize storage devices  information periodically and on user request
 
 
 
@@ -46,24 +46,24 @@ Synchronize storage devices  information periodically and on user request
 
 **Storage Resources Monitoring**
 
-Provide storage resources attributes such as pool, LUN, port, etc Details.
+- Provide storage resources attributes such as pool, LUN, port, etc Details.
 
-Synchronize storage resources  attributes periodically and on user request
+- Synchronize storage resources  attributes periodically and on user request
 
 
 
 **Performance Monitoring**
 
-Register storage for performance monitoring
-Report key performance indicators periodically 
+- Register storage for performance monitoring
+- Report key performance indicators periodically 
 
 **Alert Monitoring** 
 
-Real time reporting of events/alerts.
+- Real time reporting of events/alerts.
 
-Pull alerts from back end on user request.
+- Pull alerts from back end on user request.
 
-Clear Alert on user request.
+- Clear Alert on user request.
 
 
 #### Requirement Analysis
@@ -95,6 +95,7 @@ There is no open source framework for addressing all requirements in one platfor
 **Performance requirements**
 
 NA
+
 **Security requirements**
 1. Support secured access to delfin APIS
 2. Support secured access to back-ends
@@ -108,6 +109,7 @@ NA
 ![Architecture](./resources/Architecture.jpg)
 
 ### Module Architecture
+
 NA
 
 ### Architecture Tenets
@@ -140,19 +142,21 @@ Driver Manager module architecture [here](https://github.com/sodafoundation/arch
 
 ### Use case View
 
-![Usecase](resources/Delfin_usecase.jpg)
+![Usecase](./Resources/Delfin_usecase.jpg)
 
 #### List of Typical Use-cases
 
-1. **Adding Storage Devices for monitoring**:- 	User call APIS by specifying  device access information such as EMC VMax, Hitachi Virtual Storage Platform, or HP 3PAR etc... 
-Access modes are .
-    * REST access: You need to enter the IP address, port number, user name, and password. 
-    * SSH access: you need to provide  the IP address, port number, user name, and password. 
+1. **Adding Storage Devices for monitoring**
+
+    User call APIS by specifying  device access information such as EMC VMax, Hitachi Virtual Storage Platform, or HP 3PAR etc..
     
-    * CLI : Local management CLI access information like host name, port, user name, password
-    user must set one of the access information type.
-    
-    * SMI-S : You need to provide SMI provider credentials.
+    Access modes are.
+
+- REST access: You need to enter the IP address, port number, user name, and password. 
+- SSH access: you need to provide  the IP address, port number, user name, and password. 
+- CLI : Local management CLI access information like host name, port, user name, password
+user must set one of the access information type.
+- SMI-S : You need to provide SMI provider credentials.
 
 2. **Querying Storage Device Details**
 
@@ -201,7 +205,7 @@ REST API is provided for configuring devices for monitoring and for querying col
 Detailed API spec is available here [here](https://github.com/sodafoundation/delfin/blob/master/openapi-spec/swagger.yaml) 
 
 #### Internal Interfaces
-* Driver Interface : Provides class interfaces for the drivers to implement back end attributes collection. [Driver APIs](https://github.com/sodafoundation/delfin/blob/master/delfin/drivers/api.py)
+* Driver Interface : Provides class interfaces for the drivers to implement back end attributes collection. [Driver APIs](https://github.com/sodafoundation/delfin/blob/master/delfin/drivers/driver.py)
 
 * Exporter Interface : Provides class interfaces for the external exporters to get data from Delfin to third party platforms.
 [Exporter APIS](https://github.com/sodafoundation/delfin/blob/master/delfin/exporter/base_exporter.py)
@@ -250,7 +254,7 @@ NA
 
 ### Query resource information 
 
-![Resource sync](resources/Query_workflow.png)
+![Resource sync](./Resources/Query_workflow.png)
 
 ### Alert source configuration
 
