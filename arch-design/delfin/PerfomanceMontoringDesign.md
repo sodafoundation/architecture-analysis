@@ -1,10 +1,13 @@
 ﻿
 # Performance monitoring design document   
 
+**Authors:** [Najmudheen CT](https://github.com/NajmudheenCT), [Liuyu ](https://github.com/ThisIsClark), [Xulin](https://github.com/wisererik),  [Sushantha Kumar](https://github.com/sushanthakumart)
+
+
 ## Goal
 Bring out the design considerations and enhancements to delfin framework for metrics collection from heterogeneous back ends
 ## Motivation and background
-Performance metrics are the key indicators of storage devices, which every administrators would like to monitor, analyse and take decisions.
+Performance metrics are the key indicators of storage devices, which every administrators would like to monitor, analyze and take decisions.
 ## Non-Goals
 This doc covers only performance collection related design aspects and impacts to the framework, other use cases of delfin is not covered.
 ## Assumptions and Constraints
@@ -18,6 +21,7 @@ Performance collection is possible only if the storage is registered for resourc
 #### Feature Requirements
 1. Enable storage device for performance collection
 2. Collect and push performance metrics periodically
+3. Provide metric lists supported by driver
 
 #### Requirement Analysis
 Requirements are derived from existing SRM use cases and user inputs. 
@@ -26,16 +30,19 @@ Competitor analysis report : **Link to be updated**
 #### List of Requirements
 1. Registration of storage for performance collection
 2. Schedule collection job for different resource level metrics.
-3. Provide metrics to delfin client
+3. Push collected metrics to delfin client 
+4. Provide metric lists supported by driver.
 
 ##### Functional Requirements
-1. Register a device for performance collection
-2. Specify resources and interval to poll
-3. Once registered, performance information should be collected at every interval
-4. GET supported metrics list for each device and resources
-5. Push collected data to exporters.
-6. update/remove performance collection configurations.
-7. Remove Performance collection tasks when storage is un-registered.
+1. Register a device for performance collection in delfin
+2. Provide collection configuration ( resources and interval to poll)
+3. Schedule collection job at every interval
+4. Retry failed collection jobs
+ 
+5. GET supported metrics list for each device and resources
+6. Push collected data to exporters.
+7. update/remove performance collection configurations.
+8. Remove Performance collection tasks when storage is un-registered.
 
 
 ##### Non Functional Requirements
@@ -77,22 +84,34 @@ NA
 ## Detailed Design
 
 ### Use case View
-To be updated
+![Usecase](./Resources/Delfin_usecase_performance.jpg)
 #### List of Typical Use cases
-To be updated
+
+- Register a device for performance collection , [Pre-condition : Device is already registered in delfin for resource collection
+]
+
+- Schedule collection jobs for newly registered devices .
+
+- While starting/restarting delfin task process, schedule collection jobs for all devices registered.
+
+- Retry collection tasks for all failed collection after a specified interval.
+
+- Remove collection tasks of all succeeded and and retry limit exceeded jobs
+
+- Remove collection tasks when a storage is un-registered from delfin
+
 
 #### Usecase context model
-To be updated
+NA
 
 #### Interface Model
 
-##### Driver interfaces
-Tobe updated
 
 ##### External Interfaces
  
 ###### North-bound REST interfaces
-To be updated
+
+Performance collection related API spec analysis and design doc [here](https://github.com/sodafoundation/architecture-analysis/blob/c1ca8ad63ccd63b782e5adcd4020e784ee2471c5/arch-design/delfin/PerformanceMonitoringAPIs.md)
 
 
 ###### Exporter interface 
@@ -105,6 +124,23 @@ Exporters need to Interface to push collected metrics through exporters.
  Metric model reference [here](#metric-model) 
  
 Detailed exporter writing user guide [here](https://docs.sodafoundation.io/guides/developer-guides/delfin/exporter-developer-guide/) 
+
+##### Driver interfaces
+
+```python
+def collect_perf_metrics(self, context, storage_id, resource_metrics, start_time,
+                          end_time):
+    """Collect  performance metrics
+    storage_id : Defin Id of the storage
+    resource_metrics: dictionary represents the collection configuration
+        Example:
+            
+        resource_metrics = {'storage_pool': ['read_throughput', 'write_throughput', 'response_time'],
+         'volume': ['read_throughput', 'write_throughput']}
+    start_time: first time stamp to query in the range
+    end_time : last time to query in the range
+     """
+```
 
 #### End User Context
 NA
@@ -171,7 +207,32 @@ Every metric will have storage_id, resource_type, unit,type and resource_id as m
 |unit|IOPS,MB/s,%,ms,KB,
 
 ##### Database model
-To be updated
+
+**Table Name : telemetry**
+
+| Key Name        | Key Type | Description                                                                                                                                                                 | Example                                                                                                                                                                                                                                                                                                       |
+| --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id              | uuid     | Telemetry  ID.                                                                                                                                                              | 6cb62086-cec8-411c-9f70-16ff81cf9909                                                                                                                                                                                                                                                                          |
+| storage\_id     | uuid     | Storage on which the telemetry needs to be executed                                                                                                                         | c31291c7-781a-47e2-a66f-112f0bc0ef27                                                                                                                                                                                                                                                                          |
+| interval        | int      | Telemetry interval, in seconds.                                                                                                                                             | 300                                                                                                                                                                                                                                                                                                           |
+| method          | string   | Method/Task Type to Be Executed                                                                                                                                             | delfin.Task.performance\_collect                                                                                                                                                                                                                                                                              |
+| args            | dict     | Required parameters                                                                                                                                                         | {<br>"storage\_id": "c31291c7-781a-47e2-a66f-112f0bc0ef27",<br>"resource": {<br>"device": \["CPU usage","Bandwidth","Average I/O response time","IOPS"\],<br>"pool": \["IOPS","Average I/O response time","Bandwidth"\],<br>"lun": \["IOPS","Average I/O response time","Bandwidth","Utilization"\]<br>}<br>} |
+| last\_run\_time | int      | Time when a telemetry task instance is created last time. The time is set to the current time initially. The time is updated each time a telemtry task instance is created. | 1611840278                                                                                                                                                                                                                                                                                                    |
+
+
+**Table name : telemetry_instance**
+
+| Key Name      | Key Type                           | Description                                                                                                                                                                                                               | Example                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| id            | uuid                               | Telemetry Task ID.                                                                                                                                                                                                        | 7cb25622-93dd-4712-acf2-f3ca79139f8b                                                                                                                                                                                                                                                                                                                                     |
+| telemetry\_id | uuid                               | telemetry template ID.                                                                                                                                                                                                    | 6cb62086-cec8-411c-9f70-16ff81cf9909                                                                                                                                                                                                                                                                                                                                     |
+| launch\_time  | int                                | telemetry Task execution start time.                                                                                                                                                                                      | 1611840278                                                                                                                                                                                                                                                                                                                                                               |
+| storage\_id   | uuid                               | Storage on which the telemetry task needs to be executed                                                                                                                                                                  | c31291c7-781a-47e2-a66f-112f0bc0ef27                                                                                                                                                                                                                                                                                                                                     |
+| method        | string                             | Method/Task Type to Be Executed                                                                                                                                                                                           | delfin.Task.performance\_collect                                                                                                                                                                                                                                                                                                                                         |
+| args          | dict                               | Required parameters                                                                                                                                                                                                       | {<br>"storage\_id": "c31291c7-781a-47e2-a66f-112f0bc0ef27",<br>"resource": {<br>"device": \["CPU usage","Bandwidth","Average I/O response time","IOPS"\],<br>"pool": \["IOPS","Average I/O response time","Bandwidth"\],<br>"lun": \["IOPS","Average I/O response time","Bandwidth","Utilization"\]<br>},<br>"start\_time": 1611840276,<br>"end\_time": 1611840384,<br>} |
+| result        | "succeed"<br>"failed"<br>"running" | Task execution status<br>The task is set to the running state when the task starts.<br>After a task is successfully executed, the task is in the succeeded state.<br>The task status is changed to failed after it fails. | null                                                                                                                                                                                                                                                                                                                                                                     |
+| retry\_count  | int                                | Number of retries executed                                                                                                                                                                                                | 0                                                                                                                                                                                                                                                                                                                                                                        |
+
 
 
 ##### Metric lists
@@ -295,7 +356,17 @@ NA
 
 ## Sequence diagrams
 
-To be updated
+### Register storage for performance collection
+
+![Registration](./Resources/perf_reg_sequence.jpg)
+
+### Periodic scheduling
+
+![Registration](./Resources/task_manager_restart_seq.jpg)
+
+### Task instance retry and removal
+
+![Registration](./Resources/perf_task_retry.jpg)
 
 ## Design Alternatives and other notes
 
