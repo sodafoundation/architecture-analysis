@@ -49,19 +49,19 @@ The Filesystem provides flexible support for both traditional and transactional 
 Attributes | Type | Description
 -- | -- | --
 id | string | UUID of the Filesystem
-name | string | Name of the Filesystem
-storage_id | string | Delfin id of the associated storage
 native_filesystem_id | string | Original Filesystem id in the device
+name | string | Name of the Filesystem
+type | string | Allocation type (thick, thin)
+status | enum | Running status of the Filesystem (normal, faulty)
+storage_id | string | Delfin id of the associated storage
 native_pool_id | string | Original storage pool id in the device
 total_capacity | long | Total capacity in bytes of the Filesystem
 used_capacity | long | Used capacity in bytes of the Filesystem
 free_capacity | long | Free capacity in bytes of the Filesystem
-status | enum | Running status of the Filesystem (normal, offline, unknown)
-worm | bool | WORM supported (True, False)
-allocation_type | string | Allocation type (thick, thin)
-deduplication | bool | Filesystem deduplication (true, false)
-compression | bool | Filesystem compression (true, false)
-security_mode | string | Security Mode of Filesystem (mixed, native, windows, unix)
+worm | enum | WORM type (non_worm, audit_log, compliance, enterprise)
+deduplicated | bool | Filesystem deduplication (true, false)
+compressed | bool | Filesystem compression (true, false)
+security_mode | string | Security Mode of Filesystem (mixed, native, ntfs, unix)
 
 ### Qtree
 
@@ -85,14 +85,12 @@ Qtree also support,
 Attributes | Type | Description/enum
 -- | -- | --
 id | string | UUID of the Qtree
+native_qtree_id | string | Original Qtree id in the device
 name | string | Name of the Qtree
 storage_id | string | Delfin id of the associated storage
-native_qtree_id | string | Original Qtree id in the device
 native_filesystem_id | string | Original id of the parent filesystem
-quota_id | string | Delfin id of the quota applied to Qtree
 path | string | Path of the Qtree
-security_mode | string | Security Mode of Qtree (mixed, native, windows, unix)
-state | string | State of Qtree (normal, soft_limit, hard_limit, abnormal)
+security_mode | string | Security Mode of Qtree (mixed, native, ntfs, unix)
 
 ### Quota
 
@@ -101,21 +99,25 @@ Quota is limit applied to types like Qtrees, Users and User Groups
 Attributes | Type | Description
 -- | -- | --
 id | string | UUID of the quota
-native_qtree_id | string | Original Quota id in the device
+native_quota_id | string | Original Quota id in the device
+type | string | Quota type (tree, user, group)
 storage_id | string | Delfin id of the associated storage
-type | string | Quota type (Qtree, User, Group)
+native_filesystem_id | string | Original Filesystem id in the device
+native_qtree_id | string | Original Qtree id in the device
 capacity_hard_limit | long | Hard limit for the space
 capacity_soft_limit | long | Soft limit for the space
 file_hard_limit | long | Hard limit on the number of files
 file_soft_limit | long | Soft limit on the number of files
 file_count | long | Total number of files
 used_capacity | long | Used total capacity
+user_group_name | string | User or user group name
 
 ### Share
 
 Share is used for sharing files using one of the protocols below
 
 #### Types of Shares
+
 ##### CIFSShare
 
 File share protocol used to access NAS storage in Windows environment. Multiple CIFS Shares can be created for a Filesystem or Qtree to be accessed by different users and clients. It allows multiple access rules and supports authorized access
@@ -128,18 +130,15 @@ File share protocol used in Unix or Unix like OS environment. Multiple NFS Share
 
 The Filesystem or Qtree is accessed using FTP. Multiple FTP share access modes can be created for a Filesystem.
 
-
 Attributes | Type | Description
 -- | -- | --
 id | string | UUID of the Share
+native_share_id | string | Original Share id in the device
 name | string | Name of the Share
 storage_id | string | Delfin id of the associated storage
 native_filesystem_id | string | Original id of the parent filesystem
-qtree_id | string | Delfin id of the associated Qtree
-native_share_id | string | Original Share id in the device
-type | string | Share type (CIFS, NFS, FTP, UNKNOWN)
-offline_mode | string | Offline cache mode (Manual, documents, programs, none)
-oplock | bool | Oplock (true, false)
+native_qtree_id | string | Original id of the associated Qtree
+protocol | string | Share protocol (cifs, nfs, ftp, unknown)
 path | string | Path of the share in the Filesystem
 
 ## Impact on Delfin API
