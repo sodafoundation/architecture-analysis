@@ -99,6 +99,10 @@ TBD
 
 [https://docs.microsoft.com/en-in/azure/storage/blobs/storage-blob-storage-tiers?tabs=azure-portal](https://docs.microsoft.com/en-in/azure/storage/blobs/storage-blob-storage-tiers?tabs=azure-portal)
 
+1. Value of X-Amz-Storage-Class in the API for archining into Azure is 'Archive'
+2. For rehydrating or restoring an archived blob from Azure container, user can provide: a) Tier/Priority i.e. Hot or Standard b) Storage class i.e. the storage class to which the object will be moved to   Possible values of Storage classes to which an Archived object can be restored is "Hot" or "Cold". Currently the golang SDK doesn't support RehydratePriority so it will supported in furture.
+   https://github.com/Azure/azure-storage-blob-go/issues/245
+
 ###### Changes in SODA multi-cloud:
 Check the value of request header X-Amz-Storage-Class, set the Storage class in call to SetTier()
 
