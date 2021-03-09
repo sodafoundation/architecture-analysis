@@ -9,6 +9,7 @@ Major Version Updates
 |**Date** | **Version** | **Description** |
 |---------|-------------|-----------------|
 | 25th February 2021  | v0.1  | This document lists the requirements and changes needed for SODA Dashboard for I release. |
+| 9th March 2021  | v0.2  | Updated with further analysis of tasks |
 
 
 
@@ -169,7 +170,7 @@ SODA Delfin is adding new drivers support on a regular basis and this requires t
 - **Modify the keys of the performance metrics in the pre-configured Grafana dashboards**  
     If user installs the SRM toolchain we configure and install some Grafana dashboards which show the performance visualizations for all devices and for particular device.  
     The dashboards are configured with some keys that are fetched from the Prometheus datasource. These keys will be changed this change needs to be made in the dashboard `.json` files.
-    
+
 
 ### Input Requirements
 
