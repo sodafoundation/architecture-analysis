@@ -368,6 +368,10 @@ NA
 
 ![Registration](./Resources/perf_task_retry.jpg)
 
+### Device removal
+
+![Registration](./Resources/device_removal.jpg)
+
 ## Design Alternatives and other notes
 
 NA
