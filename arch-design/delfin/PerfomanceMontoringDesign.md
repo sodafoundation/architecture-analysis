@@ -1,7 +1,7 @@
 ﻿
 # Performance monitoring design document   
 
-**Authors:** [Najmudheen CT](https://github.com/NajmudheenCT), [Liuyu ](https://github.com/ThisIsClark), [Xulin](https://github.com/wisererik),  [Sushantha Kumar](https://github.com/sushanthakumart)
+**Authors:** [Najmudheen CT](https://github.com/NajmudheenCT), [Liuyu ](https://github.com/ThisIsClark), [Xulin](https://github.com/wisererik),  [Sushantha Kumar](https://github.com/sushanthakumart), [Amit Roushan](https://github.com/AmitRoushan)
 
 
 ## Goal
@@ -55,10 +55,43 @@ Competitor analysis report : **Link to be updated**
 
 ### System Architecture
 Overall system architecture of delfin is available [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md).
-Scope of architecture discussion in this design doc is limited to performance metrics collection interfaces, models and the modules involved for the same.
+Scope of architecture discussion in this design doc is limited to task manager module enhancements, performance metrics collection interfaces, models and the modules involved for the same.
 
 ### Module Architecture
-NA
+
+![Usecase](./Resources/task_manager_arch.jpg)
+
+Highlighted blocks are the additions to task manager for task scheduling and task handling.
+
+#### SchedulerManager
+
+ A factory for creating periodic scheduling tasks. 
+ Currently identified  periodic scheduler tasks  are TelemteryTaskScheduler, FailedTaskSheduler . 
+
+#### TelemteryTaskScheduler
+
+Create scheduled tasks for Metrics collection and add to scheduler. Creation of the task is based on Task table in DB.
+
+
+#### TelemetryFailedTaskScheduler
+
+Create scheduled tasks for failed metric collections. Creation of the task is based on FailedTask table from DB.
+
+
+#### Scheduler
+
+A task scheduler library that runs in a thread inside task manager application. Periodic scheduler should use this to set periodic running jobs.
+
+#### TaskHandler
+
+
+Receives jobs from scheduler and post the message in RabbitMQ
+
+
+#### TelemtryTask
+
+
+Telemery task executor which initiates the collect request to driver and pushes data to exporter.
 
 ### Architecture Tenets
 **North-bound API** :- REST interface to delfin
@@ -113,6 +146,7 @@ NA
 
 Performance collection related API spec analysis and design doc [here](https://github.com/sodafoundation/architecture-analysis/blob/c1ca8ad63ccd63b782e5adcd4020e784ee2471c5/arch-design/delfin/PerformanceMonitoringAPIs.md)
 
+##### Internal Interfaces
 
 ###### Exporter interface 
 Exporters need to Interface to push collected metrics through exporters.
@@ -151,7 +185,38 @@ NA
 
 ### Non Functional Context
 
-NA
+One design aspect considered for running multiple task managers for high availability and load balancing.
+#### Design considerations for HA and load balancing
+
+* Multiple task managers will scan the db independently and take decision of creating periodic jobs.
+
+
+* Given task manager instance may be running periodic jobs as well as backend collection tasks on behalf of some interval. If this instance crashes, both periodic jobs and backend collection tasks will be impacted. 
+ 
+
+* When one task manager starts, it can not take decision on which are the jobs are already running and which ones need to scheduled again.
+
+Above challenges will be addressed by Designated scheduler approach. where
+* One of the task manager should be designated as leader for scheduling the periodic jobs
+
+
+* Leader election algorithm can be used by SchedulerHandler to decide the master.
+
+
+* Implementation aspects to be explored further
+
+Another Approach in discussion :- Sharing of periodic job creation among task managers , where
+
+* Some mechanism can be used to designate each storage collection to one of the task managers
+
+
+* Each task manager handles some portion of periodic job creation
+
+
+* Details of the approach to be explored further
+
+
+
 
 
 ### Data View
@@ -208,7 +273,7 @@ Every metric will have storage_id, resource_type, unit,type and resource_id as m
 
 ##### Database model
 
-**Table Name : telemetry**
+**Table Name : Task**
 
 | Key Name        | Key Type | Description                                                                                                                                                                 | Example                                                                                                                                                                                                                                                                                                       |
 | --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -217,21 +282,24 @@ Every metric will have storage_id, resource_type, unit,type and resource_id as m
 | interval        | int      | Telemetry interval, in seconds.                                                                                                                                             | 300                                                                                                                                                                                                                                                                                                           |
 | method          | string   | Method/Task Type to Be Executed                                                                                                                                             | delfin.Task.performance\_collect                                                                                                                                                                                                                                                                              |
 | args            | dict     | Required parameters                                                                                                                                                         | {<br>"storage\_id": "c31291c7-781a-47e2-a66f-112f0bc0ef27",<br>"resource": {<br>"device": \["CPU usage","Bandwidth","Average I/O response time","IOPS"\],<br>"pool": \["IOPS","Average I/O response time","Bandwidth"\],<br>"lun": \["IOPS","Average I/O response time","Bandwidth","Utilization"\]<br>}<br>} |
-| last\_run\_time | int      | Time when a telemetry task instance is created last time. The time is set to the current time initially. The time is updated each time a telemtry task instance is created. | 1611840278                                                                                                                                                                                                                                                                                                    |
+| last\_run\_time | int      | Time when a telemetry task instance is created last time. The time is set to the current time initially. The time is updated each time a telemtry task instance is created. | 1611840278  |
+| job_id | string      | id created for the job in the scheduler | 1611840278|
 
 
-**Table name : telemetry_instance**
+**Table name : FailedTask**
 
 | Key Name      | Key Type                           | Description                                                                                                                                                                                                               | Example                                                                                                                                                                                                                                                                                                                                                                  |
 | ------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | id            | uuid                               | Telemetry Task ID.                                                                                                                                                                                                        | 7cb25622-93dd-4712-acf2-f3ca79139f8b                                                                                                                                                                                                                                                                                                                                     |
-| telemetry\_id | uuid                               | telemetry template ID.                                                                                                                                                                                                    | 6cb62086-cec8-411c-9f70-16ff81cf9909                                                                                                                                                                                                                                                                                                                                     |
+| task\_id | uuid                               | telemetry template ID.                                                                                                                                                                                                    | 6cb62086-cec8-411c-9f70-16ff81cf9909                                                                                                                                                                                                                                                                                                                                     |
 | launch\_time  | int                                | telemetry Task execution start time.                                                                                                                                                                                      | 1611840278                                                                                                                                                                                                                                                                                                                                                               |
 | storage\_id   | uuid                               | Storage on which the telemetry task needs to be executed                                                                                                                                                                  | c31291c7-781a-47e2-a66f-112f0bc0ef27                                                                                                                                                                                                                                                                                                                                     |
 | method        | string                             | Method/Task Type to Be Executed                                                                                                                                                                                           | delfin.Task.performance\_collect                                                                                                                                                                                                                                                                                                                                         |
 | args          | dict                               | Required parameters                                                                                                                                                                                                       | {<br>"storage\_id": "c31291c7-781a-47e2-a66f-112f0bc0ef27",<br>"resource": {<br>"device": \["CPU usage","Bandwidth","Average I/O response time","IOPS"\],<br>"pool": \["IOPS","Average I/O response time","Bandwidth"\],<br>"lun": \["IOPS","Average I/O response time","Bandwidth","Utilization"\]<br>},<br>"start\_time": 1611840276,<br>"end\_time": 1611840384,<br>} |
 | result        | "succeed"<br>"failed"<br>"running" | Task execution status<br>The task is set to the running state when the task starts.<br>After a task is successfully executed, the task is in the succeeded state.<br>The task status is changed to failed after it fails. | null                                                                                                                                                                                                                                                                                                                                                                     |
 | retry\_count  | int                                | Number of retries executed                                                                                                                                                                                                | 0                                                                                                                                                                                                                                                                                                                                                                        |
+| job_id | string      | id created for the job in the scheduler | 1611840278|
+
 
 
 
