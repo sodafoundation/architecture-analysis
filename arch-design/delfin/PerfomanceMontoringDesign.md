@@ -59,39 +59,47 @@ Scope of architecture discussion in this design doc is limited to task manager m
 
 ### Module Architecture
 
-![Usecase](./Resources/task_manager_arch.jpg)
+![Architecture](./Resources/task_manager_arch.jpg)
 
 Highlighted blocks are the additions to task manager for task scheduling and task handling.
 
 #### SchedulerManager
 
- A factory for creating periodic scheduling tasks. 
- Currently identified  periodic scheduler tasks  are TelemteryTaskScheduler, FailedTaskSheduler . 
+ A factory for creating periodic scheduling jobs. 
+ Currently identified  periodic scheduler jobs  are TelemteryJobcheduler, FailedJobSheduler . 
 
-#### TelemteryTaskScheduler
+#### TelemteryJobScheduler
 
-Create scheduled tasks for Metrics collection and add to scheduler. Creation of the task is based on Task table in DB.
+Create scheduled jobs for Metrics collection and add to scheduler. Creation of the job is based on Task table in DB.
+Scope of this scheduler are
+* schedule job for each entries in task table
+* update scheduled jobs when there is a change in task table
+* remove schedule jobs for when some tasks are deleted.
 
 
-#### TelemetryFailedTaskScheduler
+#### TelemetryFailedJobScheduler
 
-Create scheduled tasks for failed metric collections. Creation of the task is based on FailedTask table from DB.
+Create scheduled job for failed metric collections. Creation of the job is based on FailedTask table from DB.
+Scope of this scheduler are
+* schedule job for each failed tasks in FailedTask table
+* remove schedule jobs for when some corresponding  tasks are deleted or retry limit exceeded.
+
 
 
 #### Scheduler
 
-A task scheduler library that runs in a thread inside task manager application. Periodic scheduler should use this to set periodic running jobs.
+A task scheduler library that runs in a thread inside task manager application. Periodic schedulers should use this to set periodic running jobs.
 
-#### TaskHandler
+#### PerformanceCollectionJobHandler
 
 
-Receives jobs from scheduler and post the message in RabbitMQ
+Receives a call back from scheduler for performance collection task for a period and posts the tasks in message queue.  This module also updates the status of task in DB.
 
 
 #### TelemtryTask
 
 
-Telemery task executor which initiates the collect request to driver and pushes data to exporter.
+Telemetry task  is the actual task executor which initiates the collect request to driver and pushes data to exporter.
 
 ### Architecture Tenets
 **North-bound API** :- REST interface to delfin
