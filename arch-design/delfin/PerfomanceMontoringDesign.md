@@ -90,11 +90,15 @@ Scope of this scheduler are
 
 A task scheduler library that runs in a thread inside task manager application. Periodic schedulers should use this to set periodic running jobs.
 
-#### PerformanceCollectionJobHandler
+#### PerformanceCollectionHandler
 
 
 Receives a call back from scheduler for performance collection task for a period and posts the tasks in message queue.  This module also updates the status of task in DB.
 
+#### PerformanceCollectionHandler
+
+
+Receives a call back from scheduler for failed-performance collection task retry and posts the tasks in message queue.  This module also updates the status of failed_task in DB.
 
 #### TelemtryTask
 
