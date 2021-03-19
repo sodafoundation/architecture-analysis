@@ -16,7 +16,7 @@ Major Version Updates
 ## Goals
 - Multicloud UI 
     - Support Heterogenous object storage
-    - Register backend with changes needed to support bucket management (AWS, Azure and GCP)
+    - Register backend with changes needed to support bucket management (AWS, Azure, GCP and Huawei)
     - Bucket Create / Update / Delete on cloud storage
     - Archive / Retrieve support for Azure and GCP
     - Bug fixes and improvements
@@ -57,7 +57,7 @@ SODA Delfin is adding new drivers support on a regular basis and this requires t
             "security": "your_secret_key"            
         }
     ```
-- **Create bucket on cloud backend (AWS, Azure, GCP and all supported vendors)**  
+- **Create bucket on cloud backend (AWS, Azure, GCP, Huawei and all supported vendors)**  
     The changes required for create bucket are implicitly handled in the backend code. The current implementation maps a SODA bucket to a folder inside the actual bucket on the cloud. When we create a bucket in SODA Multicloud it creates a folder on the cloud bucket. 
     
     After the change is made creating a bucket from SODA Multicloud will create a bucket on the cloud backend. Since there are no changes made in the API structure or the parameters current functionality from the dashboard should work as before.
@@ -103,7 +103,7 @@ SODA Delfin is adding new drivers support on a regular basis and this requires t
     No change required from dashboard. 
 - **Migrate Buckets**  
     No change needed from Dashboard since the operation is on the bucket name.  
-    There is an issue here since we are only implementing the new bucket changes for AWS, Azure and GCP cloud backends. As per the new changes on these three clouds the bucket will be an actual bucket created from SODA. For the other cloud vendors the bucket created from SODA will be a folder. The migration will still take place as the API looks for the bucketname and the object keys. But it will be between a bucket and a folder. 
+    There is an issue here since we are only implementing the new bucket changes for AWS, Azure, GCP and Huawei cloud backends. As per the new changes on these three clouds the bucket will be an actual bucket created from SODA. For the other cloud vendors the bucket created from SODA will be a folder. The migration will still take place as the API looks for the bucketname and the object keys. But it will be between a bucket and a folder. 
 
 #### Multicloud - Add Archive / Retrieve support for Azure and GCP 
 ---  
