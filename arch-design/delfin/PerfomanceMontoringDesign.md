@@ -1,4 +1,4 @@
-﻿
+﻿﻿﻿
 # Performance monitoring design document   
 
 **Authors:** [Najmudheen CT](https://github.com/NajmudheenCT), [Liuyu ](https://github.com/ThisIsClark), [Xulin](https://github.com/wisererik),  [Sushantha Kumar](https://github.com/sushanthakumart), [Amit Roushan](https://github.com/AmitRoushan)
@@ -436,17 +436,25 @@ NA
 
 ## Sequence diagrams
 
+### Scheduler initialization during task manager start
+
+![Registration](./Resources/TaskManagerStart.png)
+
 ### Register storage for performance collection
 
-![Registration](./Resources/perf_reg_sequence.jpg)
+![Registration](./Resources/NewStorageRegistration.png)
 
-### Periodic scheduling
+### Performance collection lifecycle
 
-![Registration](./Resources/task_manager_restart_seq.jpg)
+![Registration](./Resources/PerfCollectionLifeCycle.png)
 
-### Task instance retry and removal
+### Failed telemetry job handler
 
-![Registration](./Resources/perf_task_retry.jpg)
+![Registration](./Resources/FailedTelemetryJob.png)
+
+### Performance collection during failed job execution
+
+![Registration](./Resources/FailedPerfCollection.png)
 
 ### Device removal
 
@@ -466,3 +474,5 @@ NA
 
 
 ## Scratchpad
+
+
