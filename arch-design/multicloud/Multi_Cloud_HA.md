@@ -45,7 +45,7 @@ Following are the assumptions to deploy SODA Multi-Cloud in HA configuration.
                         
 **Current Architecture**
 
-  ![Multi Cloud Current Design](resources/multicloud_current.PNG)
+  ![Multi Cloud Current Design](resources/multicloud_current.png)
 
 Above is a high level architecture diagram of the SODA components at present (Figure -1) . As is clearly evident from the diagram, there are multiple points of failure.  With the current deployment, SODA does not provide protection against 
 - Service Failure
@@ -82,7 +82,7 @@ Service management
 Scheduling 
 Resource Management 
 However, there are other criteria to consider before making a foundational decision of selecting an Orchestration tool that is going to impact the whole SODA stack, some of the vital cretia are listed below. 
- ![Multi Cloud Current Design](resources/multicloud_table1.PNG)
+ ![Multi Cloud Current Design](resources/multicloud_table1.png)
 |
 - **Active development:**
  The container orchestration world is relatively young. Inactive projects will quickly fall behind and signify that bugs are not being addressed, that is the reason Cattle is on the way out. 
@@ -168,7 +168,7 @@ From the analysis of tools for High Availability and Deployments, it is clear th
 **Deployment of SODA HA Solution.**
 
 
- ![Multi Cloud HA Architecture](resources/multicloud-ha-fig2.PNG)
+ ![Multi Cloud HA Architecture](resources/multicloud-ha-fig2.png)
 
 **Figure-2** provides  an extensive architecture diagram of the SODA HA solution. This solution provides protection against.
   - Service Failure
@@ -248,32 +248,13 @@ However as per the SLA, the multi-region deployment can be done with appropriate
 
 ## Next steps... ## 
 
- ![Multi Cloud HA Architecture](resources/multicloud-ha-fig3.PNG)
+ ![Multi Cloud HA Architecture](resources/multicloud-ha-fig3.png)
 
 
 
 Once the initial deployment of the Multi Cloud services is done on a Kubernetes Cluster, next steps will be to move the SODA HOT POT Services to the Kubernetes Cluster and designate the SODA Node as a SODA Controller Cluster. As depicted in the Fig.3 above, all the SODA core coponents have been moved to the Kubernetes Cluster and SODA Controller Cluster serves as the managemet entity for the SODA Kubernetes Cluster
 
 The SODA Core services will be deployed in a replicated manner alongside the Multi Cloud Services. The SODA Master node will be made failure resilient by clustering the Master node, as shown in Figure 3. Other interfaces to the Client , Cloud would remain the same.  
-
-
-
-                                                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
