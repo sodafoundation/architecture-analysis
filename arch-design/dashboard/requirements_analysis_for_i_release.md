@@ -197,10 +197,10 @@ SODA Delfin is adding new drivers support on a regular basis and this requires t
 
 
 The current SODA Multi-cloud architecture can be seen in Fig-1 below.
-![Current SODA Multi-cloud architecture](resources/multi-cloud-fig1.png)
+![Current SODA Multi-cloud architecture](resources/multi_cloud_architecture_current.png)
 
 The updated proposed architecture can be seen in Fig-2 below.
-![Updated SODA Multi-cloud architecture](resources/multi-cloud-fig2.png)
+![Updated SODA Multi-cloud architecture](resources/multi_cloud_architecture_updated.png)
 
 
 ### Use case View
