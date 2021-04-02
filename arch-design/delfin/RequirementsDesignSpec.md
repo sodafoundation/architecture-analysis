@@ -113,21 +113,21 @@ NA
 NA
 
 ### Architecture Tenets
-**North-bound API** :- REST interface to delfin
+- North-bound API :- REST interface to delfin
 
-**Exporter interface**:- Python class interfaces to push information out of delfin. 
+- Exporter interface:- Python class interfaces to push information out of delfin. 
 
-**Driver interface**:- Python class interfaces to be implemented by driver to collect information's from back end. 
+- Driver interface:- Python class interfaces to be implemented by driver to collect information's from back end. 
 
-**Database** :- Any relational database.
+- Database :- Any relational database.
 
-**API server or Resource Manager** :- Process which serves the REST APIs
+- API server or Resource Manager :- Process which serves the REST APIs
 
-**Task manager**:- Process which prepares, schedule and update collection jobs.
+- Task manager:- Process which prepares, schedule and update collection jobs.
 
-**Driver**:- An Object which is part of other processes to connect and collect information’s from a back end.
+- Driver:- An Object which is part of other processes to connect and collect information’s from a back end.
 
-**Exporter**:- An object which is part of task process to push data out.
+- Exporter:- An object which is part of task process to push data out.
 
 ### High Level Module Architecture
 
