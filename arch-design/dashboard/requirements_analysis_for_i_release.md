@@ -208,4 +208,7 @@ To create a bucket in SODA a user must register a backend. This registration pro
 This poses many challenges and issues when versioning, encryption and other bucket operations are considered.
 To solve this issue, the new changes proposed will allow the user to create a bucket on the cloud backend from SODA. The user will be able to set a custom tier policy and apply this tier to the bucket.
 
+Some of the devices that are now supported by Delfin also provide access using CLI and SMI-S access mechanisms. The dashboard should also allow users to register devices with these access mechanisms.
+
+Delfin supports unified and SAN devices and now the support for NAS capable devices has been added. Storage devices may have support for all or a few of the resources and the appropriate resources must be displayed based on the device capability.
 
