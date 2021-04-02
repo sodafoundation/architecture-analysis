@@ -36,7 +36,7 @@ Delfin supports different drivers for respective storage systems. Each driver is
 The API exposes supported features by the driver. Also the API is a way to know the driver getting used for a storage system including name, version and model.
 
 ```
-GET   /v1/storages/{id}/capability
+GET   /v1/storages/{id}/capabilities
 ```
   
   #### Parameters
@@ -62,15 +62,12 @@ GET   /v1/storages/{id}/capability
             metadata:
               type: object
               properties:
-                name:
+                model:
                   type: string
-                  description: Name of the supported storage (driver)
-                uid:
-                  type: string
-                  format: uuid
+                  description: Name of the supported model (driver)
                 vendor:
                   type: string
-                  description: vendor name
+                  description: Vendor name
             spec:
               type: object
               required:
@@ -86,7 +83,7 @@ GET   /v1/storages/{id}/capability
                     type: array
                     items: 
                       type: object
-                      description: list of metrics with supported Units and its description
+                      description: List of metrics with supported Units and its description
                       properties:
                         unit:
                           type: string
@@ -103,8 +100,7 @@ GET   /v1/storages/{id}/capability
         ```json
         {
         "metadata": {
-            "name": "VMAX250F",
-            "uid": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+            "model": "VMAX250F",
             "vendor": "Dell EMC"
             },
         "spec": {
@@ -122,7 +118,7 @@ GET   /v1/storages/{id}/capability
                       "unit": "MB/s",
                       "description": "Represents how much data read is successfully transferred in MB/s"
                     }
-                  },
+                  }
                 ]
             }
           }
