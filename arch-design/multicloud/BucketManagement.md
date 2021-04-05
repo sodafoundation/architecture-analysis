@@ -1,12 +1,12 @@
 # Bucket management in SODA-multicloud
 
 
-**Author(s)**: [Pravin Ranjan](https://github.com/PravinRanjan10), [Vineela Pachchipulusu]()
+**Author(s)**: [Pravin Ranjan](https://github.com/PravinRanjan10), [Vineela Pachchipulusu](https://github.com/vineela1999)
 
 
 ## Motivation and background
 
-In the cloud world, every cloud vendor provides storage space to users. Generally in terms of bucket and folder. A user can store the data/objects in a specific bucket or folder.
+In the cloud world, every cloud vendor provides object storage space to users. Generally in terms of bucket/container and folder. A user can store the data/objects in a specific bucket or folder.
 
 SODA multi-cloud(gelato) is a project which manages multiple cloud vendors from one place. And also interfaces to use cloud services. So it is important for SODA to provide bucket management support for various cloud vendors. So that user can create and manage buckets from one place(SODA multi-cloud).
 
@@ -20,19 +20,23 @@ NA
 
 ##### Functional Requirements
 
-1. Create buckets in various cloud providers. Ex: Aws, gcp, azure
+1. Create buckets or.and folders in various cloud providers. Ex: Aws, gcp, azure
 
-2. Delete bucket from various cloud providers. Ex: Aws, gcp, azure
+2. Delete bucket or/and folder from various cloud providers. Ex: Aws, gcp, azure
 
 3. List all the bucktes
 
-4. Upload objects in bucket
+4. Upload objects in bucket or/and folder
 
-5. Download objects from bucket
+5. Download objects from bucket or/and folder
 
-6. Delete object from bucket
+6. Delete object from bucket or/and folder
 
 7. Create/set tier policy for creating bucket. Ex: Gold, silver etc.
+
+8. Migration, copy-paste objects, bucket encryption
+
+9. Lifecycle transition rules
 
 ##### Non Functional Requirements
 
