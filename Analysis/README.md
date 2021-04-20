@@ -2,7 +2,7 @@
 
 ## Basic Layout Suggestion for your Analysis:
  - Topic Introduction
-	 - [Project/Topic basic information, links, etc] 
+	 - [Project/Topic basic information, links, etc]
  - Purpose
  - Technical Analysis
  - Recommendation/Suggestions
