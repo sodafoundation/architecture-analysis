@@ -20,7 +20,9 @@ NA
 
 ##### Functional Requirements
 
-1. Create buckets or.and folders in various cloud providers. Ex: Aws, gcp, azure
+##### Bucket Operations
+
+1. Create buckets or/and folders in various cloud providers. Ex: Aws, gcp, azure
 
 2. Delete bucket or/and folder from various cloud providers. Ex: Aws, gcp, azure
 
@@ -32,11 +34,20 @@ NA
 
 6. Delete object from bucket or/and folder
 
-7. Create/set tier policy for creating bucket. Ex: Gold, silver etc.
+7. Migration, copy-paste objects, bucket encryption
 
-8. Migration, copy-paste objects, bucket encryption
+8. Lifecycle transition rules
 
-9. Lifecycle transition rules
+##### Tiering Policy
+
+9. Create Tier
+
+10. Update Tier
+
+11. List Tiers
+
+12. Delete Tier
+
 
 ##### Non Functional Requirements
 
@@ -79,13 +90,13 @@ Step-1. Register Backend
 Step-2. Create Tier policy(configuration), May be the Admin Operation
 
   - Gold:
-      - storageclass: tier_1(Aws:standard, GCP:hot, Azure:xyz)
+      - Banackend: "abc"
 
   - Silver:
-    - storageclass: tier_99(Aws:cold, GCP:xxx, Azure:xxx)
+      - Banackend: "pqr"
 
   - Bronze:
-    - storageclass: tier_999(Aws:xxx, GCP:xxx, Azure:xxx)
+      - Banackend: "xyz"
 
 Step-3. Create bucket
 
@@ -105,6 +116,86 @@ Below diagram shows two things:
 
 
 ### SODA-API for Bucket management:
+******
+#### Tier policy API
+******
+
+#### Create Tier:
+
+##### [POST /HTTP/v1/tier-name]()
+
+###### Request Body:
+`tier_name`: string, Name of tier
+
+`backend`: string, Name to backend
+
+###### Response:
+
+ReturnCode: integer, Ex:200
+
+Message: string, Ex: Successfully Created!
+
+
+#### List all Tiers:
+
+##### [GET /HTTP/v1/tiers]()
+
+###### Request Body:
+N/A
+
+###### Response:
+
+ReturnCode: integer, Ex:200
+
+Message: [], Ex: [Gold]
+
+
+#### Get Tier:
+
+##### [GET /HTTP/v1/tiers/{tier}]()
+
+###### Request Body:
+N/A
+
+###### Response:
+
+ReturnCode: integer, Ex:200
+
+Message: json
+
+
+#### Update Tier:
+
+##### [PUT /HTTP/v1/{tier_name}]()
+
+###### Request Body:
+`tier_name`: string, Name of tier
+
+`backend`: string, Name to backend
+
+###### Response:
+
+ReturnCode: integer, Ex:200
+
+Message: string, Ex: Successfully Updated!
+
+
+#### Delete Tier:
+
+##### [DELETE /HTTP/v1/{tier_name}]()
+
+###### Request Body:
+`tier_name`: string, Name of tier
+
+###### Response:
+
+ReturnCode: integer, Ex:200
+
+Message: string, Ex: Successfully Deleted!
+
+*****
+#### Bucket Operations API
+*****
 
 #### Create Bucket:
 
@@ -631,3 +722,60 @@ There are thoughts, what could be the Tier policy. Initially we have added just 
   - latency: 15 ns
   - Size: 20-100 Gbi
   - AccessMode: ReadWriteOnce
+
+
+**********************************
+###### Custom Tier: Based on SLA's, IO performance and storageClass
+**********************************
+##### Create Tier:
+* Name:
+* Storage Class:
+* Tags:
+* Metadata
+* Replication:
+* I O performance:
+    * Max_File_Size
+    * Min_File_Size
+    * N/w Speed
+    * N/w Bandwidth
+    * IOPS
+
+* SLA
+    * AZ
+    * Days
+    * Min. Storage duration
+    * Custom Properties
+
+
+##### Storage Classes for different cloud vendors:
+
+##### AWS: While Upload
+* Standard
+
+* Standard - IA(Infrequent Access)
+
+* Standard One Zone -IA
+
+* Glacier
+
+* Glacier deep archive
+
+* Intelligent Tiering
+
+* S3-Reduced redundancy storage
+
+##### GCP: While Create
+* Standard: Best for short-term storage and frequently accessed data
+
+* Nearline: Best for backups and data accessed less than once a month
+
+* Coldline: Best for disaster recovery and data accessed less than once a quarter
+
+* Archive: Best for long-term digital preservation of data accessed less than once a year
+
+##### Huawei: While Upload
+* Standard
+
+* Infrequent
+
+* AccessArchive
