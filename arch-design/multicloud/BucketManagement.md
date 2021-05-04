@@ -48,6 +48,8 @@ NA
 
 12. Delete Tier
 
+13. Selection of backend(on-premise or clouds)
+
 
 ##### Non Functional Requirements
 
@@ -90,13 +92,13 @@ Step-1. Register Backend
 Step-2. Create Tier policy(configuration), May be the Admin Operation
 
   - Gold:
-      - Banackend: "abc"
+      - Backend: ["a", "b", "c"]
 
   - Silver:
-      - Banackend: "pqr"
+      - Backend: ["d", "e", "f"]
 
   - Bronze:
-      - Banackend: "xyz"
+      - Backend: ["j", "k"]
 
 Step-3. Create bucket
 
@@ -108,9 +110,14 @@ Step-3. Create bucket
 
 Below diagram shows two things:
 
-1. Bucket can be created with Tier policy.
+1. The flow diagram bucket management considering tiering policy
 
-2. The Tier policy of bucket will be taged in SODA-multicloud bucket. But there will be not tagging in actual cloud account.
+![](resources/bucketTier-1.png)
+
+2. Bucket can be created with Tier policy.
+
+3. The Tier policy of bucket will be taged in SODA-multicloud bucket. But there will be not tagging in actual cloud account.
+
 
 ![](resources/multi-cloud-tier1.png)
 
