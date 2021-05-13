@@ -87,55 +87,58 @@ keystone.auth.plugins.token.Token
 keystone.auth.plugins.totp.TOTP
 In the most basic plugin password, two pieces of information are required to authenticate with keystone, a bit of Resource information and a bit of Identity.
 Take the following call POST data for instance:
-{
-    "auth": {
-        "identity": {
-            "methods": [
-                "password"
-            ],
-            "password": {
-                "user": {
-                    "id": "0ca8f6",
-                    "password": "secretsecret"
+```    {
+        "auth": {
+            "identity": {
+                "methods": [
+                    "password"
+                ],
+                "password": {
+                    "user": {
+                        "id": "0ca8f6",
+                        "password": "secretsecret"
+                    }
                 }
-            }
-        },
-        "scope": {
-            "project": {
-                "id": "263fd9"
+            },
+            "scope": {
+                "project": {
+                    "id": "263fd9"
+                }
             }
         }
     }
-}
+```
  
 The user (ID of 0ca8f6) is attempting to retrieve a token that is scoped to project (ID of 263fd9).
 To perform the same call with names instead of IDs, we now need to supply information about the domain. This is because usernames are only unique within a given domain, but user IDs are supposed to be unique across the deployment. Thus, the auth request looks like the following:
-{
-    "auth": {
-        "identity": {
-            "methods": [
-                "password"
-            ],
-            "password": {
-                "user": {
-                    "domain": {
-                        "name": "acme"
+ ``` 
+   {
+        "auth": {
+            "identity": {
+                "methods": [
+                    "password"
+                ],
+                "password": {
+                    "user": {
+                        "domain": {
+                            "name": "acme"
+                        }
+                        "name": "userA",
+                        "password": "secretsecret"
                     }
-                    "name": "userA",
-                    "password": "secretsecret"
                 }
-            }
-        },
-        "scope": {
-            "project": {
-                "domain": {
-                    "id": "1789d1"
-                },
-                "name": "project-x"
+            },
+            "scope": {
+                "project": {
+                    "domain": {
+                        "id": "1789d1"
+                    },
+                    "name": "project-x"
+                }
             }
         }
     }
-}
+```
  
 For both the user and the project portion, we must supply either a domain ID or a domain name, in order to properly determine the correct user and project.
 Alternatively, if we wanted to represent this as environment variables for a command line, it would be:
@@ -165,7 +168,7 @@ In reference to users, groups, and projects, scope often refers to the domain th
 
 
 The Figure (Fig-1) depicts a high level hierarchy of actors in SODA. 
-SODA Admin : These are the persona with the overall administrator CRUD rights to all the resources in SODA. This admin can create, update, delete users, groups and projects in SODA. This persona can also house the un-assigned users and projects. Once the users are assigned to projects, the user would move to the appropriate project.
+**SODA Admin :** These are the persona with the overall administrator CRUD rights to all the resources in SODA. This admin can create, update, delete users, groups and projects in SODA. This persona can also house the un-assigned users and projects. Once the users are assigned to projects, the user would move to the appropriate project.
  
 
 |Actor Details|                        Functionality                                        |
@@ -175,7 +178,7 @@ SODA Admin : These are the persona with the overall administrator CRUD rights to
 | Access      | Has access to   all the Infrastructure / Tenentas / Users / Groups in SODA.    |
 -------------
 
-CXOs : These are the personas that have the READONLY access to all the resources being monitored and managed by SODA. These are the personas that are interested in charts and reports of SODA. They may not perform any management function in SODA. 
+**CXOs :** These are the personas that have the READONLY access to all the resources being monitored and managed by SODA. These are the personas that are interested in charts and reports of SODA. They may not perform any management function in SODA. 
 
 | Actor Details  |                           Functionality                                |
 |----------------|------------------------------------------------------------------------|
@@ -184,10 +187,10 @@ CXOs : These are the personas that have the READONLY access to all the resources
 | Access         | Has access to   the whole SODA resources and users created in SODA.    |
 |
                                                                          
-Projects (Tenants) : The term Project refers to a set of Infrastructure resources that is assigned to an organization eg. HR , Finance etc. 
+**Projects (Tenants) :** The term Project refers to a set of Infrastructure resources that is assigned to an organization eg. HR , Finance etc. 
  
-Groups : A group has a set of projects and a set of users that work on the projects. The Group may contain a Group Admin to perform the administrative tasks on the resources and users in the group. 
-Group Admins : These are the admins that are housed under SODA Admin. These admins may be responsible for managing small projects, its resources and users working on the project. 
+**Groups :** A group has a set of projects and a set of users that work on the projects. The Group may contain a Group Admin to perform the administrative tasks on the resources and users in the group. 
+**Group Admins :** These are the admins that are housed under SODA Admin. These admins may be responsible for managing small projects, its resources and users working on the project. 
 
 | Actor Details |                           Functionality                                                                                                                                                                                                                                                                         |
 |---------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
