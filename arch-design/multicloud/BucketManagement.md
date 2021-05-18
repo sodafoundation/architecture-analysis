@@ -66,6 +66,7 @@ The design document for this can be referred from [here](https://github.com/SODA
 The overall multi cloud architecture can be referred from [here](https://github.com/SODAfoundation/architecture-analysis/blob/master/arch-design/multicloud/MultiCloud_Design.md)
 
 ### Use case View
+#### I. Bucket Operations
 
 For heterogeneous object management, bucket creation is important. Currently SODA-multicloud supports creation of folders under cloud buckets as shown in Fig-1. So, SODA-users must need to create cloud buckets manually and provide a name, AK/SK to SODA for folder creation. As shown in fig-1, step-1 is manual which is performed by the user, whereas step-2,3,4,.. are supported by SODA-multi-cloud.
 
@@ -80,7 +81,7 @@ Once the buckets are created, users should perform all the operations supported 
 ![](resources/multi-cloud-fig2.png)
 
 
-#### Sequence to Create buckets:
+##### Sequence to Create buckets:
 
 Step-1. Register Backend
 
@@ -91,14 +92,32 @@ Step-1. Register Backend
 
 Step-2. Create Tier policy(configuration), May be the Admin Operation
 
-  - Gold:
-      - Backend: ["a", "b", "c"]
+  - SomeName:
+      - {
+        backend: {aws, gcp}
+        region: {HK, ap-south-1}
+        storageClass:{stndard, hot}
+        IOPS: NA
+        Bandwidth: NA
+      }
 
-  - Silver:
-      - Backend: ["d", "e", "f"]
+  - SomeName:
+      - {
+        backend: {azure, IBM}
+        region: {}
+        storageClass: {}
+        IOPS:
+        Bandwidth:
+      }
 
-  - Bronze:
-      - Backend: ["j", "k"]
+  - SomeName:
+      - {
+        backend: {alibaba, hw}
+        region:
+        storageClass:
+        IOPS:
+        Bandwidth:
+      }
 
 Step-3. Create bucket
 
@@ -106,13 +125,121 @@ Step-3. Create bucket
   - Backend_name
   - Tier-policy
 
-##### The Diagram to show bucket creation:
+#### II. Bucket Tiering:
 
-Below diagram shows two things:
+The first question comes to mind is Why need Bucket Tiering??
 
-1. The flow diagram bucket management considering tiering policy
+Let's first understand what Tiering is: Tier is a level/catagory/set where similar resources/items are kept together. When the similar backends/resources are kept together in a set/catagory for bucket operations, known as Bucket Tiering.
 
-![](resources/bucketTier-1.png)
+To understand why Bucket Tiering required, let's understand these two diagrams below:
+
+1. This diagram represents current flow/sequence of SODA-gelato project of bucket operations. Here(example of bucket creation), user will come to SODA-dashboard, provide few parameters like name, registered backend name etc. and click OK to create bucket in specified backend. The point is, user has to give backend name for bucket creation. Let's say SODA has N numbers of registered backend(including cloud or on-prem storages), then user has to know the configuration/specification details of all backends. So that appropriatly backend name can be provided. This is tough task for any user.
+
+  In this case, SODA-gelato or Admin not providing any help to user, that which backend is appropriate for your bucket etc. There is a lack of intelligence in SODA framework and such that no help for the users during bucket creation(or data Uploadation).
+
+![](resources/Bucket-Tier-1.png)
+
+2.  Now let's understand how SODA or Admin can help users using diagram.
+
+  Below diagram has an extra block of Tiers(green color), wich has basically two job:
+
+  a. Provide Backend Abstraction(of cloud or/and on-prem storages), so that user need not to know which all backends are registered with SODA. They can only see the tiers and it's policies.
+
+  b. Provide a space for admin to add some policy intelligently. In other words, provide data to SODA-gelato for it's intelligence framework
+
+![](resources/Bucket-Tier-2.png)
+
+##### So, the conclusion of above discussions are:
+
+  a. There will be intermediate block "Tiers" (i.e list of policies) between SODA-dashboard and backends. In this block multiple tiers will be added by admin and each tier will have separate policies.
+
+  b. SODA-gelato will have another block i.e intelligence framework block, which will use these policies to select backend for user. So, overall user need to just select tier's name(some policy) and remaining work like backend, storageClass, region etc. selection will be done by SODA.
+
+##### Tier Policy:
+In the above discussion, it was mentioned that Admin will create tiers with some policies. so next question comes, why policy based tiering and what all parameters need to be there in these policies.
+
+Why Policy based Tiering:
+  * Policy is a configurable variable. So dynamic configuration possible.
+  * Easy to maintain(as it may be in JSON format)
+  * Easy to add or/and remove parameters from policy. Custom parameters possible.
+  * User management possible based on policies
+  * Separate policy can be defined for cloud and on-prem storages
+
+What is Policy(or what are parameters in policy):;
+
+  * Policy is not limited to few parameters and mostly it will be a growable list of parameters based on user requirments and fremework support.
+
+  * For current release, policy can be started with few parameters as below:
+
+      Name_Of_Tiers :JSON{}
+
+  Or
+
+      Name_Of_Policy: JSON{}
+
+  Example:
+
+  ##### Cloud based Tiering policy:
+
+  | Parameters/Policy  | Policy-1     |  Policy-2 | Policy-3 | Policy-4 |
+  | ------------------ |:------------:| ---------:| --------:| --------:|
+  | Storage Class      |Smart-tiering |Standard/hot|cold/normal|archive/glacier|
+  | Storage Costs      |Medium        |High       |Low       |Lowest    |
+  |Retrieval Costs     |Lowest        |Low        |Medium    |High      |
+  |Retrieval Latency   |ms(0-9)       |ms         |ms        |hrs       |
+  |Min. Storage duration |NA          |NA         |30 days   |180 days  |
+  |Region              |R1, R2        |R2         |R3        |R4        |
+
+  ##### On-prem based Tiering policy:
+
+  | Parameters/Policy  | Policy-1     |  Policy-2 | Policy-3 | Policy-4 |
+  | ------------------ |:------------:| ---------:| --------:| --------:|
+  | Storage Type       |Block         |File       |Object    |Block     |
+  | Disk-Type          |SSD, NVMe     |NA         |NA        |Slower drives, tape|
+  |Storage Costs       |High          |High       |Medium    |Low      |
+  |Retrieval Latency   |              |           |          |         |
+  |Provisioning Policy |              |           |          |         |
+  |Compression         |              |           |          |         |
+  |De-duplication      |              |           |          |         |
+  |Access Protocol     |              |           |          |         |
+  |MaxIOPS             |              |           |          |         |
+  |MaxBWS              |              |           |          |         |
+  |MinIOPS             |              |           |          |         |
+  |MinBWS              |              |           |          |         |
+  |Latency             |              |           |          |         |
+  |Location            |              |           |          |         |
+  |Security Params     |              |           |          |         |
+
+"""""""""
+
+Let's discuss the various aspect of bucket creation
+
+1. The below diagram represents the bucket management operations without bucket tiering:
+
+Here, there are three bocks.
+
+* API server: Which takes requests from user and forward to s3 ervice
+
+* S3 service: It is responsible for selection of drivers based on input parameters and call to backend adapters(actual driver of backends) for bucket creation.
+
+* Backend Adapters: This has driver codes, which call actual backend for bucket creation.
+
+![](resources/Without_Tier.png)
+
+2. The below diagram represents the bucket management operations with bucket tiering:
+
+* If user want to create bucket with tiering, then first they need to create tiers and add backend to that.
+
+* Now, for bucket creation, user need to provide two parameters i.e Name and Tier.
+
+* The request of user will be accept by API server and forwarded to S3 service.
+
+* In case of bucket creation with tier parameter, s3 service must have selection logic. Because it won't be clear that which bacnkend should be selected among multiple backends of that tier.  
+
+* The selection logic can be based on Price, Performance and SLA's values.
+
+
+![](resources/with_Tier.png)
 
 2. Bucket can be created with Tier policy.
 
