@@ -94,35 +94,22 @@ Step-2. Create Tier policy(configuration), May be the Admin Operation
 
   - SomeName:
       - {
-        backend: {aws, gcp}
-        region: {HK, ap-south-1}
-        storageClass:{stndard, hot}
-        IOPS: NA
-        Bandwidth: NA
+        backend: {AWS, GCP}
       }
 
   - SomeName:
       - {
-        backend: {azure, IBM}
-        region: {}
-        storageClass: {}
-        IOPS:
-        Bandwidth:
+        backend: {Storage-A, Storage-B}
       }
 
   - SomeName:
       - {
-        backend: {alibaba, hw}
-        region:
-        storageClass:
-        IOPS:
-        Bandwidth:
+        backend: {Storage-A, AWS}
       }
 
 Step-3. Create bucket
 
   - Name:
-  - Backend_name
   - Tier-policy
 
 #### II. Bucket Tiering:
@@ -179,6 +166,7 @@ What is Policy(or what are parameters in policy):;
 
   Example:
 
+  Note: These policies are not included in J-release, This is sample example for future Scope
   ##### Cloud based Tiering policy:
 
   | Parameters/Policy  | Policy-1     |  Policy-2 | Policy-3 | Policy-4 |
@@ -256,12 +244,12 @@ Here, there are three bocks.
 
 #### Create Tier:
 
-##### [POST /HTTP/v1/tier-name]()
+##### [POST http://IP:PORT/v1/tenantId/tiers]()
 
 ###### Request Body:
-`tier_name`: string, Name of tier
+`name`: string, Name of tier
 
-`backend`: string, Name to backend
+`backend`: [], list of backends
 
 ###### Response:
 
@@ -272,7 +260,7 @@ Message: string, Ex: Successfully Created!
 
 #### List all Tiers:
 
-##### [GET /HTTP/v1/tiers]()
+##### [GET http://IP:PORT/v1/tenantId/tiers]()
 
 ###### Request Body:
 N/A
@@ -286,7 +274,7 @@ Message: [], Ex: [Gold]
 
 #### Get Tier:
 
-##### [GET /HTTP/v1/tiers/{tier}]()
+##### [GET http://IP:PORT/v1/tenantId/tiers/tierId]()
 
 ###### Request Body:
 N/A
@@ -300,12 +288,12 @@ Message: json
 
 #### Update Tier:
 
-##### [PUT /HTTP/v1/{tier_name}]()
+##### [PUT http://IP:PORT/v1/tenantId/tiers/tierId]()
 
 ###### Request Body:
-`tier_name`: string, Name of tier
+`name`: string, Name of tier
 
-`backend`: string, Name to backend
+`backend`: [], list of backends
 
 ###### Response:
 
@@ -316,7 +304,7 @@ Message: string, Ex: Successfully Updated!
 
 #### Delete Tier:
 
-##### [DELETE /HTTP/v1/{tier_name}]()
+##### [DELETE http://IP:PORT/v1/tenantId/tiers/tierId]()
 
 ###### Request Body:
 `tier_name`: string, Name of tier
