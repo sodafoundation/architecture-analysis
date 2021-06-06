@@ -234,7 +234,19 @@ Here, there are three bocks.
 3. The Tier policy of bucket will be taged in SODA-multicloud bucket. But there will be not tagging in actual cloud account.
 
 
-![](resources/multi-cloud-tier1.png)
+#### Sequence diagrams
+1. The sequence diagram for Bucket creation using tiers
+
+![](resources/PostBuck.png)
+
+2. The sequence diagram for Uploading object into bucket
+![](resources/uploadBuck.png)
+
+
+3. The sequence diagram for Migration/lifecycle
+![](resources/migration.png)
+
+##### Note: The sequence diagrams of other API’s like List buckets, Get Buckets, Listobjects, download objects etc. will remain the same as existing. 
 
 
 ### SODA-API for Bucket management:
