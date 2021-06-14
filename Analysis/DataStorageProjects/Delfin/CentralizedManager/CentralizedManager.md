@@ -38,164 +38,66 @@ Delfin needs to support Centralized Manager (CM) from the storage vendors, that 
 
   Registration shall fail if provided Access Info is insufficient or wrong
 
-  Registration shall fail with 'CM Already Exists' error, if user tries to register an already registered CM.
+  Registration shall fail with 'Storage Already Exists' error, if user tries to register an already existing Access Info.
 
-- Users of delfin should be able to delete an already registered CM with its id
+- Users of delfin should be able to delete individual storages that are registered with CM using storage id
 
-  Delete shall remove CM, CM details, CM managed storages arrays, resources etc. from delfin management, monitoring and alerting.
+  Delete shall remove Storages arrays, resources etc. from delfin management, monitoring and alerting.
 
-  Delete shall report failed status for invalid CM ids
+  When all storages from CM are deleted from Delfin, CM access info shall be removed from delfin.
 
-- Users of delfin should be able to list all registered CMs details
+  Delete shall report failed status for invalid storage ids
 
-  List shall report all the registered CMs and its properties excluding sensitive details like password
+- Users of delfin should be able to list all registered CM storage details
 
-  If no CM is registered, the listing will return an empty list
+- Users of delfin should be able to show details for a registered CM storages, providing its id
 
-- Users of delfin should be able to show CM details for a registered CM, providing its id
+- Users of delfin should be able to update CM Access Info details for a registered CM, providing access id
 
-  Show shall get CM details for the id of the CM, that is currently managed by delfin
-
-  Invalid id for CM shall report error
-
-- Users of delfin should be able to update CM Access Info details for a registered CM, providing its id
-
-  Update shall verify the Access Info and if verification is success, update the CM details for the id of the CM, that is currently managed by delfin
+  Update shall verify the Access Info and if verification is success, update the CM details for the id of the access info, that is currently managed by delfin
 
   Invalid Access Info for CM shall report error and no changes shall be done to delfin
 
-- Users of delfin should be able to SYNC all registered CMs for updating list of managed storage arrays of each CM
-
-  When user calls SYNC all, delfin with re-discover all the storage arrays from CM and update managed storage arrays
-
-- Users of delfin should be able to SYNC a specific CM with the its id, for updating list of managed storage arrays by that CM
-
-  When user calls SYNC for a CM, delfin with re-discover all the storage arrays from the CM and update managed storage arrays
+- Users of delfin should be able to SYNC all CM registered storages like normal storages
 
 ### Non Functional Requirements
 
-- Centralized Manager feature needs to be generic to support different storage vendors
-- Centralized Manager feature needs to be compatible with already existing APIs of Delfin
+- Centralized Manager support needs to be generic to support different storage vendors
+- Centralized Manager support needs to be easely adaptable for existing API users of Delfin
 
 ## Architecture Analysis
 
-Adding support for CM requires the addition of CM related APIs to current delfin APIs. Driver Manager and Driver API will require update. Impacted modules of delfin are highlighted below
+Adding support for CM requires the update of current storage APIs and db models. Driver Manager and Driver API will require update. Impacted modules of delfin are highlighted below
 
 ![Centralized Managers Architecture](Delfin.png)
 
 ### High Level Design
 
-Add the Centralized Manager as a separate entity with APIs to support Create, Delete and Get operations. Access Info for CM can be with different Schema and supports APIs Update/Get. APIs for CM sync and sync-all also will be added for updating managed storages by CMs.
+To support CM in current Delfin, some of the APIs and models require modification.
 
-- Add REST APIs to support CRUD operations of CM and its access info.
-- Update framework, driver manager APIs for supporting CM drivers
-- None of the existing REST APIs will be impacted, existing delfin users will not require changes for existing features
+ - Update the current Delfin Storage APIs to support CM operations
 
-#### Delfin DB Schema changes for CM
-
-Changes in Delfin DB Schema to support the CM is captured here.
-
-These changes will require migrating or re-creating of the DB for existing users of Delfin.
-
-##### Centralized Manager model
-
-A new CM Model will be added to the Delfin schemas
-
-Attributes | Type | Description/enum
--- | -- | --
-id | string | UUID of the Centralized Manager
-vendor | string | Vendor of the CM
-model | string | Model of the CM
-storages | JSON | Array of storages the associated CM
-
-##### Centralized Manager and Storage mapping model
-
-A new CM-Storage-Mapping Model will be added to the Delfin schemas.
-
-This table will be used to check whether the storage belong to CM.
-
-Attributes | Type | Description/enum
--- | -- | --
-storage_id | string | UUID of the Storage
-cm_id | string | ID of the Centralized Manager
-
-#### New APIs for CM
-
-Following new REST APIs will be added to Delfin REST APIs to support CM
-
-```sh
-POST /centralized-managers -d <access-info>
-
-DELETE /centralized-managers/<cm-id>
-
-GET /centralized-managers
-
-GET /centralized-managers/<cm-id>
-
-PUT /centralized-managers/access-info -d <access-info>
-
-GET /centralized-managers/access-info
-
-PUT /centralized-managers/sync-all
-
-PUT /centralized-managers/<cm-id>/sync
-```
-
-#### CM discovered Storages and normal Storages Differences
-
-Following are the APIs that are different between CM discovered storages and normal storages.
-
-Operation | Support in CM Storage | Description
--- | -- | --
-Get Access Info | No Support | access info is for CM, discovered storage do not have access info
-Update Access Info | No Support | Discovered storage do not have access info
-Delete Storage | No Support | CM discovered storage deleted as part of CM delete
-Update AlertSource | Supported | CM discovered storages support Alert source config. But CM do not.
-Get AlertSource | Supported | CM discovered storages support Alert source get. But CM do not.
-
-#### Sequence Diagrams
-
-- **Register Centralized Manager**
-
-![Centralized Managers POST Request](CMPostSequence.png)
-
-- **Delete Centralized Manager**
-
-![Centralized Managers DELETE Request](CMDelSequence.png)
-
-- **List Centralized Manager**
-
-![Centralized Managers GET Request](CMGetSequence.png)
-
-- **Update Centralized Manager Access Info**
-
-![Centralized Managers Access Info Request](CMAccessUpSequence.png)
-
-- **List Centralized Manager Access Info**
-
-![Centralized Managers POST Request](CMAccessGetSequence.png)
-
-- **Sync Centralized Managers**
-
-![Centralized Managers POST Request](CMSyncAllSequence.png)
-
-- **Sync One Centralized Manager**
-
-![Centralized Managers POST Request](CMSyncSequence.png)
+ - Update the current Delfin models for Access Info and Alert source
 
 
-#### Common Access Info for storage managers
+### Alert Source Update
 
-| Access Info Field | Description                                                                    |
-| ------------------|--------------------------------------------------------------------------------|
-| User ID/Password  | User ID with correct security permissions/roles (for Manager/Storage/CLI/SMI-S)|
-| CM IP:Port        | IP and Port with protocol (HTTP/HTTPS)                                         |
-| CLI Path          | Path to the CLI executable                                                     |
-| Operating System  | Windows and Linux os requirement                                               |
-| IPs/Hostnames     | Comma separated IPs of servers, with user id and password same for all servers |
+In the current implementation, Delfin supports to configure a SNMP alert source from one host IP to a storage . When the SNMP Trap is received at Delfin, the storage is derived from the host ip of the Trap source
+
+But some storages supports multiple SNMP alert sources from multiple host IPs (Eg. NetAPP FAS). This requires changes in Delfin to identify the storage from Trap source's host IP
+
+![Multiple Alert Source support](Multi-Alert-Source.PNG)
+
+### Model update to support CM
+
+Currently Delfin uses Access Info to register one Storage and there is one to one relationship between Access Info and Storage.
+
+When supporting CM, one Access Info can register multiple Storages creating one to many relationship between Access Info and Storage.
+
+![Delfin Model Update for CM](Delfin-Models.png)
 
 ### Steps involved to use CM in delfin
 
-- Configure CM and create a Manager user and role if required for delfin
+- Configure vendor device manager and create a management user and role if required for delfin
 - Add access details (IP, Port, Protocol, user, credentials, array details etc.) to delfin
-- Delfin driver connects to CM and start collection/management on individual arrays
+- Delfin driver connects to device manager and start collection/management on individual arrays
