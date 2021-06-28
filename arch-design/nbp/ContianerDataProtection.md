@@ -5,8 +5,9 @@
 
 Major Version Updates
 
-Date  : Version : Description  : Author
-
+| Date | Version | Description | Author|
+|------|---------|-------------|--------|
+| 27-06-2021 | v1.0 | First cut design doc | [Ashit Kumar](https://github.com/kumarashit)) |
   
 
 ## Goals
