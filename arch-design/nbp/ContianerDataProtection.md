@@ -7,7 +7,7 @@ Major Version Updates
 
 | Date | Version | Description | Author|
 |------|---------|-------------|--------|
-| 27-06-2021 | v1.0 | First cut design doc | [Ashit Kumar](https://github.com/kumarashit)) |
+| 27-06-2021 | v1.0 | First cut design doc | [Ashit Kumar](https://github.com/kumarashit) |
   
 
 ## Goals
@@ -69,8 +69,8 @@ Other Non Functional Requirements (Scalability, HA etc…)
 ## Architecture Analysis
 
 ### System Architecture
-//Overall Architecture details go here
-//Give the overall system architecture and provide the positioning of Module in that. Give the external interfaces, brief description etc…
+Overall architecture for SODA syncer 
+![data proection](resources/consistent-snapshot.png)
 
 ### Module Architecture
 
@@ -79,6 +79,7 @@ Other Non Functional Requirements (Scalability, HA etc…)
 ### Architecture Tenets
 a) In the first cut, SODA will consider the FS snapshot based backup using [restic](https://restic.net/)
 b) Next, SODA will consider SODA CSI snapshot based backup to leverage Vendor CSI snapshot features
+c) Add new component SODA Syncer which orchestrates all the Data protection activites
 
 ### High Level Module Architecture
 
@@ -152,7 +153,7 @@ Data Structures, key points considered, open and alternate points etc…All the 
 
 #### Code
 
-//Provide inputs for code structure, language, any open source code can be resused, coding methods, development env etc
+Experimental soda syncer code and it's feature can be checked [here](https://github.com/sodafoundation/nbp/tree/master/soda-syncer)
 
  #### Debug Model
 
@@ -174,8 +175,10 @@ Data Structures, key points considered, open and alternate points etc…All the 
 
   
 ## Sequence Diagrams
-
+### Snapshot based backup using restic (FS snapshot and K8S resource backup)
 ![Snapshot based backup using restic](resources/Container_Storage_restic_flow.png)
+
+### Snapshot based backup using SODA CSI Snapshotter and backing resources
 ![SODA CSI snapshot based backup](resources/Container_Storage_CSI_flow.png)
   
 ## Design Alternatives and other notes
