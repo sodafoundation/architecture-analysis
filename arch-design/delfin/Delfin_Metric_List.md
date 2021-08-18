@@ -82,3 +82,19 @@ This doc do not cover the common metric data model or custom metric names.
 | readThroughput  | MB/S | Total read data transferred per second  |
 | writeThroughput | MB/S | Total write data transferred per second |
 | responseTime    | ms   | Average time taken for an IO operation  |
+
+
+### File system
+
+| Metric Name       | Unit  | Description                                 |
+|-------------------|-------|---------------------------------------------|
+| iops              | iops  | read and write  operations per second       |
+| readIops          | iops  | Read  operations per second                 |
+| writeIops         | iops  | Write  operations per second                |
+| throughput        | MB/S  | Total data transferred per second           |
+| readThroughput    | MB/S  | Total read data transferred per second      |
+| writeThroughput   | MB/S  | Total write data transferred per second     |
+| readResponseTime  | ms    | Average time taken for a read  operation    |
+| writeResponseTime | ms    | Average time taken for a write  operation   |
+| readIosize        | KB    | The average size of read IO requests in KB. |
+| writeIosize       | KB    | The average size of read IO requests in KB. |
