@@ -60,6 +60,11 @@ Array port through which the volume is mapped to the initiator
 ---
 Volume or LUN or logical device or virtual volume which is masked to initiators.
 
+### Constraints & Assumptions
+
+- The Storage host representation must contain one of `native_storage_host_group_id` or `native_storage_host_id` or `storage_host_initiators`
+- The volume representation must contain one of `native_volume_group_id` or `native_volume_id`
+- The port representation can optionally contain one of `native_port_group_id` or `native_port_id`
 ### Requirement Analysis
 
 
@@ -156,72 +161,174 @@ The updated API includes the `native_storage_host_group_id`, `native_volume_grou
     ]
 }
 ```
-**Update Delfin service**
 
-**Add support for Storage Host Groups API**  
-    `/v1/storages/{storage_id}/storage-host-groups`
+If the masking view includes any of `native_storage_host_group_id`, `native_volume_group_id` and `native_port_group_id` then the same masking view will not contain a single `native_storage_host_id` , `native_volume_id` or `native_port_id`.
 
-    ```json
-    {
+### Update Delfin service
+The corresponding API interfaces must be added to the `delfin.service.ts` to enable access to the new APIs.
+
+#### Add support for Storage Host Groups API
+
+`/v1/storages/{storage_id}/storage-host-groups`
+
+```json
+{
+    "storage_hosts": [
+        {
+        "id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
+        "created_at": "2017-07-10T14:36:58.014Z",
+        "updated_at": "2017-07-10T14:36:58.014Z",
+        "name": "demo storage host",
+        "description": "storage host",
+        "storage_id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
+        "native_storage_host_group_id": "storage_host_group0",
         "storage_hosts": [
-            {
-            "id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
-            "created_at": "2017-07-10T14:36:58.014Z",
-            "updated_at": "2017-07-10T14:36:58.014Z",
-            "name": "demo storage host",
-            "description": "storage host",
-            "storage_id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
-            "native_storage_host_group_id": "storage_host_group0",
-            "storage_hosts": [
-                "storage_host_0"
-            ]
-            }
-        ],
-        "additionalProp1": {}
-    }
-    ```
-    **Add support for Port Groups API**  
-    `​/v1​/storages​/{storage_id}​/port-groups`
-
-    ```json
-    {
-        "storage_hosts": [
-            {
-            "id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
-            "created_at": "2017-07-10T14:36:58.014Z",
-            "updated_at": "2017-07-10T14:36:58.014Z",
-            "name": "string",
-            "description": "string",
-            "storage_id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
-            "native_port_group_id": "port_group_0",
-            "ports": [
-                "port_0"
-            ]
-            }
+            "storage_host_0"
         ]
+        }
+    ],
+    "additionalProp1": {}
+}
+```
+
+The delfin service update will include:
+    
+```javascript
+    getAllStorageHostGroups(storageId, nativeStorageHostGroupId?, name?, limit?, offset?, sort?): Observable<any> {
+        let query = {};
+        
+        if(nativeStorageHostGroupId){
+            query['native_storage_host_group_id'] = nativeStorageHostGroupId;
+        }
+        if(name){
+            query['name'] = name;
+        }
+        if(limit){
+            query['limit'] = limit;
+        }
+        if(offset){
+            query['offset'] = offset;
+        }
+        if(sort){
+            query['sort'] = sort;
+        }
+        query = '?' + Utils.prePareQuery(query);
+        let url =this.delfinStoragesUrl + '/' + storageId + '/storage-host-groups' + query;
+        return this.http.get(url);
     }
-    ```
+```
 
-    **Add support for Volume Groups API**  
-    `/v1/storages/{storage_id}/volume-groups`
+In list of Storage host groups returned, the details of the storage hosts will be fetched using the existing support for fetching storage hosts using `/v1/storages/{storage_id}/storage-hosts`. This along with the Storage host initiators fetched using the `storage-host-initiators` APIs will be used to create a common table to display the initiator and host details.
 
-    ```json
-    {
-        "storage_hosts": [
-            {
-            "id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
-            "created_at": "2017-07-10T14:36:58.014Z",
-            "updated_at": "2017-07-10T14:36:58.014Z",
-            "name": "string",
-            "description": "string",
-            "storage_id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
-            "native_volume_group_id": "volume_group_0",
-            "volumes": [
-                "string"
-            ]
-            }
+#### Add support for Port Groups API
+
+`​/v1​/storages​/{storage_id}​/port-groups`
+
+```json
+{
+    "storage_hosts": [
+        {
+        "id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
+        "created_at": "2017-07-10T14:36:58.014Z",
+        "updated_at": "2017-07-10T14:36:58.014Z",
+        "name": "string",
+        "description": "string",
+        "storage_id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
+        "native_port_group_id": "port_group_0",
+        "ports": [
+            "port_0"
         ]
+        }
+    ]
+}
+```
+
+The delfin service update will include:
+    
+```javascript
+    getAllPortGroups(storageId, nativePortGroupId?, name?, limit?, offset?, sort?): Observable<any> {
+        let query = {};
+        
+        if(nativePortGroupId){
+            query['native_port_group_id'] = nativePortGroupId;
+        }
+        if(name){
+            query['name'] = name;
+        }
+        if(limit){
+            query['limit'] = limit;
+        }
+        if(offset){
+            query['offset'] = offset;
+        }
+        if(sort){
+            query['sort'] = sort;
+        }
+        query = '?' + Utils.prePareQuery(query);
+        let url = '​/v1​/storages​/' + storageId + '/port-groups' + query;
+        return this.http.get(url);
     }
-    ```
+```
+#### Add support for Volume Groups API
+
+`/v1/storages/{storage_id}/volume-groups`
+
+```json
+{
+    "storage_hosts": [
+        {
+        "id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
+        "created_at": "2017-07-10T14:36:58.014Z",
+        "updated_at": "2017-07-10T14:36:58.014Z",
+        "name": "string",
+        "description": "string",
+        "storage_id": "084bf71e-a102-11e7-88a8-e31fe6d52248",
+        "native_volume_group_id": "volume_group_0",
+        "volumes": [
+            "string"
+        ]
+        }
+    ]
+}
+```
+
+The delfin service update will include:
+    
+```javascript
+    getAllVolumeGroups(storageId, nativeVolumeGroupId?, name?, limit?, offset?, sort?): Observable<any> {
+        let query = {};
+        
+        if(nativeVolumeGroupId){
+            query['native_volume_group_id'] = nativeVolumeGroupId;
+        }
+        if(name){
+            query['name'] = name;
+        }
+        if(limit){
+            query['limit'] = limit;
+        }
+        if(offset){
+            query['offset'] = offset;
+        }
+        if(sort){
+            query['sort'] = sort;
+        }
+        query = '?' + Utils.prePareQuery(query);
+        let url = '​/v1​/storages​/' + storageId + '/volume-groups' + query;
+        return this.http.get(url);
+    }
+```
+
 ### Use case View
 
+#### Storage Host Group Details and List of Storage Hosts
+
+![Storage Host Group Details and List of Storage Hosts](./resources/masking_views_update_storage_host_group.png)
+
+#### Volume Group details and list of Volumes
+
+![Volume Group details and list of Volumes](./resources/masking_views_update_volume_list.png)
+
+#### Port Group Details and list of Ports
+
+![Port Group Details and list of Ports](./resources/masking_views_update_port_list.png)
