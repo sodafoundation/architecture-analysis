@@ -1,5 +1,7 @@
 # Metadata Management
 
+**Author(s)**: [Pravin Ranjan](https://github.com/PravinRanjan10)
+
 ## Motivation and background
 
 Metadata gives basic information about data—including type, time of creation,
