@@ -69,11 +69,13 @@ This module expose REST API’s to client.
 2. *Metadata Manager*:
 This is independent microservice, which has three tasks:
    a. Validation: validations of requests, data type, length etc.
-   b. Filter: based on request, filter the 
+   b. Filter: based on request, filter the metadata.
    c. Query: prepare query structure and get the metadata from db.
 
 3. *Storage adapter*:
-It contains all drivers of respective cloud providers. 
+It contains all drivers of respective cloud providers.
 
 4. *Backend manager*:
+It handles CRUD operations on backend.
 
+<img src="./resources/meta-data-design-v4.jpg">
