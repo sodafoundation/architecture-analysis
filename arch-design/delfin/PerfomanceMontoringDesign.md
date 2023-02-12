@@ -1,76 +1,263 @@
-﻿
-# Performance Monitoring in delfin- design document   
+﻿﻿﻿
+# Performance monitoring design document   
+
+**Authors:** [Najmudheen CT](https://github.com/NajmudheenCT), [Liuyu ](https://github.com/ThisIsClark), [Xulin](https://github.com/wisererik),  [Sushantha Kumar](https://github.com/sushanthakumart), [Amit Roushan](https://github.com/AmitRoushan)
+
+
+## Goal
+Bring out the design considerations and enhancements to delfin framework for metrics collection from heterogeneous back ends
+## Motivation and background
+Performance metrics are the key indicators of storage devices, which every administrators would like to monitor, analyze and take decisions.
+## Non-Goals
+This doc covers only performance collection related design aspects and impacts to the framework, other use cases of delfin is not covered.
+## Assumptions and Constraints
+Performance collection is possible only if the storage is registered for resource collection in delfin. 
 
 ## Requirement analysis
 
-1. User wants to register a device for performance collection
-2. User wants to specify a resource  type and interval which he would like to poll
-3. User wants to get device (storage) performance information
-4. User wants to get other resource (storage-pool, volume, controller, port, disk, etc )performance information.
-5. User wants to get performance information for a range , or historic performance:  example :  (real-time, user-defined time segment, and latest 4Hours/12Hours/1Day/1Week/1Month/1Year performance information).
-6. User wants to trigger performance collection  of particular storage.
-7. User wants to export real time collection data to existing monitoring system.
-8. User wants query performance metrics through delfin APIs
+### Input Requirements
+1. Heterogeneous storage performance monitoring
 
-## Architecture
-Overall architecture spec of delfin is available  [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md).
-Scope of architecture discussion in this design doc is limited to performance metrics collection and the modules involved for the same.
+#### Feature Requirements
+1. Enable storage device for performance collection
+2. Collect and push performance metrics periodically
+3. Provide metric lists supported by driver
 
-### Delfin REST interface
-Performance configuration API:- This is the external REST interface to configure back ends for performance collection in Delfin.
-Performance Query API :- This is the external interface to query the collected metrics. 
+#### Requirement Analysis
+Requirements are derived from existing SRM use cases and user inputs. 
+Competitor analysis report : **Link to be updated**
 
-### Resource Manager
-Act as the API server for all REST requests .
-### Scheduler
-Delfins internal task scheduler. Scheduler create tasks based on the task configuration set by user.
+#### List of Requirements
+1. Registration of storage for performance collection
+2. Schedule collection job for different resource level metrics.
+3. Push collected metrics to delfin client 
+4. Provide metric lists supported by driver.
 
-### Task Manager
-Receives tasks from configured message bus, get  required parameter for the tasks from resource DB and invokes driver API for the tasks. Driver response will be verified and push to exporter interface.
-
-### Exporter interface 
-Interface to connect Exporters. 
-### Prometheus Exporter
-A default exporter available with delfin. This exporter convert delfin metric model to Prometheus metric model . Exporter provides a target endpoint for Prometheus. Exporter persist the delfin collected metrics till Prometheus scrape from this target.This exporter will be configured in prometheus to scrape. If user prefer monitoring system other than Prometheus, exporter for the same platform has to be integrated with delfin.
-### Prometheus Query adapter
-A default prometheus query adapter available with delfin. This module generate PromQL and adapt the Prometheus model to delfin metric model.
-### Driver manager 
-Act as interface between backend drivers and task manager. Provides a common interface for task manager to call driver functions.
-
-### Architecture considerations
-Based on the requirement, user can choose any of the below architecture for deployment of delfin for performance monitoring.
-
-####  1. Delfin as complete monitoring system 
-
-![](./Resources/delfin_architecture_with_prometheus.jpg)
-
-####  2. Delfin as a heterogeneous metrics collection framework for existing monitoring platforms. 
-![](Resources/delfin_architecture_with_thirdPraty.jpg)
+##### Functional Requirements
+1. Register a device for performance collection in delfin
+2. Provide collection configuration ( resources and interval to poll)
+3. Schedule collection job at every interval
+4. Retry failed collection jobs
+ 
+5. GET supported metrics list for each device and resources
+6. Push collected data to exporters.
+7. update/remove performance collection configurations.
+8. Remove Performance collection tasks when storage is un-registered.
 
 
-## Delfin metric model and persistence 
-Delfin by default  use [Prometheus](https://prometheus.io/) to persist metric data unless user configured a thridparty TSDB. In case user use DB other than Prometheus, an exporter for the same has to be integrated with delfin .
-delfin metric data model is inspired from [Prometheus data model](https://prometheus.io/docs/concepts/data_model/) to support time series data persistence .
-### data model
+##### Non Functional Requirements
+1. Fault of any task node should not impact collection tasks
+2. After process restart, the tasks should be automatically scheduled.
+3. Collection failures must be logged
+
+
+## Architecture Analysis
+
+### System Architecture
+Overall system architecture of delfin is available [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md).
+Scope of architecture discussion in this design doc is limited to task manager module enhancements, performance metrics collection interfaces, models and the modules involved for the same.
+
+### Module Architecture
+
+![Architecture](./Resources/task_manager_arch.jpg)
+
+Highlighted blocks are the additions to task manager for task scheduling and task handling.
+
+#### SchedulerManager
+
+ A factory for creating periodic scheduling jobs. 
+ Currently identified  periodic scheduler jobs  are TelemteryJobcheduler, FailedJobSheduler . 
+
+#### TelemteryJobScheduler
+
+Create scheduled jobs for Metrics collection and add to scheduler. Creation of the job is based on Task table in DB.
+Scope of this scheduler are
+* schedule job for each entries in task table
+* update scheduled jobs when there is a change in task table
+* remove schedule jobs for when some tasks are deleted.
+
+
+#### TelemetryFailedJobScheduler
+
+Create scheduled job for failed metric collections. Creation of the job is based on FailedTask table from DB.
+Scope of this scheduler are
+* schedule job for each failed tasks in FailedTask table
+* remove schedule jobs for when some corresponding  tasks are deleted or retry limit exceeded.
+
+
+
+#### Scheduler
+
+A task scheduler library that runs in a thread inside task manager application. Periodic schedulers should use this to set periodic running jobs.
+
+#### PerformanceCollectionHandler
+
+
+Receives a call back from scheduler for performance collection task for a period and posts the tasks in message queue.  This module also updates the status of task in DB.
+
+#### PerformanceCollectionHandler
+
+
+Receives a call back from scheduler for failed-performance collection task retry and posts the tasks in message queue.  This module also updates the status of failed_task in DB.
+
+#### TelemtryTask
+
+
+Telemetry task  is the actual task executor which initiates the collect request to driver and pushes data to exporter.
+
+### Architecture Tenets
+**North-bound API** :- REST interface to delfin
+
+**Exporter interface**:- Python class interfaces
+
+**Driver interface**:- Python class interfaces
+
+**Database** :- Any relation databse (sqllite3 by default)
+
+**API server or Resource Manager** :- Process which serves the REST APIs
+
+**Task manager**:- Process which prepares, schedule and update collection jobs.
+
+**Driver**:- An Object which is part of other processes to connect and collect information’s from a back end.
+
+**Exporter**:- An object which is part of task process to push data out.
+
+
+### High Level Module Architecture
+NA
+
+## Detailed Design
+
+### Use case View
+![Usecase](./Resources/Delfin_usecase_performance.jpg)
+#### List of Typical Use cases
+
+- Register a device for performance collection , [Pre-condition : Device is already registered in delfin for resource collection
+]
+
+- Schedule collection jobs for newly registered devices .
+
+- While starting/restarting delfin task process, schedule collection jobs for all devices registered.
+
+- Retry collection tasks for all failed collection after a specified interval.
+
+- Remove collection tasks of all succeeded and and retry limit exceeded jobs
+
+- Remove collection tasks when a storage is un-registered from delfin
+
+
+#### Usecase context model
+NA
+
+#### Interface Model
+
+
+##### External Interfaces
+ 
+###### North-bound REST interfaces
+
+Performance collection related API spec analysis and design doc [here](https://github.com/sodafoundation/architecture-analysis/blob/c1ca8ad63ccd63b782e5adcd4020e784ee2471c5/arch-design/delfin/PerformanceMonitoringAPIs.md)
+
+##### Internal Interfaces
+
+###### Exporter interface 
+Exporters need to Interface to push collected metrics through exporters.
+```
+    def dispatch(self, ctxt, data):
+    # ctxt :- Delfin context object
+    # data:- Metric data
+```
+ Metric model reference [here](#metric-model) 
+ 
+Detailed exporter writing user guide [here](https://docs.sodafoundation.io/guides/developer-guides/delfin/exporter-developer-guide/) 
+
+##### Driver interfaces
+
+```python
+def collect_perf_metrics(self, context, storage_id, resource_metrics, start_time,
+                          end_time):
+    """Collect  performance metrics
+    storage_id : Defin Id of the storage
+    resource_metrics: dictionary represents the collection configuration
+        Example:
+            
+        resource_metrics = {'storage_pool': ['read_throughput', 'write_throughput', 'response_time'],
+         'volume': ['read_throughput', 'write_throughput']}
+    start_time: first time stamp to query in the range
+    end_time : last time to query in the range
+     """
+```
+
+#### End User Context
+NA
+
+### Functional Context
+
+NA
+
+### Non Functional Context
+
+One design aspect considered for running multiple task managers for high availability and load balancing.
+#### Design considerations for HA and load balancing
+
+* Multiple task managers will scan the db independently and take decision of creating periodic jobs.
+
+
+* Given task manager instance may be running periodic jobs as well as backend collection tasks on behalf of some interval. If this instance crashes, both periodic jobs and backend collection tasks will be impacted. 
+ 
+
+* When one task manager starts, it can not take decision on which are the jobs are already running and which ones need to scheduled again.
+
+Above challenges will be addressed by Designated scheduler approach. where
+* One of the task manager should be designated as leader for scheduling the periodic jobs
+
+
+* Leader election algorithm can be used by SchedulerHandler to decide the master.
+
+
+* Implementation aspects to be explored further
+
+Another Approach in discussion :- Sharing of periodic job creation among task managers , where
+
+* Some mechanism can be used to designate each storage collection to one of the task managers
+
+
+* Each task manager handles some portion of periodic job creation
+
+
+* Details of the approach to be explored further
+
+
+
+
+
+### Data View
+
+#### Data and Control Data Contexts
+NA
+
+#### Data Model
+
+##### Metric Model
 
 | Property  | datatype  | Description                                                     |
 |------------|-----------|-----------------------------------------------------------------|
 | name       | string    |  Name of the indicator                                          |
-| labels     | dict { }   | Any parameters required to distinguish this indicator uniquely as key value map|
-| values      | dict {}     | time_stamp as key and metric value as value as a key value map                                         |
+| labels     | dict { }   | Any parameters required to distinguish this indicator uniquely as key value pairs|
+| values      | dict {}     | time_stamp of metric  as key and value of metric  as value.                                        |
 
-### example metric
+###### metric data example
 ```
 name = read_throuhput
 labels = {
 			'storage_id': '0000123456789',
 			'resource_type': 'port',
 			'id': '12c2d52f-01bc-41f5-b73f-7abf6f38a340',
-			'native_port_id': 'FF1:001',
-			'native_controller_id': ' 'CTRL1',
+			'resource_id': 'FF1:001',
+			'custom_propperty’:  'CTRL1',
 			'type': 'RAW'
 			'unit': 'IOPS'
-			'value_type': 'GAUGE'
+			
 	}
 values = {
     1594635195: 1094.28,
@@ -78,237 +265,122 @@ values = {
 }
 
 ```
-### Labels model
+###### Label guidelines and standards
+Every metric will have storage_id, resource_type, unit,type and resource_id as mandatory labels along with other custom labels. This will help the client to uniquely identify the metric.
+
 | | |
 |-|-|
 |**Resource**|**Required labels**|
-|Array| **storage_id** = <storage_id> **resource_type** = array **id** = < delfin id of this resource> |
-|Storage-Pool| **storage_id** = <storage_id> **resource_type** = storage_pool **id** = < delfin id of this resource> **native_storage_pool_id** = < associated storage_pool id in backend > **type**=enum **unit** = enum **value_type** = enum|
-|Volume|**storage_id** = <storage_id> **resource_type** = volume **id** = < delfin id of this resource> **native_volume_id** = < id of this pool  in back_end> **native_storage_pool_id** = < associated storage_pool id in backend > **type**=enum **unit** = enum **value_type** = enum|
+|Device| **storage_id** = <storage_id> <br /> **id** = < delfin id> <br />  **resource_type** = device <br /> **resource_id** = < native device id> <br /> **unit** = enum <br /> **type** = enum |
+|Storage-Pool| **storage_id** = <storage_id> <br /> **resource_type** = storage_pool <br /> **resource_id** = < native  id of this resource> <br />  **id** = < delfin id> <br />  **type**=enum <br />  **unit** = enum <br />  
 
-#### enums
+
+###### Label field enums
 | | |
 |-|-|
 |**Propperty**|**enum**|
 |type|RAW,DERIVED,AGGREGATED|
-|value_type|COUNTER, RATE, GUAGE,|
+|
 |unit|IOPS,MB/s,%,ms,KB,
-## REST interface for configuring performance collection 
-![](./Resources/PUT.PNG)
-![](./Resources/PUT_1.PNG)
-![](./Resources/PUT_2.PNG)
 
-## Driver interfaces
-```
-collection_spec = {
-'interval':900,
-'is_historic':True,
-'storage_id': '12c2d52f-01bc-41f5-b73f-7abf6f38a2a6'
-}
+##### Database model
 
-```
-```
-keys = ['response_time', 'throughtput', 'bandwidth', 'read_throughtput', 'write_throughtput', 'read_bandwidth', 'write_bandwidth']
-```
-```
-@abc.abstractmethod
-def get_storage_perf_metrics(self, context, collection_spec, keys):
-    """Get storage device performance metrics  
-   Return array of metrics metrics[]"""
-    pass
+**Table Name : Task**
 
-```
+| Key Name        | Key Type | Description                                                                                                                                                                 | Example                                                                                                                                                                                                                                                                                                       |
+| --------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| id              | uuid     | Telemetry  ID.                                                                                                                                                              | 6cb62086-cec8-411c-9f70-16ff81cf9909                                                                                                                                                                                                                                                                          |
+| storage\_id     | uuid     | Storage on which the telemetry needs to be executed                                                                                                                         | c31291c7-781a-47e2-a66f-112f0bc0ef27                                                                                                                                                                                                                                                                          |
+| interval        | int      | Telemetry interval, in seconds.                                                                                                                                             | 300                                                                                                                                                                                                                                                                                                           |
+| method          | string   | Method/Task Type to Be Executed                                                                                                                                             | delfin.Task.performance\_collect                                                                                                                                                                                                                                                                              |
+| args            | dict     | Required parameters                                                                                                                                                         | {<br>"storage\_id": "c31291c7-781a-47e2-a66f-112f0bc0ef27",<br>"resource": {<br>"device": \["CPU usage","Bandwidth","Average I/O response time","IOPS"\],<br>"pool": \["IOPS","Average I/O response time","Bandwidth"\],<br>"lun": \["IOPS","Average I/O response time","Bandwidth","Utilization"\]<br>}<br>} |
+| last\_run\_time | int      | Time when a telemetry task instance is created last time. The time is set to the current time initially. The time is updated each time a telemtry task instance is created. | 1611840278  |
+| job_id | string      | id created for the job in the scheduler | 1611840278|
 
 
+**Table name : FailedTask**
 
-## Delfin unified Metrics and mapping with some backends
-delfin metrics are unified metrics which are either  mapped to or derived from other platforms metrics . below table is a report from  analysis of different platforms
-### Storage
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-
-<html>
-
-
-<body>
-<table cellspacing="0" border="0">
-	<colgroup width="365"></colgroup>
-	<colgroup width="103"></colgroup>
-	<colgroup width="169"></colgroup>
-	<colgroup width="628"></colgroup>
-	<colgroup width="226"></colgroup>
-	<colgroup width="209"></colgroup>
-	<colgroup width="161"></colgroup>
-	<colgroup width="412"></colgroup>
-	<colgroup width="169"></colgroup>
-	<colgroup width="209"></colgroup>
-	<colgroup width="80"></colgroup>
-	<colgroup width="446"></colgroup>
-	<colgroup span="3" width="87"></colgroup>
-	<colgroup width="378"></colgroup>
-	<tr>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 height="56" align="center" valign=middle><b><font face="Arial" color="#C0504D">delfin</font></b></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" valign=middle><font face="Arial">EMC VMAX</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" valign=middle><font face="Arial">OceanStor</font></td>
-		<td style="border-top: 1px solid #000000; border-bottom: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" colspan=4 align="center" valign=middle><font face="Arial">HP</font></td>
-		</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="56" align="left" valign=middle><b><font face="Times New Roman" size=2>Metrics</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><b><font face="Times New Roman" size=2>Unit</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><b><font face="Times New Roman" size=2>Type</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><b><font face="Times New Roman" size=2>Description/enum</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Metrics</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" size=2>Unit</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Type</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Description</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Metrics</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" size=2>Unit</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Type</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Description</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Metrics</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><b><font face="Times New Roman" size=2>Unit</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Type</font></b></td>
-		<td style="border-top: 1px solid #000000; border-left: 1px solid #000000; border-right: 1px solid #000000" align="center" valign=middle><b><font face="Arial">Description</font></b></td>
-	</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="91" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">response_time</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">ms</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">float</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">Average IO response time</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>ReadResponseTime + Write ResponseTime</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Read and write avaible separately</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Avg.<br>I/O<br>Respon<br>se<br>Time</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>ms</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-	</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="37" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">throughtput</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">IOPS</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">float</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">total read and write throughput</font></b></td>
-		<td align="left" valign=middle>HostIOs</td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2>IOPS</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Read and write avaible separately</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Total<br>IOPS</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>IO/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>TotalIOs</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-	</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="37" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">read_throughtput</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">IOPS</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">float</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">read throughput</font></b></td>
-		<td align="left" valign=middle>HostReads</td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2>IOPS</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Read<br>IOPS</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>IO/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>ReadIOs</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-	</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="37" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">write_throughput</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">IOPS</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">float</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">write throughput</font></b></td>
-		<td align="left" valign=middle>HostWrites</td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2>IOPS</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Write<br>IOPS</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>IO/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>WriteIOs</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-	</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="55" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">bandwidth</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">MB/s</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">float</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">total bandwidth</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>HostMBReads, HostMBWRITES</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2>MB/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Block<br>Bandwi<br>dth</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>MB/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-	</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="55" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">read_bandwidth</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">MB/s</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">float</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">read bandwidth</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>HostMBReads</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2>MB/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Read<br>Bandwi<br>dth</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>MB/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-	</tr>
-	<tr>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" height="55" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">write_bandwidth</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">MB/s</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">float</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#F2DCDB"><b><font face="Times New Roman" size=2 color="#000000">write bandwidth</font></b></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>HostMBWrites</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2>MB/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>Write<br>Bandwi<br>dth</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>MB/s</font></td>
-		<td style="border-bottom: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2>float</font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle bgcolor="#FFFFFF"><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-		<td style="border-bottom: 2px solid #000000; border-left: 2px solid #000000; border-right: 2px solid #000000" align="left" valign=middle><font face="Times New Roman" size=2><br></font></td>
-	</tr>
-</table>
-<!-- ************************************************************************** -->
-</body>
-
-</html>
+| Key Name      | Key Type                           | Description                                                                                                                                                                                                               | Example                                                                                                                                                                                                                                                                                                                                                                  |
+| ------------- | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| id            | uuid                               | Telemetry Task ID.                                                                                                                                                                                                        | 7cb25622-93dd-4712-acf2-f3ca79139f8b                                                                                                                                                                                                                                                                                                                                     |
+| task\_id | uuid                               | telemetry template ID.                                                                                                                                                                                                    | 6cb62086-cec8-411c-9f70-16ff81cf9909                                                                                                                                                                                                                                                                                                                                     |
+| launch\_time  | int                                | telemetry Task execution start time.                                                                                                                                                                                      | 1611840278                                                                                                                                                                                                                                                                                                                                                               |
+| storage\_id   | uuid                               | Storage on which the telemetry task needs to be executed                                                                                                                                                                  | c31291c7-781a-47e2-a66f-112f0bc0ef27                                                                                                                                                                                                                                                                                                                                     |
+| method        | string                             | Method/Task Type to Be Executed                                                                                                                                                                                           | delfin.Task.performance\_collect                                                                                                                                                                                                                                                                                                                                         |
+| args          | dict                               | Required parameters                                                                                                                                                                                                       | {<br>"storage\_id": "c31291c7-781a-47e2-a66f-112f0bc0ef27",<br>"resource": {<br>"device": \["CPU usage","Bandwidth","Average I/O response time","IOPS"\],<br>"pool": \["IOPS","Average I/O response time","Bandwidth"\],<br>"lun": \["IOPS","Average I/O response time","Bandwidth","Utilization"\]<br>},<br>"start\_time": 1611840276,<br>"end\_time": 1611840384,<br>} |
+| result        | "succeed"<br>"failed"<br>"running" | Task execution status<br>The task is set to the running state when the task starts.<br>After a task is successfully executed, the task is in the succeeded state.<br>The task status is changed to failed after it fails. | null                                                                                                                                                                                                                                                                                                                                                                     |
+| retry\_count  | int                                | Number of retries executed                                                                                                                                                                                                | 0                                                                                                                                                                                                                                                                                                                                                                        |
+| job_id | string      | id created for the job in the scheduler | 1611840278|
 
 
 
 
+##### Metric lists
+List of unified metrics in delfin can be found [here](https://github.com/sodafoundation/architecture-analysis/blob/4200e725960768ad02be246c700d3e124965f64b/arch-design/delfin/Delfin_Metric_List.md)
+### Development and Deployment Context
 
-## Performance Collection Flow
+#### Code
+
+NA
+
+#### Debug Model
+
+NA
+
+  
+#### Build & Package
+
+NA
+
+#### Deployment
+
+NA
+
+  
+### Execution View
+
+NA
 
 
-![](./Resources/PerformanceCollectionFlow.png)
+## Sequence diagrams
 
-## Performance Metric Query Flow
-![](./Resources/PerformanceQueryFlow.png)
+### Scheduler initialization during task manager start
+
+![Registration](./Resources/TaskManagerStart.png)
+
+### Register storage for performance collection
+
+![Registration](./Resources/NewStorageRegistration.png)
+
+### Performance collection lifecycle
+
+![Registration](./Resources/PerfCollectionLifeCycle.png)
+
+### Failed telemetry job handler
+
+![Registration](./Resources/FailedTelemetryJob.png)
+
+### Performance collection during failed job execution
+
+![Registration](./Resources/FailedPerfCollection.png)
+
+### Device removal
+
+![Registration](./Resources/device_removal.jpg)
+
+## Design Alternatives and other notes
+
+NA
+
+## Open Issues
+
+NA
+
+## Design Requirements / Tasks
+
+NA
+
+
+## Scratchpad
+
+
