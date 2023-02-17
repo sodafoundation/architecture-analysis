@@ -1,0 +1,134 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome file</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><p><strong>Moose File System</strong></p>
+<p><strong>Introduction</strong></p>
+<p><strong>Moose File System</strong> (<strong>MooseFS</strong>) is an open-source, POSIX-compliant distributed file system developed by Core Technology. MooseFS aims to be fault-tolerant, highly available, highly performing, scalable general-purpose network distributed file system for data centers. Initially proprietary software, it was released to the public as open source on May 30, 2008.</p>
+<p>Currently two editions of MooseFS are available:</p>
+<p>MooseFS - released under GPLv2 license,</p>
+<p>MooseFS Professional Edition (MooseFS Pro) - release under proprietary license in binary packages form.</p>
+<p>The MooseFS follows similar design principles as Fossil (file system), Google File System, Lustre or Ceph. The file system comprises three components:</p>
+<p><strong>Metadata server (MDS)</strong> — manages the location (layout) of files, file access and namespace hierarchy. The current version of MooseFS does support multiple metadata servers and automatic failover. Clients only talk to the MDS to retrieve/update a file’s layout and attributes; the data itself is transferred directly between clients and chunk servers. The Metadata server is a user-space daemon; the metadata is kept in memory and lazily stored on local disk.</p>
+<p><strong>Metalogger server</strong> — periodically pulls the metadata from the MDS to store it for backup. Since version 1.6.5, this is an optional feature.</p>
+<p><strong>Chunk servers (CSS)</strong> — store the data and optionally replicate it among themselves. There can be many of them, though the scalability limit has not been published. The biggest cluster reported so far consists of 160 servers. The Chunk server is also a user-space daemon that relies on the underlying local file system to manage the actual storage.</p>
+<p><strong>Clients</strong> — talk to both the MDS and CSS. MooseFS clients mount the file system into user-space via FUSE.</p>
+<p><strong>Project Summary</strong></p>
+<p><em>Website</em><br>
+<a href="https://moosefs.com">https://moosefs.com</a></p>
+<p><em>Organization name</em><br>
+Tuxera</p>
+<p><em>Open/Proprietary</em><br>
+Open</p>
+<p><strong>Brief Description</strong></p>
+<p>MooseFS Pro is software that allows you to build fast and reliable petabyte file systems on any type of server. It is used worldwide in many bioinformatics laboratories, computer modeling facilities, research institutes, etc.</p>
+<p><strong>Project Details:</strong></p>
+<p><strong>Key Features</strong></p>
+<p>To achieve high reliability and performance MooseFS offers the following features:</p>
+<p><strong>1. Fault-tolerance</strong> — MooseFS uses replication, data can be replicated across chunk servers, the replication ratio (N) is set per file/directory. If (N-1) replicas fail the data will still be available. At the moment MooseFS does not offer any other technique for fault tolerance. Fault-tolerance for very big files thus requires vast amount of space - N<em>filesize instead of filesize+(N</em>stripesize) as would be the case for RAID 4, RAID 5 or RAID 6. Version 4.x PRO of MooseFS implements 8+n Erasure Coding.</p>
+<p><strong>2. Striping</strong> — Large files are divided into chunks (up to 64 megabytes) that might be stored on different chunk servers in order to achieve higher aggregate bandwidth.</p>
+<p><strong>3. Load balancing</strong> — MooseFS attempts to use storage resources equally, the current algorithm seems to take into account only the consumed space.</p>
+<p><strong>4. Security</strong> — Apart from classical POSIX file permissions, since the 1.6 release MooseFS has offered a simple, NFS-like, authentication/authorization.</p>
+<p><strong>5. Coherent snapshots</strong> — Quick, low-overhead snapshots.</p>
+<p><strong>6. Transparent “trash bin”</strong> — Deleted files are retained for a configurable period of time.</p>
+<p><strong>7. “Project”</strong> quotas support</p>
+<ol start="8">
+<li>POSIX locks, flock locks support</li>
+</ol>
+<p><strong>Architecture</strong></p>
+<p>Typical MooseFS architecture consists of four components.</p>
+<p>A MooseFS cluster consists of components of four types: <strong>Master Servers, Chunkservers, Metaloggers (metadata backup servers) and client machines.</strong></p>
+<p><em>Master Servers</em></p>
+<p>Leader Master Server, Master Server Followers are the machines managing the whole file system, storing metadata for every file and folder.</p>
+<p>The leader is always the central point of a cluster. Leader Master Server directs clients to appropriate data servers (Chunkservers) for read/write operations.</p>
+<p>It leads all inter-servers data manipulations (replicating, auto-healing, balancing etc.). Master Server neither reads nor sends any file data (chunks).</p>
+<p>Each client and data server must know the IP/DNS address of the Master Server. Clients learn from the Master Server addresses of Chunkservers (data servers) for sending or receiving chunks of data.</p>
+<p>Master Server Followers are Highly Available online backup copies of Leader Master Server (available with HA configurations).</p>
+<p><em>Chunkservers</em></p>
+<p>Data servers (Chunkservers) are machines that store files’ data (chunks). They serve data for clients and synchronize among themselves when necessary.</p>
+<p><em>Metaloggers</em></p>
+<p>Metadata backup server(s) (Metaloggers) can be any number of such servers, all of which store metadata changelogs and periodically download the main metadata file.</p>
+<p>In MooseFS Community, any Metalogger can be easily set up as a new Master Server in case of main Master Server failure.</p>
+<p><em>Client machine</em></p>
+<p>Client computers that use (mount) the filesystem can be any number of such machines contacting Master Servers (to receive and modify file metadata) and Chunkservers (to exchange actual file data) using the MooseFS TCP/IP network protocol.</p>
+<p>Linux/FreeBSD/OS X machines use the mfsmount process based on the FUSE mechanism (Filesystem in USErspace) so that MooseFS is available on every operating system supported by FUSE. Also, Windows machines (both desktops and servers) use the native Windows mfs4win driver.</p>
+<p>All components communicate with each other using the MooseFS TCP/IP based protocol. The most common network type used for MooseFS clusters is Ethernet but other types supporting TCP/IP stack may be used.</p>
+<p><strong>Current Usage</strong></p>
+<p>MooseFS is a breakthrough concept in the Big Data storage industry. It allows us to combine data storage and data processing in a single unit using commodity hardware thereby providing an extremely high ROI.</p>
+<p>Moosefs provide professional services and expert advisory for storage solutions as well as implementation and support for all your operations.</p>
+<p><strong>Technical Details</strong></p>
+<ul>
+<li><em>Redundancy</em></li>
+</ul>
+<p>All the system components are redundant and in case of a failure, there is an automatic failover mechanism that is transparent to the user.</p>
+<ul>
+<li><em>Computation on Nodes</em></li>
+</ul>
+<p>Support for scheduling computation on data nodes for better overall system TCO by utilizing idle CPU and memory resources. There is no need to buy extra hardware; the same server can be used for storing data as well as for running applications.</p>
+<ul>
+<li><em>Atomic Snapshots</em></li>
+</ul>
+<p>Instantaneous and uninterrupted provisioning of file system at any particular point in time. This feature is ideal for online backup solutions.</p>
+<ul>
+<li><em>Redundancy with Erasure Coding</em></li>
+</ul>
+<p>Ensures data redundancy by using error correction code algorithms with up to 9 parity sums. It saves more RAW space compared to an ordinary data duplication approach.</p>
+<ul>
+<li><em>Tiered Storage</em></li>
+</ul>
+<p>The assignment of different categories of data to various types of storage media to reduce total storage cost. Hot data can be stored on fast SSD disks and infrequently used data can be moved to cheaper, slower mechanical hard disk drives.</p>
+<ul>
+<li><em>Rolling Upgrades</em></li>
+</ul>
+<p>Ability to perform one-node-at-a-time upgrades, hardware replacements and additions, without disruption of service. This feature allows you to maintain hardware platform up-to-date with no downtime.</p>
+<ul>
+<li><em>POSIX Compliance</em></li>
+</ul>
+<p>Allows the user to perform data operations similarly as with the existing file storage systems without the need of making any additional changes. This feature helps in smooth transition from previously used storage systems.</p>
+<ul>
+<li><em>Fast Disk Recovery</em></li>
+</ul>
+<p>In case of hard disk or hardware failure, the system instantly initiates parallel data replication from redundant copies to other available storage resources within the system. This process is much faster than traditional disk rebuild approach. It may take as little as 15 minutes for 1 TB disk recovery.</p>
+<ul>
+<li><em>Global Trash</em></li>
+</ul>
+<p>A virtual, global space for deleted objects, configurable for each file and directory. With the help of this advantageous feature, accidentally deleted data can be easily recovered.</p>
+<ul>
+<li><em>Quota Limits</em></li>
+</ul>
+<p>The system administrator has the flexibility to set limits to restrict the data storage capacity per directory. This feature ensures a stable system and helps in management and storage of crucial data.</p>
+<ul>
+<li><em>Native Clients</em></li>
+</ul>
+<p>Enhanced performance achieved through a dedicated client (mount) components specially designed for Linux, FreeBSD and MacOS systems.</p>
+<ul>
+<li><em>Access Control</em></li>
+</ul>
+<p>Access to files and directories is based on a standard Unix access control model enhanced with standard Access Control Lists.</p>
+<ul>
+<li><em>Management Interfaces</em></li>
+</ul>
+<p>Provides a rich set of administrative tools such as command line based and web-based interfaces, which helps the system administrator to monitor and analyze the system performance.</p>
+<ul>
+<li><em>Hardware Independence</em></li>
+</ul>
+<p>Exceptional performance on almost every hardware platform that runs a POSIX compliant Operating System like Linux, Mac OSX or FreeBSD.</p>
+<ul>
+<li><em>Parallelism</em></li>
+</ul>
+<p>Performs all I/O operations in parallel threads of execution to deliver high performance read/write operations.</p>
+<ul>
+<li><em>Ethernet</em></li>
+</ul>
+<p>1 Gbps / 10 Gbps standard Ethernet-based network can be used for all the communications with the support of LACP configurations.</p>
+</div>
+</body>
+
+</html>
