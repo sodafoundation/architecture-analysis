@@ -18,13 +18,11 @@ It's important to note that disk types can be also differentiated by capacity an
 
 ## PROJECT SUMMARY
 
-||                        |
-|----------------|-------------------------------|-----------------------------|
-|**WEBSITE**	 |https://azure.microsoft.com/en-us/services/storage/disks/| 						|
-|**ORGANIZATION**|**MICROSOFT**            |
-|**LICENCES**         |**NILL**            |
-|**BRIEF DESCRIPTION**|**Azure Disk Storage is a Microsoft Azure storage service that provides managed, highly available and scalable disk storage for Virtual Machines (VMs) and applications. It offers various options for disk storage such as : Azure managed disks, Unmanaged disks, Premium SSD, Standard SSD, Standard HDD**|
-||                        |
+|**WEBSITE**	 |https://azure.microsoft.com/enus/services/storage/disks/| 						
+|----------------|------------------------------
+|**ORGANIZATION**|**MICROSOFT**            
+|**LICENCES**         |**NILL**        
+|**BRIEF DESCRIPTION**|**Azure Disk Storage is a Microsoft Azure storage service that provides managed, highly available and scalable disk storage for Virtual Machines (VMs) and applications. It offers various options for disk storage such as : Azure managed disks, Unmanaged disks, Premium SSD, Standard SSD, Standard HDD**                        |                 |
 
 ## PROJECT DETAILS
 
