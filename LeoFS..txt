@@ -1,0 +1,67 @@
+﻿## LeoFS
+
+**Introduction**
+
+      LeoFS is a highly scalable, fault tolerant unstructured object  storage system for the web, and LeoFS provides High cost performance ratio, High reliability, High scalability.
+
+**Project summary**
+                 
+     Website      :  http://leo-project.net/leofs/
+     License      :  Apache License 2.0
+     Organization :  Google
+     
+**Key Features**
+
+     Multi protocols support.
+     Built-in object cache features.
+     Multi data center/cluster replication.
+     Date lake solution.
+     Cloud solution integration.
+     
+**Data Lake**
+
+    LeoFS moved a step closer to Data Lake with v1.4. we’re aiming to achieve a highly beneficial effect to Big Data analytics as a data repository.
+     
+![enter image description here](https://leo-project.net/leofs/img/slides/leofs-overview.png)
+**New features**
+
+  Improve AWS s3-API compatibility
+          AWS signature v4 support
+          Custom metadata support
+
+  Improve NFS v3 support
+          Improving the performance and stability
+
+  Integration
+            Improving spark integration
+
+**Architecture**
+
+![enter image description here](https://leo-project.net/leofs/docs/assets/leofs-architecture.001.jpg)
+
+  Leofs consists of three core components –
+
+    Leo Gateway  handles http-request and http-response from any clients when using REST-API OR S3-API.
+
+    Leo Storage  handles GET, PUT AND DELETE object as well as metadata, Also it has replicator, recover and queueing mechanism in order to keep running a storage node and realize eventual consistency.
+
+    Leo Manager always monitors Leo Gateway and Leo Storage nodes. The main monitoring status are node status and RING’s checksum in order to realise to keep high availability and keep data consistency.
+
+**Goals**
+ We have been aiming to achieve three things:
+ 
+   High reliability and availability
+   
+    Operating ratios is 99.9999999%, nine nines.
+        Keeps maintaining high data and system availability while some node downed in a LeoFS cluster.
+
+High scalability
+
+     Builds a huge capacity cluster at low cost.
+     Supports a multi data center/cluster replication.
+
+High cost performance ratio
+       
+       High performance with minimum resources.
+      Provides easy management and easy operation to users.
+
