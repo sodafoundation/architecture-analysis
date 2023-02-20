@@ -9,20 +9,21 @@
 **Pure Storage is** **an American publicly** **traded technology company headquartered in** **Mountain View**,**California**,**United States**.
 
 **After that, the business saw a** **50 percent increase** **in quarterly revenues and raised more than $470 million in venture financing before going public in 2015. At first, Pure Storage used generic flash storage hardware and built the software for storage controllers. In 2015, Pure Storage completed the development of** **its own exclusive flash storage hardware**.
+
 [company link](https://blog.purestorage.com/wp-content/uploads/2017/07/blog.purestorage.comwww.codyhosterman.comintr-a2cce344e8b121c01ebc89178ce835d83265fc50-768x382.jpg)
  
 ## Products
 
 Pure Storage develops flash-based storage for data centersusing consumer-grade solid state drives. Flash storage is faster than traditional disk storage, but more expensive. Pure Storage develops proprietary de-duplication and compression software to improve the amount of data that can be stored on each drive.  It also develops its own flash storage hardware.Pure Storage has three primary product lines: FlashBlade for unstructured data, FlashArray//C which uses "Multi-level cell")  flash, and the higher-end  FlashArray//X.  Its products use an operatin system called Purity.
   
-[product image](https://www.google.com/imgres?imgurl=https://regmedia.co.uk/2016/03/13/flashblade_950.jpg&imgrefurl=https://www.theregister.com/2016/03/14/pure_storage_rackscale_flashblade_object_filer/&tbnid=O_oHiVTn5r2PKM&vet=12ahUKEwi_qdn6iZ79AhXlIrcAHRoLAcwQMygUegUIARDhAQ..i&docid=YVmxI6KoslzBjM&w=950&h=537&q=pure%20storage%20product&ved=2ahUKEwi_qdn6iZ79AhXlIrcAHRoLAcwQMygUegUIARDhAQ)
+[product image](https://th.bing.com/th/id/R.47a27d43d8930096df0efa8fa3165fd5?rik=Vb74hkvhnqy5VQ&riu=http%3a%2f%2fgeekfluent.com%2fwp-content%2fuploads%2f2016%2f03%2fFlashBlade.png&ehk=px3wnMvE40yx2ErVGpRmEotYvnaOQ7qBZH4MUuQBd6w%3d&risl=&pid=ImgRaw&r=0)
 
 
 ### **Project summary**
 
 | WEBSITE | PROJECT WEBSITE LINK |
 |--|--|
-| ORAGIZATAION: PURE STORAGE | [enter link description here](https://www.purestorage.com/) |
+| ORAGIZATAION: PURE STORAGE | [https://www.purestorage.com/](https://www.purestorage.com/) |
 | LICENSE: PURE STORAGE|ENC 740.17(B)(1)|
 | OPEN/PROPRIETARY |PROPRIETARY  |
 | SOURCE PATH (IF OPEN SOURCE) |DATABASE SOURCE |
@@ -44,7 +45,8 @@ Pure Storage develops flash-based storage for data centersusing consumer-grade s
 
 **2.ARCHITECTURE**
 
-[ARCHITECTURE IMAGE](https://www.google.com/imgres?imgurl=https://blog.purestorage.com/wp-content/uploads/2019/02/Pure_Storage_Focus_Areas.png&imgrefurl=https://blog.purestorage.com/products/directflash-fabric-continuation-of-pures-nvme-innovation/&tbnid=qqY80WrxhnZ78M&vet=12ahUKEwiz47ru9pz9AhVZ-nMBHVq4CtIQMygCegUIARDIAQ..i&docid=MxpjQoZcHuDJ5M&w=2414&h=1114&q=pure%20storage%20process&ved=2ahUKEwiz47ru9pz9AhVZ-nMBHVq4CtIQMygCegUIARDIAQ)
+[ARCHITECTURE IMAGE](![image](https://user-images.githubusercontent.com/122254775/220024204-7acc378b-c8e4-418e-af17-9ddf1b0880f0.png)
+)
      
 
  A. **NETWORKED:-**
