@@ -1,0 +1,96 @@
+﻿<h1 id="openvdb"><em>OpenVDB</em></h1>
+<h2 id="project--analysis">Project  Analysis</h2>
+<p>INTRODUCTION</p>
+<p><strong>OpenVDB</strong> is an Academy Award-winning C++ library comprising a hierarchical data structure and a suite of tools for the efficient manipulation of sparse, time-varying, volumetric data discretized on three-dimensional grids. It is based on VDB, which was developed by Ken Museth at DreamWorks Animation, and it offers:</p>
+<ul>
+<li>
+<p>an effectively infinite 3D index space.</p>
+</li>
+<li>
+<p>compact storage</p>
+</li>
+<li>
+<p>fast data access</p>
+</li>
+<li>
+<p>a collection of algorithms- specifically optimized for the data<br>
+structure for common tasks such as filtering, CSG, compositing,<br>
+numerical simulation, sampling, and voxelization from other<br>
+geometric.</p>
+</li>
+</ul>
+<h2 id="project-summary">PROJECT SUMMARY</h2>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Website</td>
+<td><a href="https://www.openvdb.org/">https://www.openvdb.org/</a></td>
+</tr>
+<tr>
+<td>Organisation Name</td>
+<td>LINUX FOUNDATION</td>
+</tr>
+<tr>
+<td>License</td>
+<td><a href="http://www.mozilla.org/MPL/2.0/">Mozilla Public License Version 2.0</a></td>
+</tr>
+</tbody>
+</table><h2 id="project-details">PROJECT DETAILS</h2>
+<h3 id="key-features">KEY FEATURES</h3>
+<h4 id="installation">Installation</h4>
+<p>To install openvdb software ,you can follow the link as this link provides the latest version according to your computer and henceforth fixing all the bug issues:  <a href="https://github.com/AcademySoftwareFoundation/openvdb">https://github.com/AcademySoftwareFoundation/openvdb</a></p>
+<h4 id="efficient-data-structure">Efficient Data Structure</h4>
+<p>OpenVDB represents high-resolution sparse volumes compactly both in memory and on disk, via a novel hierarchical data structure that offers an effectively infinite 3D index space and via a custom, lossless codec for fast file I/O.</p>
+<h4 id="fast-voxel-access">Fast Voxel Access</h4>
+<p>OpenVDB features fast (constant-time) random and sequential access to voxels. This is the result of a new, CPU-like caching scheme and compact, hierarchical bit mask iterators.</p>
+<h4 id="morphological-operations">Morphological Operations</h4>
+<p>OpenVDB features fast morphological operations like dilation and erosion, which are essential when dealing with dynamic volumes, for example during level set interface tracking.</p>
+<h4 id="topological-operations">Topological Operations</h4>
+<p>OpenVDB’s fast topological operations (union, intersection and difference) are the foundation for many of its sparse algorithms, in particular ones for masked filtering and meshing.</p>
+<h4 id="geometric-transforms">Geometric Transforms</h4>
+<p>OpenVDB includes tools for advection of level sets or point clouds through vector fields, with the option to constrain points to surfaces, and tools to reshape, resample and segment volumes, highlighted by fast, seamless volumetric fracturing.</p>
+<h4 id="mathematical-transforms">Mathematical Transforms</h4>
+<p>OpenVDB supports scalar- and vector-valued volumes and provides vector calculus and related operations such as gradient, Laplacian, closest-point transform and vector field curl and divergence.</p>
+<h4 id="filters">Filters</h4>
+<p>OpenVDB’s suite of filters for smoothing and applying noise to volumes forms the basis for DreamWorks Animation’s feature film cloud modeling toolset. There are various tools present in the OpenVDB Software,  Some of them are:</p>
+<ul>
+<li>Conversion Tools</li>
+</ul>
+<p>OpenVDB volumes can be generated robustly and efficiently from polygonal meshes or particles, and can be converted to adaptive meshes, point clouds, signed distance fields or fog volumes.</p>
+<ul>
+<li>Level Set Tools</li>
+</ul>
+<p>OpenVDB includes a large selection of level set operators, including multithreaded advection, smoothing, filtering, surface tracking, offsetting, resampling, rendering and near-real-time Boolean operations.</p>
+<ul>
+<li>Compositing Tools</li>
+</ul>
+<p>OpenVDB provides a variety of efficient tools for procedurally combining volumes.</p>
+<ul>
+<li>Python Support</li>
+</ul>
+<p>OpenVDB includes a Python module with functions for basic manipulation of volumes.</p>
+<ul>
+<li>Point Clouds and Tools</li>
+</ul>
+<p>OpenVDB can natively store point data within its hierarchy using Point-Data Grids. These grids can store the points with attributes directly in the VDB Grid. Points are spatially-organized into VDB voxels to provide faster access and a greater opportunity for data compression compared with linear point arrays.</p>
+<h2 id="architecture">ARCHITECTURE</h2>
+<h3 id="current-usage">CURRENT USAGE</h3>
+<ol>
+<li>
+<p>AX: Domain Specific Language</p>
+</li>
+<li>
+<p>NanoVDB</p>
+</li>
+<li>
+<p>Houdini Cloud FX</p>
+</li>
+</ol>
+
