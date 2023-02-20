@@ -4,7 +4,7 @@
 
 ### ***INTRODUCTION:-***
 
-[**Pure Storage](https://www.purestorage.com/) is a technology company that develops software products and** **all-flash data storage hardware**. Pure Storage was established in 2009 and it was developing its products in stealth mode until 2011.
+[**Pure Storage**](https://www.purestorage.com/) is a technology company that develops software products and** **all-flash data storage hardware**. Pure Storage was established in 2009 and it was developing its products in stealth mode until 2011.
 
 **Pure Storage is** **an American publicly** **traded technology company headquartered in** **Mountain View**,**California**,**United States**.
 
@@ -132,7 +132,6 @@ flexible storage solutions that boast the power and reliability needed to meet g
 
  - https://www.techtarget.com 
  -  https://www.purestorage.com/
-  
  - https://www.linkedin.com/company/purestorage/
  - https://en.m.wikipedia.org/wiki/Pure_Storage
 
