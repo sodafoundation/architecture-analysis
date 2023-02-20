@@ -45,9 +45,8 @@ Pure Storage develops flash-based storage for data centersusing consumer-grade s
 
 **2.ARCHITECTURE**
 
-[ARCHITECTURE IMAGE](![image](https://user-images.githubusercontent.com/122254775/220024204-7acc378b-c8e4-418e-af17-9ddf1b0880f0.png)
-)
-     
+[ARCHITECTURE IMAGE](https://user-images.githubusercontent.com/122254775/220027900-6a1ae44f-a085-45cc-8383-e634fbb4c01f.png)
+ 
 
  A. **NETWORKED:-**
                   One Network provides a secure, flexible and highly reliable cloud business network platform in which all parties in a supply chain can see the status of their orders. The Dallas-based service provider facilitates orders involving one-third of all grocery items in the United States. It handles the bulk of car parts for domestic automakers, all ammunition for the Marine Corps, and many other items in a broad range of industries. On average One Network handles around 1.3 million transactions a day. By installing Pure Storage, One Network has benefited from increased network availability, a sharp reduction in system and database maintenance, greater productivity in its software-development process, and the ability to offer customers more tools for business analytics.
