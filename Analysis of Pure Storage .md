@@ -10,7 +10,7 @@
 
 **After that, the business saw a** **50 percent increase** **in quarterly revenues and raised more than $470 million in venture financing before going public in 2015. At first, Pure Storage used generic flash storage hardware and built the software for storage controllers. In 2015, Pure Storage completed the development of** **its own exclusive flash storage hardware**.
 
-[company link](https://blog.purestorage.com/wp-content/uploads/2017/07/blog.purestorage.comwww.codyhosterman.comintr-a2cce344e8b121c01ebc89178ce835d83265fc50-768x382.jpg)
+[pure storage process](https://blog.purestorage.com/wp-content/uploads/2017/07/blog.purestorage.comwww.codyhosterman.comintr-a2cce344e8b121c01ebc89178ce835d83265fc50-768x382.jpg)
  
 ## Products
 
