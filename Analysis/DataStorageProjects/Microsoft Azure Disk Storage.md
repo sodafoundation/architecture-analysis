@@ -1,16 +1,3 @@
-﻿**
-**What type of PR is this?**
-> Uncomment only one ` /kind <>` line, hit enter to put that in a new line, and remove leading whitespace from that line:
->
-> /kind new feature
-> /kind bug fix
-> /kind cleanup
-> /kind revert change
-> /kind design
-
- kind documentation
-
-> /kind enhancement
 # AZURE DISK STORAGE
 ## INTRODUCTION
 Azure Disk Storage is a Microsoft Azure service that provides disk storage for Azure virtual machines (VMs). It includes Azure managed disks, which provide various disk types and sizes for different workloads, and Azure blob storage, which is a scalable object storage service for unstructured data. Azure Disk Storage allows for the creation and management of VMs, and provides the storage for the operating system and data disks for the VMs. It also provides storage for backups, images, and snapshots of VMs. Additionally, it offers features such as encryption, data replication, and snapshots for data protection and disaster recovery.
