@@ -28,7 +28,7 @@ Pure Storage develops flash-based storage for data centersusing consumer-grade s
 | OPEN/PROPRIETARY |PROPRIETARY  |
 | SOURCE PATH (IF OPEN SOURCE) |DATABASE SOURCE |
 |BRIFE DESCRIPTION| Pure Storage® is a leading provider of enterprise-grade, all-flash block, file, and object storage. Pure delivers a Modern Data Experience™, allowing you to rely on innovative, cloud-ready solutions and the best experience in technology to transform data into powerful outcomes. |
-|
+
 
 ### **PROJECT DETAILS**
 
