@@ -25,41 +25,15 @@ Over the course of the last decade, the landscape of AI and data technologies ha
 
 **PROJECT SUMMARY**
 
-Website
-
-[https://lfaidata.foundation/](https://lfaidata.foundation/)
-
-wiki
-
-[Technical Advisory Council Home](https://wiki.lfaidata.foundation/pages/viewpage.action?pageId=7733341)
-
-Organization/Foundation Name
-
-LF AI AND DATA FOUNDATION
-
-Open/Proprietary
-
-Open source
-
-Landscape
-
-[https://landscape.lfaidata.foundation/](https://landscape.lfaidata.foundation/)
-
-Artwork
-
-[https://artwork.lfaidata.foundation](https://artwork.lfaidata.foundation/)
-
-Github
-
-[https://github.com/lfai](https://github.com/lfai)
-
-Source Path
-
-https://lfaidata.foundation/projects/
-
-Brief Description
-
-LF AI & Data was created to support open source AI and data, and to create a sustainable open source AI and data ecosystem that makes it easy to create AI and data products and services using open source technologies.
+|Website|[https://lfaidata.foundation/](https://lfaidata.foundation/)|
+|wiki|[Technical Advisory Council Home](https://wiki.lfaidata.foundation/pages/viewpage.action?pageId=7733341)|
+|Organization/Foundation Name|LF AI AND DATA FOUNDATION|
+|Open/Proprietary|Open source|
+|Landscape|[https://landscape.lfaidata.foundation/](https://landscape.lfaidata.foundation/)|
+|Artwork|[https://artwork.lfaidata.foundation](https://artwork.lfaidata.foundation/)|
+|Github|[https://github.com/lfai](https://github.com/lfai)|
+|Source Path|https://lfaidata.foundation/projects/|
+|Brief Description|LF AI & Data was created to support open source AI and data, and to create a sustainable open source AI and data ecosystem that makes it easy to create AI and data products and services using open source technologies.|
 
 **PROJECT DETAILS**
 
