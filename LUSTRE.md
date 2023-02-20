@@ -65,7 +65,7 @@ Lustre is purpose-built to provide a coherent, global POSIX-compliant namespace 
 
 ![](https://lh6.googleusercontent.com/uOs89dW4DCkhXmVVGCv43UGSmuxkZnt2pojR6BGGI3zpq-Xh161lcMEQYC7L8_B-gC8PalT1jDDOMcxXHXEdkoOQhb1OFZCPI0Sl78SvS6IF5bMd3fgK1doKXceygDHvdIuIU-BAxkZhlU3EA6OGu9E)
 
-**Lustre File System Users**+6
+**Lustre File System Users**
 
   
 
