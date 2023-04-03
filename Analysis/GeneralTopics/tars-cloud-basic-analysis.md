@@ -35,9 +35,6 @@ Nowadays it’s used by hundreds of bussiness in Tencent, services that develope
 - PROTECT
 	- To avoid overloading the system because of burst requests or machine fault, tars handles this scenario in the framework. In order to improve system throughput, server uses request queue to process request asynchronously.
 
-
-
-
 ## Supported Platforms :
 - Linux
 - Windows
@@ -67,16 +64,33 @@ Nowadays it’s used by hundreds of bussiness in Tencent, services that develope
 ### Link for TARS Landscape: https://tarscloud.org/foundation/projects
 
 # Technical Analysis:
-Add Technical Analysis here.
+<img src="https://tarscloud.github.io/TarsDocs_en/assets/tars_top_en.png">
 
 ## Other Links:
 | -- | TARS |
 |--|--|
 | **Website** | https://tarscloud.org/ |
 | **TARS Projects** |  https://tarscloud.org/foundation/projects|
-| **License** | [BSD-3-Clause](License.md) |
+| **License** | [BSD-3-Clause] Read more below. |
 | **TARS Projects** | https://github.com/TarsCloud |
 | **Twitter** | https://twitter.com/TarsCloud |
+
+
+## License:
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this
+   list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+
+3. Neither the name of the copyright holder nor the names of its
+   contributors may be used to endorse or promote products derived from
+   this software without specific prior written permission.
+
 
 ## Contributing:
 Contributing
