@@ -65,6 +65,19 @@ Nowadays it’s used by hundreds of bussiness in Tencent, services that develope
 
 # Technical Analysis:
 <img src="https://tarscloud.github.io/TarsDocs_en/assets/tars_top_en.png">
+The above image provides a description of the high-level architecture of TARS cloud.
+1. At the top we have the management system which is an web based interface for managing the platform.<br>
+2. The next layer is the registry which takes care of all the microservices running on the platform and along with their metadata.<br>
+3. The node management module help with the process of deployment, configuration, monitoring and scaling a node on the platform.
+4. TARS cloud also provides support for scalable and dynamic object storage.<br>
+
+### SODA and TARS
+SODA is an open source project which provides an unified framework for managing data storage across different types of storage systems,<br>
+TARS cloud includes built-in support for SODA managed systems, The developers can easily integrate their microservices with SODA-managed<br>
+storage systems using the TARS cloud platform.<br>
+Therefore we can say that SODA and TARS can work seamlessly in building and deploying data-intensive applications that can meet the modern demands<br>
+
+
 
 ## Other Links:
 | -- | TARS |
