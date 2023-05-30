@@ -13,7 +13,7 @@
 8. User wants query performance metrics through delfin APIs
 
 ## Architecture
-Overall architecture spec of delfin is available  [here](https://github.com/sodafoundation/design-specs/blob/master/specs/SIM/SODA_InfrastructureManagerDesign.md).
+Overall architecture spec of delfin is available  [here](./RequirementsDesignSpec.md).
 Scope of architecture discussion in this design doc is limited to performance metrics collection and the modules involved for the same.
 
 ### Delfin REST interface
